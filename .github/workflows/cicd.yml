@@ -1,0 +1,185 @@
+# Based on  the following resources:
+# https://github.com/actions/starter-workflows/blob/main/ci/python-package.yml
+# https://www.marwandebbiche.com/posts/python-package-tooling/
+# https://github.com/marketplace/actions/install-poetry-action
+
+name: Continuous Integration and Deployment # Pipeline name in GitHub Actions
+
+on: # events that trigger this workflow
+# UNCOMMENT THE LINES BELOW TO ACTIVATE THE WORKFLOW
+ #push:
+ #  branches:
+ #    - master
+ #pull_request:
+ #  branches:
+ #    - master
+ #release:
+ #  types: [created]
+ #workflow_dispatch: # manual trigger
+jobs:
+  # First job, which runs linting and autoformatting
+  linting-autoformatting:
+    runs-on: ubuntu-latest
+    steps:
+
+      # Checkout the repo so the workflow can access it
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # Install the specified version of poetry
+      # note that poetry is 1.2.0b2 (master branch of docs as of August 2022)
+      # TODO: Update to 1.2.0 once released
+      - name: Get poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.2.0b2
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      # Load cached poetry env if it exists
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      # Install poetry env with style group
+      # poetry install --with= is 1.2.0 behaviour
+      - name: Install poetry env with style
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --with=style
+
+      # Run autoformatters
+      - name: Run isort
+        run: |
+          poetry run isort .
+      - name: Run black
+        run: |
+          poetry run black .
+      - name: Run flake8
+        run: |
+          poetry run flake8 . --statistics
+      # mypy disabled
+      # static type checking: http://mypy-lang.org/
+      # uncomment lines below if you want to use mypy
+      #- name: Run mypy
+      #  run: |
+      #    poetry run mypy -p nemseer
+
+  # Second job, which runs tests
+  test:
+    # Linting/autoformatting is a prerequisite
+    needs: linting-autoformatting
+    # Matrix testing allows us to test multiple Python versions
+    # We will also fail-fast - fail the job if it fails for any context
+    strategy:
+      fail-fast: true
+      matrix:
+        os: ["ubuntu-latest", "macos-latest"]
+        python-version: ["3.8", "3.9", "3.10"]
+    runs-on: ${{ matrix.os }}
+    steps:
+
+      # Checkout the repo so the workflow can access it
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Install the specified version of poetry
+      # note that poetry is 1.2.0b2 (master branch of docs as of August 2022)
+      # TODO: Update to 1.2.0 once released
+      - name: Get poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.2.0b2
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      # Load cached poetry env if it exists
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      # Set up Python, with a cache for poetry deps
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'poetry'
+
+      # Install poetry env with test group
+      # poetry install --with= is 1.2.0 behaviour
+      - name: Install poetry env with test group
+        run: poetry install --with=test
+
+      # Run tests
+      - name: Run tests
+        run: |
+          poetry run pytest
+
+      # Code coverage to codecov.io disabled
+      # allows you to publish test code coverage, and link to a README badge
+      # uncomment block below if you set up codecov - see: https://about.codecov.io/
+      # note that codecov uses coverage.xml in tests/. This is an output configured in pyproject.toml for pytest
+      #- uses: codecov/codecov-action@v3
+      #  with:
+      #    files: tests/coverage.xml
+      #    flags: unittests # optional
+      #    name: codecov-umbrella # optional
+      #    fail_ci_if_error: true # optional (default = false)
+      #    verbose: true # optional (default = false)
+
+  # Third job publishes to PyPi if tests are passed and release is created
+  # To create a release, you need to create a git tag then a GitHub release
+  # See https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases
+  # To publish to PyPI, you will need PyPI username and password as a GitHub secret
+  # See https://docs.github.com/en/actions/security-guides/encrypted-secrets
+  publish:
+    if: github.event_name == 'release' && github.event.action == 'created'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repo so the workflow can access it
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # Install the specified version of poetry
+      # note that poetry is 1.2.0b2 (master branch of docs as of August 2022)
+      # TODO: Update to 1.2.0 once released
+      - name: Get poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.2.0b2
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      # Load cached poetry env if it exists
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      # Build and publish to PyPI
+      # Make sure you add username and password as secrets in the GitHub repo (see link above)
+      - name: Build and publish # publish tsgen to PyPI
+        env:
+          PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: poetry publish -u $PYPI_USERNAME -p $PYPI_PASSWORD --build

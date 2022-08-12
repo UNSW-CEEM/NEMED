@@ -1,0 +1,64 @@
+[tool.poetry]
+name = "Your package name"
+version = "0.1.0"
+description = "Package description"
+authors = ["UNSW CEEM"]
+license = "Licence"
+readme = "README.md"
+
+# Main dependencies for the package via poetry. Package users will need these dependencies.
+[tool.poetry.dependencies]
+python = ">= 3.8, < 3.11"
+# assuming pandas is required!
+pandas = "^1.2"
+
+# Packages for developers for creating documentation
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+# MyST parser for Sphinx documentation with furo theme
+Sphinx = "^5.0.2"
+furo = "^2022.6.21"
+myst-parser = "^0.18.0"
+
+# Packages for developers for linting/autoformatting
+[tool.poetry.group.style]
+optional = true
+
+[tool.poetry.group.style.dependencies]
+# static: flake8 (style)
+# autoformatter: black (style), isort (import sort)
+# pre-commit: tool to configure and install pre-commit hooks
+flake8 = "*"
+black = "^22.6.0"
+isort = "^5.10.1"
+pre-commit = "^2.20.0"
+
+# Packages for developers for testing
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+# pytest and pytest-cov for coverage
+pytest = "^7"
+pytest-cov = "^3"
+
+# Config for pytest and pytest-cov
+[tool.pytest.ini_options]
+# path to tests for pytest
+testpaths = ["tests"]
+# addopts = add options
+# -ra means show extra test summary info for all except passed tests
+# --cov points pytest-cov to the src/ dir
+# --cov-branch runs branch coverage. See https://breadcrumbscollector.tech/how-to-use-code-coverage-in-python-with-pytest/
+# --cov-repot html dumps HTML and xml summaries of pytest-cov in the "tests" folder
+addopts = "-ra --cov=src/ --cov-branch --cov-report xml:tests/coverage.xml --cov-report html:tests/htmlcov"
+
+# Config isort to be compatible with black
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["poetry-core>=1.1.0b2"]
+build-backend = "poetry.core.masonry.api"
