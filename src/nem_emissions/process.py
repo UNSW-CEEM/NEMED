@@ -16,20 +16,20 @@ def get_total_emissions_by_DI_DUID(
     Parameters
     ----------
     start_time : str
-                                                                                                                                                                                                                                                                    Start Time Period in format 'yyyy/mm/dd HH:MM:SS'
+        Start Time Period in format 'yyyy/mm/dd HH:MM:SS'
     end_time : str
-                                                                                                                                                                                                                                                                    End Time Period in format 'yyyy/mm/dd HH:MM:SS'
+        End Time Period in format 'yyyy/mm/dd HH:MM:SS'
     cache : str
-                                                                                                                                                                                                                                                                    Raw data location in local directory
-    ilter_units : list of str
-                                                                                                                                                                                                                                                                    List of DUIDs to filter data by, by default None
+        Raw data location in local directory
+    filter_units : list of str
+        List of DUIDs to filter data by, by default None
 
     Returns
     -------
     pd.DataFrame
-                                                                                                                                    Calculated data table containing columns=["Time","DUID","Plant_Emissions_Intensity","Energy",
-                                                                                                                                    "Total_Emissions"]. Plant_Emissions_Intensity is a static metric in tCO2-e/MWh, Energy is in MWh, Total
-                                                                                                                                    Emissions in tCO2-e.
+        Calculated data table containing columns=["Time","DUID","Plant_Emissions_Intensity","Energy",
+        "Total_Emissions"]. Plant_Emissions_Intensity is a static metric in tCO2-e/MWh, Energy is in MWh, Total
+        Emissions in tCO2-e.
     """
     cdeii_df = download_cdeii_table()
     disp_df = download_unit_dispatch(
@@ -82,7 +82,7 @@ def get_total_emissions_by_(start_time, end_time, cache, by="interval"):
     agg_map = {"Energy": np.sum, "Total_Emissions": np.sum, "Intensity_Index": np.mean}
     if by == "interval":
         for metric in data.columns.levels[0]:
-            result[metric] = data[metric]
+            result[metric] = data[metric].round(2)
 
     elif by == "hour":
         for metric in data.columns.levels[0]:

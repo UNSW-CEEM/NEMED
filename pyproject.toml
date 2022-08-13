@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "NEMemissions"
+name = "NEMED"
 version = "0.1.0"
-description = "NEM Emissions Tool"
+description = "NEM Emissions Data tool"
 authors = ["UNSW CEEM"]
 license = "Licence"
 readme = "README.md"
