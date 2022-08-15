@@ -28,4 +28,4 @@ Please note that this project is released with a [Code of Conduct](CONDUCT.md). 
 `nemed` was created by `Declan Heim` and `Shayan Naderi`. It is licensed under the terms of the `BSD 3-Clause license`.
 
 ## Credits
-This template was created using the [`UNSW CEEM template`](https://github.com/UNSW-CEEM/ceem-python-template).
+This template was created using the [`UNSW CEEM template`](https://github.com/UNSW-CEEM/ceem-python-template). It also adopts functionality from other UNSW CEEM tools including [`NEMOSIS`](https://github.com/UNSW-CEEM/NEMOSIS) and [`NEMPY`](https://github.com/UNSW-CEEM/nempy).
