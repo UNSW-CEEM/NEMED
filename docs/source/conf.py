@@ -18,9 +18,9 @@ sys.path.insert(0, os.path.abspath("../../src/"))
 
 # -- Project information -----------------------------------------------------
 
-project = "NEMSEER"
-copyright = "2022, Abhijith (Abi) Prakash"
-author = "Abhijith (Abi) Prakash"
+project = "NEMED"
+copyright = "2022, Declan Heim, Shayan Naderi"
+author = "Declan Heim, Shayan Naderi"
 
 # The full version, including alpha/beta/rc tags
 release = "0.1.0"

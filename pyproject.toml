@@ -11,6 +11,17 @@ readme = "README.md"
 python = ">= 3.8, < 3.11"
 pandas = "^1.2"
 nemosis = "*"
+nempy = "*"
+datetime = "*"
+os = "*"
+glob = "*"
+pathlib = "*"
+requests = "*"
+zipfile = "*"
+io = "*"
+glob = "*"
+json = "*"
+xmltodict = "*"
 
 # Packages for developers for creating documentation
 [tool.poetry.group.docs]
