@@ -31,6 +31,11 @@ def get_total_emissions_by_DI_DUID(
         "Total_Emissions"]. Plant_Emissions_Intensity is a static metric in tCO2-e/MWh, Energy is in MWh, Total
         Emissions in tCO2-e.
     """
+    if not os.path.isdir(cache):
+        print("Creating new cache in current directory.")
+        os.mkdir("CACHE")
+        cache = os.path.join(os.getcwd(), "CACHE")
+
     cdeii_df = download_cdeii_table()
     disp_df = download_unit_dispatch(
         start_time, end_time, cache, filter_units, record="TOTALCLEARED"
@@ -60,6 +65,11 @@ def get_total_emissions_by_DI_DUID(
 
 
 def get_total_emissions_by_(start_time, end_time, cache, by="interval"):
+    if not os.path.isdir(cache):
+        print("Creating new cache in current directory.")
+        os.mkdir("CACHE")
+        cache = os.path.join(os.getcwd(), "CACHE")
+    
     # NOTE: ISSUE with timing and aggregation. Needing to shift everything 5 minutes to start of interval for
     # accounting.
     # Currently all in time ending.
@@ -202,6 +212,11 @@ def get_marginal_emitter(cache, start_year, start_month, start_day, end_year, en
     pd.DataFrame
         _description_
     """
+    if not os.path.isdir(cache):
+        print("Creating new cache in current directory.")
+        os.mkdir("CACHE")
+        cache = os.path.join(os.getcwd(), "CACHE")
+
     gen_info = download_generators_info(cache)
     emissions_factors = download_cdeii_table()
     price_setters = download_pricesetters(cache, start_year, start_month, start_day, end_year, end_month, end_day,
