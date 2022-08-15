@@ -2,7 +2,8 @@
 from datetime import datetime
 import pandas as pd
 import numpy as np
-from .downloader import *
+import os
+from .downloader import download_cdeii_table, download_unit_dispatch, download_pricesetters, download_generators_info
 
 DISP_INT_LENGTH = 5 / 60
 
@@ -69,7 +70,7 @@ def get_total_emissions_by_(start_time, end_time, cache, by="interval"):
         print("Creating new cache in current directory.")
         os.mkdir("CACHE")
         cache = os.path.join(os.getcwd(), "CACHE")
-    
+
     # NOTE: ISSUE with timing and aggregation. Needing to shift everything 5 minutes to start of interval for
     # accounting.
     # Currently all in time ending.
@@ -245,7 +246,7 @@ def get_marginal_emitter(cache, start_year, start_month, start_day, end_year, en
 
     calc_emissions_df["PeriodID"] = pd.to_datetime(calc_emissions_df["PeriodID"])
     calc_emissions_df["PeriodID"] = calc_emissions_df["PeriodID"].apply(lambda x: x.replace(tzinfo=None))
-    calc_emissions_df.set_index("PeriodID",inplace=True)
+    calc_emissions_df.set_index("PeriodID", inplace=True)
 
     calc_emissions_df["Date"] = calc_emissions_df.index.date
     calc_emissions_df["Hour"] = calc_emissions_df.index.hour
@@ -256,7 +257,6 @@ def get_marginal_emitter(cache, start_year, start_month, start_day, end_year, en
     calc_emissions_df["Season"].replace(4, "Spring", inplace=True)
 
     return calc_emissions_df
-
 
 
 def tech_rename(fuel, tech_descriptor, dispatch_type):
