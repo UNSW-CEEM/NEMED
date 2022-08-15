@@ -25,7 +25,7 @@ Interested in contributing? Check out the [contributing guidelines](CONTRIBUTING
 Please note that this project is released with a [Code of Conduct](CONDUCT.md). By contributing to this project, you agree to abide by its terms.
 
 ## License
-`nemed` was created by `Declan Heim` and `_`. It is licensed under the terms of the `BSD 3-Clause license`.
+`nemed` was created by `Declan Heim` and `Shayan Naderi`. It is licensed under the terms of the `BSD 3-Clause license`.
 
 ## Credits
 This template was created using the [`UNSW CEEM template`](https://github.com/UNSW-CEEM/ceem-python-template).
