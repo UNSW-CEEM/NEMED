@@ -111,7 +111,10 @@ def download_pricesetters_xml(cache, start_year, start_month, start_day, end_yea
     xml_cache_manager = XML(cache)
     xml_cache_manager.populate_by_day(start_year=start_year, start_month=start_month, start_day=start_day,
                                       end_year=end_year, end_month=end_month, end_day=end_day)
-    convert_xml_to_json(cache, clean_up=False)
+
+    start_date_str = str(start_year) + "/" + str(start_month).zfill(2) + "/" + str(start_day).zfill(2)
+    end_date_str = str(end_year) + "/" + str(end_month).zfill(2) + "/" + str(end_day).zfill(2)
+    convert_xml_to_json(cache, start_date_str, end_date_str, clean_up=False)
 
 
 def download_pricesetters(cache, start_year, start_month, start_day, end_year, end_month, end_day,
@@ -170,5 +173,7 @@ def download_pricesetters(cache, start_year, start_month, start_day, end_year, e
         download_pricesetters_xml(cache , start_year, start_month, start_day, end_year, end_month, end_day)
 
     print("Reading JSON to pandas Dataframe")
-    table = read_json_to_df(cache)
+    start_date_str = str(start_year) + "/" + str(start_month).zfill(2) + "/" + str(start_day).zfill(2)
+    end_date_str = str(end_year) + "/" + str(end_month).zfill(2) + "/" + str(end_day).zfill(2)
+    table = read_json_to_df(cache,start_date_str,end_date_str)
     return table

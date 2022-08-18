@@ -14,7 +14,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath("../../src/"))
-
+sys.path.insert(0, os.path.abspath("../../examples/"))
 
 # -- Project information -----------------------------------------------------
 
@@ -39,6 +39,7 @@ release = "0.1.0"
 # todo is self explanatory
 # viewcode adds links to highlighted source code
 # MyST is a CommonMark parser that plugs into Sphinx. Enables you to write docs in md.
+# MyST-nb allows inclusion of jupyter notebooks
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
@@ -46,7 +47,8 @@ extensions = [
     "sphinx.ext.doctest",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
-    "myst_parser",
+    #"myst_parser",
+    "myst_nb"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -59,7 +61,8 @@ exclude_patterns = []
 
 
 # -- Formats for MyST --------------------------------------------------------
-source_suffix = [".rst", ".md"]
+#source_suffix = {".rst":"restructuredtext", ".md":"myst_parser", ".ipynb":"myst_nb"}
+source_suffix = [".rst", ".md", ".ipynb"]
 
 # --  Napoleon options--------------------------------------------------------
 # use the :param directive
@@ -78,7 +81,7 @@ autoclass_content = "class"
 intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
 
 # --  MyST options------------------------------------------------------------
-
+#myst_commonmark_only = False
 myst_enable_extensions = [
     "colon_fence",
     "deflist",

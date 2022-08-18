@@ -13,14 +13,8 @@ pandas = "^1.2"
 nemosis = "*"
 nempy = "*"
 datetime = "*"
-os = "*"
-glob = "*"
 pathlib = "*"
 requests = "*"
-zipfile = "*"
-io = "*"
-glob = "*"
-json = "*"
 xmltodict = "*"
 
 # Packages for developers for creating documentation
@@ -32,6 +26,7 @@ optional = true
 Sphinx = "^5.0.2"
 furo = "^2022.6.21"
 myst-parser = "^0.18.0"
+myst-nb = "*"
 
 # Packages for developers for linting/autoformatting
 [tool.poetry.group.style]
