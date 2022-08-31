@@ -3,13 +3,14 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 import os
-from .downloader import download_cdeii_table, download_unit_dispatch, download_pricesetters, download_generators_info
+from .downloader import download_cdeii_table, download_unit_dispatch, download_pricesetters, download_generators_info, \
+    download_duid_auxload
 
 DISP_INT_LENGTH = 5 / 60
 
 
 def get_total_emissions_by_DI_DUID(
-    start_time, end_time, cache, filter_units=None, filter_regions=None
+    start_time, end_time, cache, filter_units=None, filter_regions=None, generation_sent_out=True, save_debug_file=False
 ):
     """Find the total emissions for each generation unit per dispatch interval. Calculates the Total_Emissions column by
     multiplying Energy (Dispatch (MW) * 5/60 (h)) with Plant Emissions Intensity (tCO2-e/MWh)
@@ -32,21 +33,27 @@ def get_total_emissions_by_DI_DUID(
         "Total_Emissions"]. Plant_Emissions_Intensity is a static metric in tCO2-e/MWh, Energy is in MWh, Total
         Emissions in tCO2-e.
     """
+    # Check if cache is an existing directory
     if not os.path.isdir(cache):
         print("Creating new cache in current directory.")
         os.mkdir("CACHE")
         cache = os.path.join(os.getcwd(), "CACHE")
 
+    # Download CDEII and Unit Dispatch Data
     cdeii_df = download_cdeii_table()
     disp_df = download_unit_dispatch(
-        start_time, end_time, cache, filter_units, record="TOTALCLEARED"
+        start_time, end_time, cache, filter_units, record="INITIALMW"
     )
+
+    # Merge unit generation and emissions factor data
     result = pd.merge(
         disp_df,
         cdeii_df[["DUID", "REGIONID", "CO2E_EMISSIONS_FACTOR"]],
         how="left",
         on="DUID",
     )
+
+    # Filter by region is specified
     if filter_regions:
         if not pd.Series(cdeii_df["REGIONID"].unique()).isin(filter_regions).any():
             raise ValueError(
@@ -57,27 +64,48 @@ def get_total_emissions_by_DI_DUID(
         print(
             "WARNING: Emissions Dataframe is empty. Check filter_units and filter_regions parameters do not conflict!"
         )
+
     result["Energy"] = result["Dispatch"] * DISP_INT_LENGTH
+
+    if generation_sent_out:
+        # Use 'sent_out' generation metrics
+        # Download Auxillary Load Data
+        auxload = download_duid_auxload()
+        result = result.merge(auxload, on=["DUID"], how="left")
+        result['pct_sent_out'] = (100 - result['Auxiliary Load (%)']) / 100
+        result['pct_sent_out'].fillna(1.0, inplace=True)
+        result["Energy"] = result["Energy"] * result['pct_sent_out']
+
     result["Total_Emissions"] = result["Energy"] * result["CO2E_EMISSIONS_FACTOR"]
     result.rename(
-        columns={"CO2E_EMISSIONS_FACTOR": "Plant_Emissions_Intensity"}, inplace=True
-    )
-    return result[result.columns[~result.columns.isin(["Dispatch"])]]
+            columns={"CO2E_EMISSIONS_FACTOR": "Plant_Emissions_Intensity"}, inplace=True
+        )
+
+    # Remove duplicates if still existing
+    result.drop_duplicates(subset=["Time", "DUID"], inplace=True)
+
+    if save_debug_file:
+        result.to_csv('totalemissionsdebug.csv')
+
+    return result[['Time', 'DUID', 'REGIONID', 'Plant_Emissions_Intensity', 'Energy', 'Total_Emissions']]
 
 
-def get_total_emissions_by_(start_time, end_time, cache, by="interval"):
+def get_total_emissions_by_(start_time, end_time, cache, filter_regions, by="interval", 
+                            generation_sent_out=True, save_debug_file=False):
+    # Check if cache folder exists
     if not os.path.isdir(cache):
         print("Creating new cache in current directory.")
         os.mkdir("CACHE")
         cache = os.path.join(os.getcwd(), "CACHE")
 
-    # NOTE: ISSUE with timing and aggregation. Needing to shift everything 5 minutes to start of interval for
-    # accounting.
-    # Currently all in time ending.
+    # Get emissions for all units by dispatch interval
     raw_table = get_total_emissions_by_DI_DUID(
-        start_time, end_time, cache, filter_units=None, filter_regions=None
+        start_time, end_time, cache, filter_units=None, filter_regions=filter_regions,
+        generation_sent_out=generation_sent_out,
+        save_debug_file=save_debug_file
     )
 
+    # Pivot and summate data. Aggregates to a regional level on interval
     data = raw_table.pivot_table(
         index="Time",
         columns="REGIONID",
@@ -85,6 +113,7 @@ def get_total_emissions_by_(start_time, end_time, cache, by="interval"):
         aggfunc="sum",
     )
 
+    # Compute Emissions Intensity Index from total emissions divided by total energy
     for region in data.columns.levels[1]:
         data[("Intensity_Index", region)] = (
             data["Total_Emissions"][region] / data["Energy"][region]
@@ -92,10 +121,13 @@ def get_total_emissions_by_(start_time, end_time, cache, by="interval"):
 
     result = {}
     agg_map = {"Energy": np.sum, "Total_Emissions": np.sum, "Intensity_Index": np.mean}
+    # Format result to show on interval resolution
     if by == "interval":
         for metric in data.columns.levels[0]:
             result[metric] = data[metric].round(2)
+            result[metric] = result[metric][:-1]
 
+    # Format result to show on hourly resolution
     elif by == "hour":
         for metric in data.columns.levels[0]:
             result[metric] = (
@@ -118,6 +150,9 @@ def get_total_emissions_by_(start_time, end_time, cache, by="interval"):
                 )
             result[metric].set_index("reconstr_time", inplace=True)
             result[metric].index.name = "Time"
+            result[metric] = result[metric][:-1]
+
+    # Format result to show on daily resolution
     elif by == "day":
         for metric in data.columns.levels[0]:
             result[metric] = (
@@ -139,7 +174,9 @@ def get_total_emissions_by_(start_time, end_time, cache, by="interval"):
                 )
             result[metric].set_index("reconstr_time", inplace=True)
             result[metric].index.name = "Time"
+            result[metric] = result[metric][:-1]
 
+    # Format result to show on monthly resolution
     elif by == "month":
         for metric in data.columns.levels[0]:
             result[metric] = (
@@ -160,7 +197,9 @@ def get_total_emissions_by_(start_time, end_time, cache, by="interval"):
                 )
             result[metric].set_index("reconstr_time", inplace=True)
             result[metric].index.name = "Time"
+            result[metric] = result[metric][:-1]
 
+    # Format result to show on annual resolution
     elif by == "year":
         for metric in data.columns.levels[0]:
             result[metric] = (
@@ -175,6 +214,7 @@ def get_total_emissions_by_(start_time, end_time, cache, by="interval"):
                 )
             result[metric].set_index("reconstr_time", inplace=True)
             result[metric].index.name = "Time"
+            result[metric] = result[metric][:-1]
 
     else:
         raise Exception(

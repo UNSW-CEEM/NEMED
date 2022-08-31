@@ -2,12 +2,19 @@
 from nemosis import dynamic_data_compiler, static_table
 from nemosis.data_fetch_methods import _read_mms_csv
 from nempy.historical_inputs.xml_cache import XMLCacheManager as XML
-from .defaults import CDEII_URL
+from .defaults import CDEII_URL, REQ_URL_HEADERS
 from .helper_functions.mod_xml_cache import overwrite_xmlcachemanager_with_pricesetter_config, convert_xml_to_json,\
     read_json_to_df
 import os
 import glob
+import numpy as np
+import pandas as pd
+import requests
 from datetime import datetime, timedelta
+
+from pathlib import Path
+
+DISPATCH_INT_MIN = 5
 
 
 def download_cdeii_table():
@@ -25,6 +32,61 @@ def download_cdeii_table():
 
 def download_generators_info(cache):
     table = static_table(table_name="Generators and Scheduled Loads", raw_data_location=cache)
+    return table
+
+
+def download_duid_auxload():
+    map = download_duid_mapping()
+    auxload = download_iasr_existing_gens()
+    merged_table = pd.merge(map, auxload, on='Generator', how='left')
+    return merged_table
+
+
+def download_duid_mapping():
+    filepath = Path(__file__).parent / "../../data/duid_mapping.csv"
+    table = pd.read_csv(filepath)[['DUID', '2021-22-IASR_Generator']]
+    table.columns = ['DUID', 'Generator']
+    return table
+
+
+def download_iasr_existing_gens(select_columns=['Generator', 'Auxiliary Load (%)'], coltype={'Generator': str,
+                                'Auxiliary Load (%)': float}):
+    filepath = Path(__file__).parent / "../../data/existing_gen_data_summary.csv"
+    table = pd.read_csv(filepath, dtype=coltype)
+    table = table[table.columns[table.columns.isin(select_columns)]]
+    return table
+
+
+def download_aemo_cdeii_summary(year, filter_start, filter_end, cache):
+    url = f"https://www.aemo.com.au/-/media/files/electricity/nem/settlements_and_payments/settlements/{year}/co2eii_summary_results_{year}.csv?la=en"
+    # filepath = Path(__file__).parent / f"../../data/AEMO_CO2EII_{year}.csv"
+    filepath = os.path.join(cache, f'AEMO_CO2EII_{year}.csv')
+
+    r = requests.get(url, headers=REQ_URL_HEADERS)
+    with open(filepath, 'wb') as f:
+        f.write(r.content)
+
+    aemo = pd.read_csv(filepath, header=1, usecols=[6, 7, 8, 9, 10])
+
+    fil_start_dt = datetime.strptime(filter_start, "%Y/%m/%d %H:%M:%S")
+    fil_end_dt = datetime.strptime(filter_end, "%Y/%m/%d %H:%M:%S")
+
+    aemo['SETTLEMENTDATE'] = pd.to_datetime(aemo['SETTLEMENTDATE'], format="%Y/%m/%d %H:%M:%S")
+    table = aemo[aemo['SETTLEMENTDATE'].between(fil_start_dt, fil_end_dt)]
+    return table.reset_index(drop=True)
+
+
+def get_aemo_comparison_data(filter_start, filter_end, filename='AEMO_CO2EII_August_2022_dataset.csv'):
+    # Call the download func.
+
+    filepath = Path(__file__).parent / f"../../data/{filename}"
+    aemo = pd.read_csv(filepath, header=1, usecols=[6, 7, 8, 9, 10])
+
+    fil_start_dt = datetime.strptime(filter_start, "%Y/%m/%d %H:%M:%S")
+    fil_end_dt = datetime.strptime(filter_end, "%Y/%m/%d %H:%M:%S")
+
+    aemo['SETTLEMENTDATE'] = pd.to_datetime(aemo['SETTLEMENTDATE'], format="%d/%m/%Y %H:%M")
+    table = aemo[aemo['SETTLEMENTDATE'].between(fil_start_dt, fil_end_dt)]
     return table
 
 
@@ -54,15 +116,26 @@ def download_unit_dispatch(start_time, end_time, cache, filter_units=None, recor
     ValueError
         The record parameter must be either 'INITIALMW' or 'TOTALCLEARED'
     """
+    # Get data from DISPATCHLOAD MMS Table
     if record not in ["INITIALMW", "TOTALCLEARED"]:
         raise ValueError(
             "record parameter must be either 'INITIALMW' or 'TOTALCLEARED'"
         )
+    if record == "INITIALMW":
+        shift_stime = datetime.strptime(start_time, "%Y/%m/%d %H:%M:%S")
+        shift_stime = shift_stime + timedelta(minutes=DISPATCH_INT_MIN)
+        shift_etime = datetime.strptime(end_time, "%Y/%m/%d %H:%M:%S")
+        shift_etime = shift_etime + timedelta(minutes=DISPATCH_INT_MIN)
+        get_start_time = datetime.strftime(shift_stime, "%Y/%m/%d %H:%M:%S")
+        get_end_time = datetime.strftime(shift_etime, "%Y/%m/%d %H:%M:%S")
+    else:
+        get_start_time = start_time
+        get_end_time = end_time
 
     if filter_units:
-        table = dynamic_data_compiler(
-            start_time=start_time,
-            end_time=end_time,
+        disp_load = dynamic_data_compiler(
+            start_time=get_start_time,
+            end_time=get_end_time,
             table_name="DISPATCHLOAD",
             raw_data_location=cache,
             select_columns=["SETTLEMENTDATE", "DUID", record],
@@ -71,18 +144,60 @@ def download_unit_dispatch(start_time, end_time, cache, filter_units=None, recor
             fformat="feather",
         )
     else:
-        table = dynamic_data_compiler(
-            start_time=start_time,
-            end_time=end_time,
+        disp_load = dynamic_data_compiler(
+            start_time=get_start_time,
+            end_time=get_end_time,
             table_name="DISPATCHLOAD",
             raw_data_location=cache,
             select_columns=["SETTLEMENTDATE", "DUID", record],
             fformat="feather",
         )
 
-    table.columns = ["Time", "DUID", "Dispatch"]
+    # Get data from other generators in DISPATCH_UNIT_SCADA MMS Table
+    if filter_units:
+        disp_scada = dynamic_data_compiler(
+            start_time=start_time,
+            end_time=end_time,
+            table_name="DISPATCH_UNIT_SCADA",
+            raw_data_location=cache,
+            select_columns=["SETTLEMENTDATE", "DUID", "SCADAVALUE"],
+            filter_cols=["DUID"],
+            filter_values=[filter_units],
+            fformat="feather",
+        )
+    else:
+        disp_scada = dynamic_data_compiler(
+            start_time=start_time,
+            end_time=end_time,
+            table_name="DISPATCH_UNIT_SCADA",
+            raw_data_location=cache,
+            select_columns=["SETTLEMENTDATE", "DUID", "SCADAVALUE"],
+            fformat="feather",
+        )
 
-    return table
+    disp_load.columns = ["Time", "DUID", "Dispatch"]
+    disp_scada.columns = ["Time", "DUID", "Dispatch"]
+
+    if record == "INITIALMW":
+        disp_load["Time"] = disp_load["Time"] - timedelta(minutes=DISPATCH_INT_MIN)
+
+    table = pd.concat([disp_load, disp_scada])
+
+    final = _clean_duplicates(table)
+
+    return final
+
+
+def _clean_duplicates(table):
+    # TODO: Add warning for duplicate dispatch column greater than 1 MW
+    table_clean = table.pivot_table(index=["Time", "DUID"], values="Dispatch", aggfunc=np.mean)
+    table_clean = table_clean.reset_index()
+    table_clean = table_clean.drop_duplicates(subset=["Time", "DUID"])
+
+    # Check for duplicate timestamped data
+    # Warn if difference in dispatch column is great than 1 MW
+    # Remove duplicates and return a single entry per DUID
+    return table_clean
 
 
 def download_pricesetters_xml(cache, start_year, start_month, start_day, end_year, end_month, end_day):
@@ -175,5 +290,5 @@ def download_pricesetters(cache, start_year, start_month, start_day, end_year, e
     print("Reading JSON to pandas Dataframe")
     start_date_str = str(start_year) + "/" + str(start_month).zfill(2) + "/" + str(start_day).zfill(2)
     end_date_str = str(end_year) + "/" + str(end_month).zfill(2) + "/" + str(end_day).zfill(2)
-    table = read_json_to_df(cache,start_date_str,end_date_str)
+    table = read_json_to_df(cache, start_date_str, end_date_str)
     return table
