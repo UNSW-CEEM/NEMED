@@ -1,14 +1,7 @@
 
 # Welcome to NEMED's documentation!
 
-```{toctree}
----
-maxdepth: 3
-caption: Contents
----
-api_reference.md
-examples.md
-```
+Details coming soon...
 
 # Indices and tables
 

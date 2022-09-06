@@ -44,7 +44,7 @@ def get_total_emissions_by_DI_DUID(
     disp_df = download_unit_dispatch(
         start_time, end_time, cache, filter_units, record="INITIALMW"
     )
-
+    
     # Merge unit generation and emissions factor data
     result = pd.merge(
         disp_df,
@@ -82,146 +82,13 @@ def get_total_emissions_by_DI_DUID(
         )
 
     # Remove duplicates if still existing
-    result.drop_duplicates(subset=["Time", "DUID"], inplace=True)
+    #result.drop_duplicates(subset=["Time", "DUID"], inplace=True)
 
     if save_debug_file:
         result.to_csv('totalemissionsdebug.csv')
+        disp_df.to_csv('rawdispatchdata.csv')
 
     return result[['Time', 'DUID', 'REGIONID', 'Plant_Emissions_Intensity', 'Energy', 'Total_Emissions']]
-
-
-def get_total_emissions_by_(start_time, end_time, cache, filter_regions, by="interval", 
-                            generation_sent_out=True, save_debug_file=False):
-    # Check if cache folder exists
-    if not os.path.isdir(cache):
-        print("Creating new cache in current directory.")
-        os.mkdir("CACHE")
-        cache = os.path.join(os.getcwd(), "CACHE")
-
-    # Get emissions for all units by dispatch interval
-    raw_table = get_total_emissions_by_DI_DUID(
-        start_time, end_time, cache, filter_units=None, filter_regions=filter_regions,
-        generation_sent_out=generation_sent_out,
-        save_debug_file=save_debug_file
-    )
-
-    # Pivot and summate data. Aggregates to a regional level on interval
-    data = raw_table.pivot_table(
-        index="Time",
-        columns="REGIONID",
-        values=["Energy", "Total_Emissions"],
-        aggfunc="sum",
-    )
-
-    # Compute Emissions Intensity Index from total emissions divided by total energy
-    for region in data.columns.levels[1]:
-        data[("Intensity_Index", region)] = (
-            data["Total_Emissions"][region] / data["Energy"][region]
-        )
-
-    result = {}
-    agg_map = {"Energy": np.sum, "Total_Emissions": np.sum, "Intensity_Index": np.mean}
-    # Format result to show on interval resolution
-    if by == "interval":
-        for metric in data.columns.levels[0]:
-            result[metric] = data[metric].round(2)
-            result[metric] = result[metric][:-1]
-
-    # Format result to show on hourly resolution
-    elif by == "hour":
-        for metric in data.columns.levels[0]:
-            result[metric] = (
-                data[metric]
-                .groupby(
-                    by=[
-                        data.index.year,
-                        data.index.month,
-                        data.index.day,
-                        data.index.hour,
-                    ]
-                )
-                .agg(agg_map[metric])
-            )
-            result[metric] = result[metric].round(2)
-            result[metric]["reconstr_time"] = None
-            for row in result[metric].index:
-                result[metric].loc[row, "reconstr_time"] = datetime(
-                    year=row[0], month=row[1], day=row[2], hour=row[3]
-                )
-            result[metric].set_index("reconstr_time", inplace=True)
-            result[metric].index.name = "Time"
-            result[metric] = result[metric][:-1]
-
-    # Format result to show on daily resolution
-    elif by == "day":
-        for metric in data.columns.levels[0]:
-            result[metric] = (
-                data[metric]
-                .groupby(
-                    by=[
-                        data.index.year,
-                        data.index.month,
-                        data.index.day,
-                    ]
-                )
-                .agg(agg_map[metric])
-            )
-            result[metric] = result[metric].round(2)
-            result[metric]["reconstr_time"] = None
-            for row in result[metric].index:
-                result[metric].loc[row, "reconstr_time"] = datetime(
-                    year=row[0], month=row[1], day=row[2]
-                )
-            result[metric].set_index("reconstr_time", inplace=True)
-            result[metric].index.name = "Time"
-            result[metric] = result[metric][:-1]
-
-    # Format result to show on monthly resolution
-    elif by == "month":
-        for metric in data.columns.levels[0]:
-            result[metric] = (
-                data[metric]
-                .groupby(
-                    by=[
-                        data.index.year,
-                        data.index.month,
-                    ]
-                )
-                .agg(agg_map[metric])
-            )
-            result[metric] = result[metric].round(2)
-            result[metric]["reconstr_time"] = None
-            for row in result[metric].index:
-                result[metric].loc[row, "reconstr_time"] = datetime(
-                    year=row[0], month=row[1], day=1
-                )
-            result[metric].set_index("reconstr_time", inplace=True)
-            result[metric].index.name = "Time"
-            result[metric] = result[metric][:-1]
-
-    # Format result to show on annual resolution
-    elif by == "year":
-        for metric in data.columns.levels[0]:
-            result[metric] = (
-                data[metric].groupby(by=[data.index.year]).agg(agg_map[metric])
-            )
-            print("UNTESTED for request spanning multiple years")
-            result[metric] = result[metric].round(2)
-            result[metric]["reconstr_time"] = None
-            for row in result[metric].index:
-                result[metric].loc[row, "reconstr_time"] = datetime(
-                    year=row, month=1, day=1
-                )
-            result[metric].set_index("reconstr_time", inplace=True)
-            result[metric].index.name = "Time"
-            result[metric] = result[metric][:-1]
-
-    else:
-        raise Exception(
-            "Error: invalid by argument. Must be one of [interval, hour, day, month, year]"
-        )
-
-    return result
 
 
 def get_marginal_emitter(cache, start_year, start_month, start_day, end_year, end_month, end_day, redownload_xml=True):
@@ -328,3 +195,110 @@ def tech_rename(fuel, tech_descriptor, dispatch_type):
     elif isinstance(tech_descriptor, str) and 'Engine' in tech_descriptor:
         name = 'Reciprocating Engine'
     return name
+
+
+# New functions
+
+def aggregate_data_by(data, by):
+    result = {}
+    agg_map = {"Energy": np.sum, "Total_Emissions": np.sum, "Intensity_Index": np.mean}
+    # Format result to show on interval resolution
+    if by == "interval":
+        for metric in data.columns.levels[0]:
+            result[metric] = data[metric].round(2)
+
+    # Format result to show on hourly resolution
+    elif by == "hour":
+        for metric in data.columns.levels[0]:
+            result[metric] = (
+                data[metric]
+                .groupby(
+                    by=[
+                        data.index.year,
+                        data.index.month,
+                        data.index.day,
+                        data.index.hour,
+                    ]
+                )
+                .agg(agg_map[metric])
+            )
+            result[metric] = result[metric].round(2)
+            result[metric]["reconstr_time"] = None
+            for row in result[metric].index:
+                result[metric].loc[row, "reconstr_time"] = datetime(
+                    year=row[0], month=row[1], day=row[2], hour=row[3]
+                )
+            result[metric].set_index("reconstr_time", inplace=True)
+            result[metric].index.name = "Time"
+            result[metric] = result[metric][:-1]
+
+    # Format result to show on daily resolution
+    elif by == "day":
+        for metric in data.columns.levels[0]:
+            result[metric] = (
+                data[metric]
+                .groupby(
+                    by=[
+                        data.index.year,
+                        data.index.month,
+                        data.index.day,
+                    ]
+                )
+                .agg(agg_map[metric])
+            )
+            result[metric] = result[metric].round(2)
+            result[metric]["reconstr_time"] = None
+            for row in result[metric].index:
+                result[metric].loc[row, "reconstr_time"] = datetime(
+                    year=row[0], month=row[1], day=row[2]
+                )
+            result[metric].set_index("reconstr_time", inplace=True)
+            result[metric].index.name = "Time"
+            result[metric] = result[metric][:-1]
+
+    # Format result to show on monthly resolution
+    elif by == "month":
+        for metric in data.columns.levels[0]:
+            result[metric] = (
+                data[metric]
+                .groupby(
+                    by=[
+                        data.index.year,
+                        data.index.month,
+                    ]
+                )
+                .agg(agg_map[metric])
+            )
+            result[metric] = result[metric].round(2)
+            result[metric]["reconstr_time"] = None
+            for row in result[metric].index:
+                result[metric].loc[row, "reconstr_time"] = datetime(
+                    year=row[0], month=row[1], day=1
+                )
+            result[metric].set_index("reconstr_time", inplace=True)
+            result[metric].index.name = "Time"
+            result[metric] = result[metric][:-1]
+
+    # Format result to show on annual resolution
+    elif by == "year":
+        for metric in data.columns.levels[0]:
+            result[metric] = (
+                data[metric].groupby(by=[data.index.year]).agg(agg_map[metric])
+            )
+            print("UNTESTED for request spanning multiple years")
+            result[metric] = result[metric].round(2)
+            result[metric]["reconstr_time"] = None
+            for row in result[metric].index:
+                result[metric].loc[row, "reconstr_time"] = datetime(
+                    year=row, month=1, day=1
+                )
+            result[metric].set_index("reconstr_time", inplace=True)
+            result[metric].index.name = "Time"
+            result[metric] = result[metric][:-1]
+
+    else:
+        raise Exception(
+            "Error: invalid by argument. Must be one of [interval, hour, day, month, year]"
+        )
+
+    return result

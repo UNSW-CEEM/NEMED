@@ -1,0 +1,17 @@
+format: jb-book
+root: index
+parts:
+- caption: Overview
+  chapters:
+  - file: about
+  - file: conduct
+  - file: contributing
+  - file: changelog
+
+- caption: Examples
+  chapters:
+  - file: examples/example_1
+
+- caption: API Reference
+  chapters:
+  - file: api_reference

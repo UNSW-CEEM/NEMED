@@ -18,7 +18,8 @@ DISPATCH_INT_MIN = 5
 
 
 def download_cdeii_table():
-    """Retrieves the most recent Carbon emissions factor data per generation unit (DUID) published to NEMWEB by AEMO.
+    """
+    Retrieves the most recent Carbon emissions factor data per generation unit (DUID) published to NEMWEB by AEMO.
 
     Returns
     -------
@@ -43,7 +44,14 @@ def download_duid_auxload():
 
 
 def download_duid_mapping():
-    filepath = Path(__file__).parent / "../../data/duid_mapping.csv"
+    """_summary_
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
+    filepath = Path(__file__).parent / "./data/duid_mapping.csv"
     table = pd.read_csv(filepath)[['DUID', '2021-22-IASR_Generator']]
     table.columns = ['DUID', 'Generator']
     return table
@@ -51,7 +59,7 @@ def download_duid_mapping():
 
 def download_iasr_existing_gens(select_columns=['Generator', 'Auxiliary Load (%)'], coltype={'Generator': str,
                                 'Auxiliary Load (%)': float}):
-    filepath = Path(__file__).parent / "../../data/existing_gen_data_summary.csv"
+    filepath = Path(__file__).parent / "./data/existing_gen_data_summary.csv"#"../../data/existing_gen_data_summary.csv"
     table = pd.read_csv(filepath, dtype=coltype)
     table = table[table.columns[table.columns.isin(select_columns)]]
     return table
@@ -76,6 +84,16 @@ def download_aemo_cdeii_summary(year, filter_start, filter_end, cache):
     return table.reset_index(drop=True)
 
 
+def download_current_aemo_cdeii_summary(filter_start, filter_end):
+    filepath = Path(__file__).parent / f"./data/CO2EII_SUMMARY_RESULTS_RECENT.csv"
+
+    aemo = pd.read_csv(filepath, header=1, usecols=[6,7,8,9,10])
+    aemo['SETTLEMENTDATE'] = pd.to_datetime(aemo['SETTLEMENTDATE'],format="%d/%m/%Y %H:%M")
+    table = aemo[aemo['SETTLEMENTDATE'].between(filter_start, filter_end)]
+
+    return table
+
+
 def get_aemo_comparison_data(filter_start, filter_end, filename='AEMO_CO2EII_August_2022_dataset.csv'):
     # Call the download func.
 
@@ -90,7 +108,7 @@ def get_aemo_comparison_data(filter_start, filter_end, filename='AEMO_CO2EII_Aug
     return table
 
 
-def download_unit_dispatch(start_time, end_time, cache, filter_units=None, record="TOTALCLEARED"):
+def download_unit_dispatch(start_time, end_time, cache, filter_units=None, record="INITIALMW"):
     """Downloads historical generation dispatch data via NEMOSIS.
 
     Parameters
@@ -138,7 +156,7 @@ def download_unit_dispatch(start_time, end_time, cache, filter_units=None, recor
             end_time=get_end_time,
             table_name="DISPATCHLOAD",
             raw_data_location=cache,
-            select_columns=["SETTLEMENTDATE", "DUID", record],
+            select_columns=["SETTLEMENTDATE", "DUID", record, "INTERVENTION"],
             filter_cols=["DUID"],
             filter_values=[filter_units],
             fformat="feather",
@@ -149,9 +167,12 @@ def download_unit_dispatch(start_time, end_time, cache, filter_units=None, recor
             end_time=get_end_time,
             table_name="DISPATCHLOAD",
             raw_data_location=cache,
-            select_columns=["SETTLEMENTDATE", "DUID", record],
+            select_columns=["SETTLEMENTDATE", "DUID", record, "INTERVENTION"],
             fformat="feather",
         )
+
+    disp_load = _check_interventions(disp_load)
+    disp_load = disp_load[["SETTLEMENTDATE", "DUID", record]]
 
     # Get data from other generators in DISPATCH_UNIT_SCADA MMS Table
     if filter_units:
@@ -199,6 +220,15 @@ def _clean_duplicates(table):
     # Remove duplicates and return a single entry per DUID
     return table_clean
 
+def _check_interventions(table):
+    timestamps_w_intervtn = list(table[table["INTERVENTION"]==1]["SETTLEMENTDATE"].unique())
+
+    data_unchanged = table[~table["SETTLEMENTDATE"].isin(timestamps_w_intervtn)]
+    data_intervtn_updated = table[(table["SETTLEMENTDATE"].isin(timestamps_w_intervtn)) & (table["INTERVENTION"]==1)]
+
+    updated_table = pd.concat([data_unchanged, data_intervtn_updated],ignore_index=True)
+    updated_table.sort_values(by=["SETTLEMENTDATE","DUID"],inplace=True)
+    return updated_table.reset_index(drop=True)
 
 def download_pricesetters_xml(cache, start_year, start_month, start_day, end_year, end_month, end_day):
     """Download XML files from AEMO NEMWEB of price setters for each dispatch interval. Converts the downloaded raw

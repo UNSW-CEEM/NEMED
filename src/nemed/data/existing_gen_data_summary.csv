@@ -1,0 +1,295 @@
+﻿Generator,Generator Type,Region,"ISP 
+sub-region",REZ Location,Fuel/Technology type,Maximum Capacity (MW),2023-34 Summer Rating (MW),2024 Not Summer Rating (MW),Maintenance duration (%),Maximum Capacity Factor (%),FOM ($/kW/annum),VOM ($/MWh sent-out),Heat Rate (GJ/MWh HHV s.o.),2023-24 Step Change Fuel Cost ($/GJ),Emissions (kg/MWh),MLF,Auxiliary Load (%),SRMC ($/MWh),Expected Retirement Year
+Bayswater,Steam Sub Critical,NSW,CNSW,N/A,Black Coal NSW,"2,690","2,620","2,740",5.48,75,56.74,4.49,9.45,1.77,889,0.96,5.46,21.19,2033
+Eraring,Steam Sub Critical,NSW,SNW,N/A,Black Coal NSW,"2,880","2,675","2,755",5.48,75,56.74,4.49,9.55,3.2,888,0.98,5.46,35.02,2025
+Liddell,Steam Sub Critical,NSW,CNSW,N/A,Black Coal NSW,"2,000",0,0,5.48,75,56.74,4.49,10.14,1.77,946,0.96,5.46,22.41,2023
+Mt Piper,Steam Sub Critical,NSW,CNSW,N/A,Black Coal NSW,"1,390","1,380","1,430",5.48,75,56.74,4.49,9.25,3.2,846,0.97,5.46,34.07,2040
+Vales Point B,Steam Sub Critical,NSW,SNW,N/A,Black Coal NSW,"1,320","1,320","1,320",5.48,75,56.74,4.49,9.68,3.01,877,0.99,5.46,33.57,2029
+Callide B,Steam Sub Critical,QLD,CNQ,N/A,Black Coal QLD,700,700,700,5.48,N/A,55.84,4.42,9.16,2.04,947,0.93,6.67,23.14,2028
+Callide C,Steam Super Critical,QLD,CNQ,N/A,Black Coal QLD,840,854,886,5.48,N/A,55.84,4.42,9.3,2.04,911,0.93,6.67,23.43,2051
+Gladstone,Steam Sub Critical,QLD,GG,N/A,Black Coal QLD,"1,680","1,680","1,680",5.48,N/A,55.84,4.42,9.47,2.65,952,0.95,6.67,29.52,2035
+Kogan Creek,Steam Super Critical,QLD,SQ,N/A,Black Coal QLD,744,710,750,5.48,N/A,55.84,4.42,8.8,1.38,841,0.97,6.67,16.6,2042
+Millmerran,Steam Super Critical,QLD,SQ,N/A,Black Coal QLD,852,672,852,5.48,N/A,55.84,4.42,9.21,1.26,830,0.97,6.67,16.03,2051
+Stanwell,Steam Sub Critical,QLD,CNQ,N/A,Black Coal QLD,"1,460","1,460","1,460",5.48,N/A,55.84,4.42,9.07,2.52,860,0.93,6.67,27.23,2043
+Tarong,Steam Sub Critical,QLD,SQ,N/A,Black Coal QLD,"1,400","1,400","1,400",5.48,N/A,55.84,4.42,9.21,2.67,880,0.97,6.67,28.97,2036
+Tarong North,Steam Super Critical,QLD,SQ,N/A,Black Coal QLD,450,443,443,5.48,N/A,55.84,4.42,8.65,2.67,880,0.97,6.67,27.5,2037
+Loy Yang A Power Station,Steam Sub Critical,VIC,VIC,N/A,Brown Coal VIC,"2,210","2,080","2,210",5.48,N/A,143.97,4.21,12.16,0.67,"1,138",0.98,8.2,12.35,2045
+Loy Yang B,Steam Sub Critical,VIC,VIC,N/A,Brown Coal VIC,"1,160","1,090","1,160",5.48,N/A,143.97,4.21,12.54,0.67,"1,113",0.98,8.2,12.6,2047
+Yallourn W,Steam Sub Critical,VIC,VIC,N/A,Brown Coal VIC,"1,450","1,420","1,528",5.48,N/A,143.97,4.21,13.9,0.66,"1,280",0.97,8.2,13.42,2028
+Tallawarra,CCGT,NSW,SNW,N/A,CCGT,440,380,427,5.48,N/A,11.02,7.74,6.99,10.56,369,0.99,1.76,81.55,2043
+Condamine A,CCGT,QLD,SQ,N/A,CCGT,144,139,144,5.48,N/A,11.02,7.74,7.29,7.81,459,0.98,1.76,64.64,2039
+Darling Downs,CCGT,QLD,SQ,N/A,CCGT,645,563,630,5.48,N/A,11.02,7.74,7.38,7.69,428,0.96,1.76,64.49,2045
+Swanbank E GT,CCGT,QLD,SQ,N/A,CCGT,385,350,365,5.48,N/A,11.02,7.74,7.44,8.67,378,1,1.76,72.23,2036
+Yabulu PS,CCGT,QLD,CNQ,N/A,CCGT,160,150,165,5.48,N/A,11.02,7.74,7.59,8.25,587,0.97,1.76,70.38,2046
+Yabulu Steam Turbine ,CCGT,QLD,CNQ,N/A,CCGT,84,78,82,5.48,N/A,11.02,7.74,7.59,8.25,587,0.97,1.76,70.38,2046
+Yarwun Cogen,CCGT,QLD,GG,N/A,CCGT,180,180,180,5.48,N/A,11.02,7.74,10.37,8.25,488,0.95,1.76,93.3,2050
+Osborne,CCGT,SA,SA,N/A,CCGT,180,172,0,5.48,N/A,11.02,7.74,8.16,10.87,412,1,1.76,96.48,2023
+Pelican Point,CCGT,SA,SA,N/A,CCGT,529,453,498,5.48,N/A,11.02,7.74,7.35,11.08,398,1,1.76,89.13,2037
+Tamar Valley Combined Cycle,CCGT,TAS,TAS,N/A,CCGT,208,0,0,5.48,N/A,110.79,7.74,7.29,12.62,516,1,1.76,99.71,2050
+Colongra,OCGT,NSW,SNW,N/A,OCGT,724,640,724,1.37,N/A,15.9,11.05,11.15,11.03,659,0.99,0.72,133.95,2070
+Hunter Valley GT,OCGT,NSW,CNSW,N/A,Liquid Fuel,50,30,40,1.37,N/A,15.9,11.05,12.72,36.72,"1,274",0.97,0.64,478.17,2022
+Smithfield Energy Facility,OCGT,NSW,SNW,N/A,OCGT,185,108,126,1.37,N/A,15.9,11.05,13.69,11.03,720,1,0.72,161.98,2044
+Uranquinty,OCGT,NSW,SNSW,N/A,OCGT,664,640,664,1.37,N/A,15.9,11.05,11.15,10.61,591,0.86,0.72,129.32,2044
+Barcaldine Power Station,OCGT,QLD,CNQ,N/A,OCGT,37,34,37,1.37,N/A,15.9,11.05,12.72,9.04,"3,193",0.91,0.72,126.06,2034
+Braemar,OCGT,QLD,SQ,N/A,OCGT,549,501,543,1.37,N/A,15.9,11.05,11.88,9.04,600,0.96,0.72,118.47,2046
+Braemar 2 Power Station,OCGT,QLD,SQ,N/A,OCGT,519,480,519,1.37,N/A,15.9,11.05,11.88,9.04,600,0.96,0.72,118.47,2049
+Mackay GT,OCGT,QLD,CNQ,N/A,Liquid Fuel,34,0,0,1.37,N/A,15.9,11.05,12.72,36.72,"1,592",0.95,0.64,478.17,2021
+Mt Stuart,OCGT,QLD,CNQ,N/A,Liquid Fuel,424,387,400,1.37,N/A,15.9,11.05,11.88,36.72,"1,042",0.93,0.64,447.34,2033
+Oakey Power Station,OCGT,QLD,SQ,N/A,OCGT,346,288,346,1.37,N/A,15.9,11.05,10.94,9.04,705,0.95,0.72,109.98,2050
+Roma,OCGT,QLD,SQ,N/A,OCGT,80,54,68,1.37,N/A,15.9,11.05,11.88,9.04,640,0.97,0.72,118.47,2034
+Port Lincoln GT,OCGT,SA,SA,N/A,Liquid Fuel,74,56,74,1.37,N/A,15.9,11.73,12.81,36.72,"1,620",0.95,0.64,482.18,2030
+Snuggery,OCGT,SA,SA,N/A,Liquid Fuel,63,54,63,1.37,N/A,15.9,11.73,13.43,36.72,"1,436",0.95,0.64,505,2030
+Dry Creek GT,OCGT,SA,SA,N/A,OCGT,156,112,143,1.37,N/A,15.9,11.05,13.69,11.08,"1,037",1,0.72,162.7,2030
+Hallett GT,OCGT,SA,SA,N/A,OCGT,277,223,249,1.37,N/A,15.9,11.05,14.88,11.08,857,0.96,0.72,175.86,2032
+Ladbroke Grove,OCGT,SA,SA,N/A,OCGT,80,70,84,1.37,N/A,15.9,11.05,11.88,11.08,505,0.99,0.72,142.68,2035
+Mintaro GT,OCGT,SA,SA,N/A,OCGT,90,68,90,1.37,N/A,15.9,11.05,12.72,11.08,778,0.99,0.72,151.99,2030
+Quarantine,OCGT,SA,SA,N/A,OCGT,229,195,236,1.37,N/A,15.9,11.05,10.71,11.08,704,0.99,0.72,129.76,2053
+Temporary Generation South,OCGT,SA,SA,N/A,Liquid Fuel,246,0,0,1.37,N/A,13.06,4.25,10.19,36.72,532,1,0.64,378.43,2045
+Bell Bay Three,OCGT,TAS,TAS,N/A,OCGT,120,105,105,1.37,N/A,15.9,11.05,12.04,12.62,516,1,0.72,163.01,2040
+Tamar Valley Peaking,OCGT,TAS,TAS,N/A,OCGT,58,58,58,1.37,N/A,15.9,11.05,12.72,12.62,516,1,0.72,171.6,2050
+Somerton,OCGT,VIC,VIC,N/A,OCGT,170,140,170,1.37,N/A,15.9,11.05,14.88,11.3,701,0.99,0.72,179.1,2033
+Bairnsdale,OCGT,VIC,VIC,N/A,OCGT,94,60,84,1.37,N/A,15.9,11.05,10.5,11.3,548,0.99,0.72,129.61,2042
+Jeeralang A,OCGT,VIC,VIC,N/A,OCGT,212,186,222,1.37,N/A,15.9,11.05,15.25,11.3,755,0.98,0.72,183.37,2039
+Jeeralang B,OCGT,VIC,VIC,N/A,OCGT,228,213,257,1.37,N/A,15.9,11.05,15.25,11.3,755,0.98,0.72,183.37,2039
+Laverton North,OCGT,VIC,VIC,N/A,OCGT,312,319,344,1.37,N/A,15.9,11.05,11.5,11.3,597,0.99,0.72,140.98,2070
+Mortlake,OCGT,VIC,VIC,N/A,OCGT,584,514,584,1.37,N/A,15.9,11.05,11.15,10.99,550,0.99,0.72,133.49,2047
+Valley Power,OCGT,VIC,VIC,N/A,OCGT,300,285,336,1.37,N/A,15.9,11.05,14.88,11.3,814,0.98,0.72,179.1,2070
+Torrens Island A,Gas-powered steam turbine,SA,SA,N/A,Gas-powered steam turbine,240,0,0,0.68,N/A,49.46,2.44,11.43,10.87,580,1,5.08,126.69,2021
+Torrens Island B,Gas-powered steam turbine,SA,SA,N/A,Gas-powered steam turbine,800,585,600,0.68,N/A,49.46,2.44,10.71,10.87,580,1,5.08,118.93,2035
+Newport,Gas-powered steam turbine,VIC,VIC,N/A,Gas-powered steam turbine,500,475,510,0.68,N/A,49.46,2.44,10.29,11.3,535,0.99,5.08,118.63,2039
+Angaston,Reciprocating Engine,SA,SA,N/A,Liquid Fuel,50,49,49,1.64,N/A,15.87,11.05,12.78,36.72,690,1,0.64,480.16,2070
+Barker Inlet Power Station,Reciprocating Engine,SA,SA,N/A,OCGT,210,205,210,1.64,N/A,15.87,11.05,7.89,10.98,442,1,0.72,97.7,2044
+Lonsdale,Reciprocating Engine,SA,SA,N/A,Liquid Fuel,21,21,21,1.64,N/A,15.87,11.73,7.89,36.72,674,1.01,0.64,301.63,2070
+Port Stanvac 1,Reciprocating Engine,SA,SA,N/A,Liquid Fuel,58,65,65,1.64,N/A,15.87,11.73,7.89,36.72,674,1.01,0.64,301.63,2070
+Blowering,Hydro,NSW,SNSW,N/A,Hydro,80,70,70,0.27,N/A,61.14,7.55,,,,0.94,0.34,7.55,2070
+Guthega,Hydro,NSW,SNSW,N/A,Hydro,60,68,68,0.27,N/A,61.14,7.55,,,,0.9,0.34,7.55,2070
+Hume Dam NSW,Hydro,NSW,SNSW,N/A,Hydro,29,29,0,0.27,N/A,61.14,7.55,,,,0.9,0.34,7.55,2057
+Shoalhaven,Hydro,NSW,CNSW,N/A,Hydro,240,240,240,0.27,N/A,61.14,7.55,,,,0.98,0.34,7.55,2100
+Upper Tumut,Hydro,NSW,SNSW,N/A,Hydro,616,674,674,0.27,N/A,61.14,7.55,,,,0.93,0.34,7.55,2070
+Tumut 3,Hydro,NSW,SNSW,N/A,Hydro,"1,500","1,800","1,800",0.27,N/A,61.14,7.55,,,,0.92,0.34,7.55,2070
+Barron Gorge,Hydro,QLD,CNQ,N/A,Hydro,66,66,66,0.27,N/A,61.14,7.55,,,,0.98,0.34,7.55,2042
+Kareeya,Hydro,QLD,CNQ,N/A,Hydro,86,86,86,0.27,N/A,61.14,7.55,,,,0.97,0.34,7.55,2037
+Wivenhoe,Hydro,QLD,SQ,N/A,Hydro,570,570,570,0.27,N/A,61.14,7.55,,,,0.99,0.34,7.55,2084
+Bastyan,Hydro,TAS,TAS,N/A,Hydro,80,81,81,0.27,N/A,61.14,7.55,,,,0.93,0.34,7.55,2100
+Catagunya / Liapootah / Wayatinah,Hydro,TAS,TAS,N/A,Hydro,177,174,174,0.27,N/A,61.14,7.55,,,,0.98,0.34,7.55,2100
+Cethana,Hydro,TAS,TAS,N/A,Hydro,85,95,95,0.27,N/A,61.14,7.55,,,,0.95,0.34,7.55,2100
+Devils Gate,Hydro,TAS,TAS,N/A,Hydro,60,63,63,0.27,N/A,61.14,7.55,,,,0.96,0.34,7.55,2100
+Fisher,Hydro,TAS,TAS,N/A,Hydro,43,46,46,0.27,N/A,61.14,7.55,,,,0.96,0.34,7.55,2100
+Gordon,Hydro,TAS,TAS,N/A,Hydro,432,252,378,0.27,N/A,61.14,7.55,,,,0.93,0.34,7.55,2100
+John Butters,Hydro,TAS,TAS,N/A,Hydro,144,140,140,0.27,N/A,61.14,7.55,,,,0.93,0.34,7.55,2100
+Lake Echo,Hydro,TAS,TAS,N/A,Hydro,32,30,0,0.27,N/A,61.14,7.55,,,,0.91,0.34,7.55,2100
+Lemonthyme / Wilmot,Hydro,TAS,TAS,N/A,Hydro,82,88,87,0.27,N/A,61.14,7.55,,,,0.96,0.34,7.55,2100
+Mackintosh,Hydro,TAS,TAS,N/A,Hydro,80,81,81,0.27,N/A,61.14,7.55,,,,0.92,0.34,7.55,2100
+Meadowbank,Hydro,TAS,TAS,N/A,Hydro,40,44,44,0.27,N/A,61.14,7.55,,,,0.98,0.34,7.55,2100
+Poatina,Hydro,TAS,TAS,N/A,Hydro,300,285,285,0.27,N/A,61.14,7.55,,,,0.95,0.34,7.55,2100
+Reece,Hydro,TAS,TAS,N/A,Hydro,231,232,232,0.27,N/A,61.14,7.55,,,,0.92,0.34,7.55,2100
+Tarraleah,Hydro,TAS,TAS,N/A,Hydro,90,70,72,0.27,N/A,61.14,7.55,,,,0.91,0.34,7.55,2100
+Trevallyn,Hydro,TAS,TAS,N/A,Hydro,93,70,100,0.27,N/A,61.14,7.55,,,,0.98,0.34,7.55,2100
+Tribute,Hydro,TAS,TAS,N/A,Hydro,83,88,88,0.27,N/A,61.14,7.55,,,,0.91,0.34,7.55,2100
+Tungatinah,Hydro,TAS,TAS,N/A,Hydro,125,130,130,0.27,N/A,61.14,7.55,,,,0.89,0.34,7.55,2100
+Bogong / MacKay,Hydro,VIC,VIC,N/A,Hydro,300,300,300,0.27,N/A,61.14,7.55,,,,0.97,0.34,7.55,2057
+Dartmouth,Hydro,VIC,VIC,N/A,Hydro,185,170,170,0.27,N/A,61.14,7.55,,,,0.99,0.34,7.55,2057
+Eildon,Hydro,VIC,VIC,N/A,Hydro,135,120,120,0.27,N/A,61.14,7.55,,,,1,0.34,7.55,2057
+Hume Dam VIC,Hydro,VIC,VIC,N/A,Hydro,29,29,0,0.27,N/A,61.14,7.55,,,,0.99,0.34,7.55,2057
+Murray 1,Hydro,VIC,VIC,N/A,Hydro,950,950,760,0.27,N/A,61.14,7.55,,,,1,0.34,7.55,2070
+Murray 2,Hydro,VIC,VIC,N/A,Hydro,552,600,600,0.27,N/A,61.14,7.55,,,,1,0.34,7.55,2070
+West Kiewa,Hydro,VIC,VIC,N/A,Hydro,68,68,68,0.27,N/A,61.14,7.55,,,,1.01,0.34,7.55,2057
+Beryl Solar Farm,Large scale Solar PV,NSW,CNSW,Central-West Orana,Solar,98,87,87,0,N/A,17.61,0,,,,0.92,0.2,,2049
+Bomen Solar Farm,Large scale Solar PV,NSW,SNSW,Wagga Wagga,Solar,121,94,100,0,N/A,17.61,0,,,,0.89,0.2,,2050
+Broken Hill Solar Farm,Large scale Solar PV,NSW,SNSW,Broken Hill,Solar,53,53,53,0,N/A,17.61,0,,,,0.8,0.2,,2043
+Coleambally Solar Farm,Large scale Solar PV,NSW,SNSW,South West NSW,Solar,150,150,150,0,N/A,17.61,0,,,,0.85,0.2,,2038
+Darlington Point Solar Farm,Large scale Solar PV,NSW,SNSW,South West NSW,Solar,275,263,275,0,N/A,17.61,0,,,,0.86,0.2,,2055
+Finley Solar Farm,Large scale Solar PV,NSW,SNSW,South West NSW,Solar,162,117,133,0,N/A,17.61,0,,,,0.84,0.2,,2049
+Goonumbla Solar Farm,Large scale Solar PV,NSW,CNSW,Central-West Orana,Solar,70,68,70,0,N/A,17.61,0,,,,0.89,0.2,,2050
+Gullen Range Solar Farm,Large scale Solar PV,NSW,SNSW,N/A,Solar,10,10,10,0,N/A,17.61,0,,,,0.96,0.2,,2100
+Limondale Solar Farm 1,Large scale Solar PV,NSW,SNSW,South West NSW,Solar,220,207,220,0,N/A,17.61,0,,,,0.81,0.2,,2050
+Limondale Solar Farm 2,Large scale Solar PV,NSW,SNSW,South West NSW,Solar,29,29,29,0,N/A,17.61,0,,,,0.8,0.2,,2050
+Manildra Solar Farm,Large scale Solar PV,NSW,CNSW,Central-West Orana,Solar,50,47,47,0,N/A,17.61,0,,,,0.93,0.2,,2048
+Molong Solar Farm,Large scale Solar PV,NSW,CNSW,Central-West Orana,Solar,36,32,32,0,N/A,17.61,0,,,,0.95,0.2,,2051
+Moree Solar Farm,Large scale Solar PV,NSW,NNSW,North West NSW,Solar,56,56,56,0,N/A,17.61,0,,,,0.89,0.2,,2046
+Nevertire Solar Farm,Large scale Solar PV,NSW,CNSW,Central-West Orana,Solar,105,105,105,0,N/A,17.61,0,,,,0.94,0.2,,2049
+Nyngan Solar Plant,Large scale Solar PV,NSW,CNSW,Central-West Orana,Solar,102,102,102,0,N/A,17.61,0,,,,0.99,0.2,,2042
+Parkes Solar Farm,Large scale Solar PV,NSW,CNSW,N/A,Solar,51,51,51,0,N/A,17.61,0,,,,0.89,0.2,,2058
+Sunraysia Solar Farm,Large scale Solar PV,NSW,SNSW,South West NSW,Solar,229,200,165,0,N/A,17.61,0,,,,0.81,0.2,,2049
+White Rock Solar Farm,Large scale Solar PV,NSW,NNSW,New England,Solar,20,20,20,0,N/A,17.61,0,,,,0.87,0.2,,2043
+Childers Solar Farm,Large scale Solar PV,QLD,SQ,Wide Bay,Solar,56,56,56,0,N/A,17.61,0,,,,0.98,0.2,,2049
+Clare Solar Farm,Large scale Solar PV,QLD,CNQ,Northern Qld,Solar,110,95,100,0,N/A,17.61,0,,,,0.92,0.2,,2047
+Clermont Solar Farm,Large scale Solar PV,QLD,CNQ,Isaac,Solar,93,71,75,0,N/A,17.61,0,,,,0.93,0.2,,2049
+Collinsville Solar Farm,Large scale Solar PV,QLD,CNQ,Isaac,Solar,43,40,43,0,N/A,17.61,0,,,,0.92,0.2,,2044
+Darling Downs Solar Farm,Large scale Solar PV,QLD,SQ,Darling Downs,Solar,121,109,110,0,N/A,17.61,0,,,,0.98,0.2,,2036
+Daydream Solar Farm,Large scale Solar PV,QLD,CNQ,Isaac,Solar,168,146,150,0,N/A,17.61,0,,,,0.93,0.2,,2048
+Emerald Solar Farm,Large scale Solar PV,QLD,CNQ,N/A,Solar,72,0,0,0,N/A,17.61,0,,,,0.92,0.2,,2048
+Hamilton Solar Farm,Large scale Solar PV,QLD,CNQ,Isaac,Solar,58,54,56,0,N/A,17.61,0,,,,0.92,0.2,,2048
+Haughton Solar Farm,Large scale Solar PV,QLD,CNQ,Northern Qld,Solar,133,100,100,0,N/A,17.61,0,,,,0.94,0.2,,2049
+Hayman Solar Farm,Large scale Solar PV,QLD,CNQ,Isaac,Solar,58,48,50,0,N/A,17.61,0,,,,0.93,0.2,,2048
+Hughenden Solar Farm,Large scale Solar PV,QLD,CNQ,North Qld Clean Energy Hub,Solar,18,18,18,0,N/A,17.61,0,,,,0.94,0.2,,2048
+Kidston Solar Farm,Large scale Solar PV,QLD,CNQ,North Qld Clean Energy Hub,Solar,50,49,49,0,N/A,17.61,0,,,,0.94,0.2,,2037
+Lilyvale Solar Farm,Large scale Solar PV,QLD,CNQ,Isaac,Solar,118,98,100,0,N/A,17.61,0,,,,0.93,0.2,,2048
+Longreach Solar Farm,Large scale Solar PV,QLD,CNQ,Barcaldine,Solar,14,14,14,0,N/A,17.61,0,,,,0.93,0.2,,2043
+Middlemount Sun Farm,Large scale Solar PV,QLD,CNQ,Isaac,Solar,26,26,26,0,N/A,17.61,0,,,,0.92,0.2,,2050
+Oakey 1 Solar Farm,Large scale Solar PV,QLD,SQ,Darling Downs,Solar,25,23,25,0,N/A,17.61,0,,,,0.97,0.2,,2043
+Oakey 2 Solar Farm,Large scale Solar PV,QLD,SQ,Darling Downs,Solar,56,52,55,0,N/A,17.61,0,,,,0.97,0.2,,2044
+Ross River Solar Farm,Large scale Solar PV,QLD,CNQ,Northern Qld,Solar,128,116,116,0,N/A,17.61,0,,,,0.94,0.2,,2043
+Rugby Run Solar Farm,Large scale Solar PV,QLD,CNQ,Isaac,Solar,65,65,65,0,N/A,17.61,0,,,,0.92,0.2,,2049
+Sun Metals Corporation Solar Farm,Large scale Solar PV,QLD,CNQ,Northern Qld,Solar,143,120,120,0,N/A,17.61,0,,,,1,0.2,,2042
+Susan River Solar Farm,Large scale Solar PV,QLD,SQ,Wide Bay,Solar,85,75,75,0,N/A,17.61,0,,,,0.98,0.2,,2049
+Whitsunday Solar Farm,Large scale Solar PV,QLD,CNQ,Isaac,Solar,58,54,56,0,N/A,17.61,0,,,,0.92,0.2,,2048
+Yarranlea Solar Farm,Large scale Solar PV,QLD,SQ,Darling Downs,Solar,103,103,103,0,N/A,17.61,0,,,,0.98,0.2,,2044
+Bungala one Solar Farm,Large scale Solar PV,SA,SA,Northern SA,Solar,135,102,108,0,N/A,17.61,0,,,,0.96,0.2,,2044
+Bungala Two Solar Farm,Large scale Solar PV,SA,SA,Northern SA,Solar,135,102,108,0,N/A,17.61,0,,,,0.96,0.2,,2044
+Tailem Bend Solar Farm,Large scale Solar PV,SA,SA,South East SA,Solar,108,95,95,0,N/A,17.61,0,,,,1.01,0.2,,2049
+Bannerton Solar Farm,Large scale Solar PV,VIC,VIC,Murray River,Solar,100,88,88,0,N/A,17.61,0,,,,0.86,0.2,,2049
+Gannawarra Solar Farm,Large scale Solar PV,VIC,VIC,Murray River,Solar,55,48,50,0,N/A,17.61,0,,,,0.91,0.2,,2048
+Glenrowan West Solar Farm,Large scale Solar PV,VIC,VIC,Central North Vic,Solar,132,103,110,0,N/A,17.61,0,,,,1,0.2,,2051
+Karadoc Solar Farm,Large scale Solar PV,VIC,VIC,Murray River,Solar,103,90,90,0,N/A,17.61,0,,,,0.87,0.2,,2048
+Kiamal Solar Farm stage 1,Large scale Solar PV,VIC,VIC,Murray River,Solar,200,190,200,0,N/A,17.61,0,,,,0.85,0.2,,2049
+Numurkah Solar Farm,Large scale Solar PV,VIC,VIC,Central North Vic,Solar,110,108,108,0,N/A,17.61,0,,,,1,0.2,,2044
+Wemen Solar Farm,Large scale Solar PV,VIC,VIC,Murray River,Solar,98,82,88,0,N/A,17.61,0,,,,0.86,0.2,,2049
+Yatpool Solar Farm,Large scale Solar PV,VIC,VIC,Murray River,Solar,93,81,81,0,N/A,17.61,0,,,,0.87,0.2,,2050
+Bango 973 Wind Farm,Wind,NSW,SNSW,N/A,Wind,159,0,159,0,N/A,25.92,0,,,,0.91,0.28,,2050
+Boco Rock Wind Farm,Wind,NSW,SNSW,Cooma-Monaro,Wind,113,104,113,0,N/A,25.92,0,,,,0.94,0.28,,2040
+Bodangora Wind Farm,Wind,NSW,CNSW,Central-West Orana,Wind,113,113,113,0,N/A,25.92,0,,,,0.96,0.28,,2049
+Capital Wind Farm,Wind,NSW,SNSW,N/A,Wind,141,141,141,0,N/A,25.92,0,,,,0.96,0.28,,2040
+Collector Wind Farm,Wind,NSW,SNSW,N/A,Wind,227,0,0,0,N/A,25.92,0,,,,0.96,0.28,,2046
+Crookwell 2 Wind Farm,Wind,NSW,SNSW,N/A,Wind,96,91,91,0,N/A,25.92,0,,,,0.96,0.28,,2043
+Crudine Ridge Wind Farm,Wind,NSW,CNSW,N/A,Wind,138,0,138,0,N/A,25.92,0,,,,0.92,0.28,,2041
+Cullerin Range Wind Farm,Wind,NSW,SNSW,N/A,Wind,30,30,30,0,N/A,25.92,0,,,,0.91,0.28,,2038
+Gullen Range Wind Farm,Wind,NSW,SNSW,N/A,Wind,166,166,166,0,N/A,25.92,0,,,,0.96,0.28,,2100
+Gunning Wind Farm,Wind,NSW,SNSW,N/A,Wind,47,47,47,0,N/A,25.92,0,,,,0.91,0.28,,2036
+Sapphire Wind Farm,Wind,NSW,NNSW,New England,Wind,270,156,270,0,N/A,25.92,0,,,,0.94,0.28,,2043
+Silverton Wind Farm,Wind,NSW,SNSW,Broken Hill,Wind,199,119,198,0,N/A,25.92,0,,,,0.85,0.28,,2043
+Taralga Wind Farm,Wind,NSW,CNSW,N/A,Wind,107,107,107,0,N/A,25.92,0,,,,1.01,0.28,,2040
+White Rock Wind Farm - Stage 1,Wind,NSW,NNSW,New England,Wind,172,172,172,0,N/A,25.92,0,,,,0.87,0.28,,2038
+Woodlawn Wind Farm,Wind,NSW,SNSW,N/A,Wind,48,48,48,0,N/A,25.92,0,,,,0.96,0.28,,2041
+Coopers Gap Wind Farm,Wind,QLD,SQ,Darling Downs,Wind,453,440,440,0,N/A,25.92,0,,,,0.97,0.28,,2044
+Mount Emerald Wind Farm,Wind,QLD,CNQ,Far North QLD,Wind,181,167,180,0,N/A,25.92,0,,,,0.98,0.28,,2043
+Canunda Wind Farm,Wind,SA,SA,South East SA,Wind,46,46,46,0,N/A,25.92,0,,,,0.99,0.28,,2030
+Cathedral Rocks Wind Farm,Wind,SA,SA,Eastern Eyre Peninsula,Wind,66,66,66,0,N/A,25.92,0,,,,0.92,0.28,,2030
+Clements Gap Wind Farm,Wind,SA,SA,Mid-North SA,Wind,57,57,57,0,N/A,25.92,0,,,,0.96,0.28,,2039
+Hallett Stage 1 Brown Hill Wind Farm,Wind,SA,SA,Mid-North SA,Wind,95,63,95,0,N/A,25.92,0,,,,0.96,0.28,,2043
+Hallett Stage 2 Hallett Hill Wind Farm,Wind,SA,SA,Mid-North SA,Wind,71,48,71,0,N/A,25.92,0,,,,0.96,0.28,,2035
+Hallett 4 North Brown Hill Wind Farm,Wind,SA,SA,Mid-North SA,Wind,132,88,132,0,N/A,25.92,0,,,,0.96,0.28,,2036
+Hallett 5 The Bluff Wind Farm,Wind,SA,SA,Mid-North SA,Wind,53,35,53,0,N/A,25.92,0,,,,0.96,0.28,,2036
+Hornsdale Wind Farm Stage 1,Wind,SA,SA,Mid-North SA,Wind,102,100,100,0,N/A,25.92,0,,,,0.95,0.28,,2056
+Hornsdale Wind Farm Stage 2,Wind,SA,SA,Mid-North SA,Wind,102,100,100,0,N/A,25.92,0,,,,0.95,0.28,,2057
+Hornsdale Wind Farm Stage 3,Wind,SA,SA,Mid-North SA,Wind,112,109,109,0,N/A,25.92,0,,,,0.95,0.28,,2057
+Lake Bonney 1 Wind Farm,Wind,SA,SA,South East SA,Wind,81,81,81,0,N/A,25.92,0,,,,0.98,0.28,,2035
+Lake Bonney 2 Wind Farm,Wind,SA,SA,South East SA,Wind,159,159,159,0,N/A,25.92,0,,,,0.98,0.28,,2038
+Lake Bonney 3 Wind Farm,Wind,SA,SA,South East SA,Wind,39,39,39,0,N/A,25.92,0,,,,0.98,0.28,,2040
+Lincoln Gap Wind Farm - stage 1,Wind,SA,SA,Northern SA,Wind,126,126,126,0,N/A,25.92,0,,,,0.97,0.28,,2045
+Mount Millar Wind Farm,Wind,SA,SA,Eastern Eyre Peninsula,Wind,70,70,70,0,N/A,25.92,0,,,,0.93,0.28,,2035
+Snowtown Wind Farm,Wind,SA,SA,Mid-North SA,Wind,99,66,99,0,N/A,25.92,0,,,,0.91,0.28,,2033
+Snowtown S2 Wind Farm - North,Wind,SA,SA,Mid-North SA,Wind,144,133,144,0,N/A,25.92,0,,,,0.97,0.28,,2039
+Snowtown S2 Wind Farm - South,Wind,SA,SA,Mid-North SA,Wind,126,117,126,0,N/A,25.92,0,,,,0.97,0.28,,2039
+Starfish Hill Wind Farm,Wind,SA,SA,N/A,Wind,33,33,33,0,N/A,25.92,0,,,,1.01,0.28,,2027
+Waterloo Wind Farm,Wind,SA,SA,Mid-North SA,Wind,131,40,131,0,N/A,25.92,0,,,,0.96,0.28,,2045
+Wattle Point Wind Farm,Wind,SA,SA,Yorke Peninsula,Wind,91,0,111,0,N/A,25.92,0,,,,0.81,0.28,,2029
+Willogoleche Wind Farm,Wind,SA,SA,Mid-North SA,Wind,119,0,119,0,N/A,25.92,0,,,,0.96,0.28,,2043
+Cattle Hill Wind Farm,Wind,TAS,TAS,Central Highlands,Wind,144,144,144,0,N/A,25.92,0,,,,0.98,0.28,,2044
+Granville Harbour Wind Farm,Wind,TAS,TAS,North West Tasmania,Wind,112,112,112,0,N/A,25.92,0,,,,0.93,0.28,,2055
+Musselroe Wind Farm,Wind,TAS,TAS,North East Tasmania,Wind,168,168,168,0,N/A,25.92,0,,,,0.9,0.28,,2050
+Woolnorth Wind Farm,Wind,TAS,TAS,North West Tasmania,Wind,140,140,140,0,N/A,25.92,0,,,,0.88,0.28,,2050
+Ararat Wind Farm,Wind,VIC,VIC,Western Victoria,Wind,240,75,240,0,N/A,25.92,0,,,,0.9,0.28,,2047
+Bald Hills Wind Farm,Wind,VIC,VIC,N/A,Wind,107,107,107,0,N/A,25.92,0,,,,0.99,0.28,,2040
+Bulgana Green Power Hub - Wind Farm,Wind,VIC,VIC,Western Victoria,Wind,204,204,204,0,N/A,25.92,0,,,,0.89,0.28,,2049
+Challicum Hills Wind Farm,Wind,VIC,VIC,Western Victoria,Wind,53,53,53,0,N/A,25.92,0,,,,0.97,0.28,,2033
+Cherry Tree Wind Farm,Wind,VIC,VIC,N/A,Wind,58,58,58,0,N/A,25.92,0,,,,1,0.28,,2050
+Crowlands Wind Farm,Wind,VIC,VIC,Western Victoria,Wind,80,80,80,0,N/A,25.92,0,,,,0.9,0.28,,2049
+Dundonnell Wind Farm,Wind,VIC,VIC,South West Victoria,Wind,336,216,336,0,N/A,25.92,0,,,,0.98,0.28,,2045
+Elaine Wind Farm,Wind,VIC,VIC,Western Victoria,Wind,84,84,84,0,N/A,25.92,0,,,,0.95,0.28,,2049
+Kiata Wind Farm,Wind,VIC,VIC,Western Victoria,Wind,31,27,31,0,N/A,25.92,0,,,,0.9,0.28,,2042
+Macarthur Wind Farm,Wind,VIC,VIC,South West Victoria,Wind,420,420,420,0,N/A,25.92,0,,,,0.98,0.28,,2038
+Moorabool Wind Farm,Wind,VIC,VIC,Western Victoria,Wind,312,312,312,0,N/A,25.92,0,,,,0.95,0.28,,2044
+Mortons Lane Wind Farm,Wind,VIC,VIC,South West Victoria,Wind,20,20,20,0,N/A,25.92,0,,,,1,0.28,,2042
+Mt Gellibrand Wind Farm,Wind,VIC,VIC,South West Victoria,Wind,139,0,132,0,N/A,25.92,0,,,,0.99,0.28,,2043
+Mt Mercer Wind Farm,Wind,VIC,VIC,Western Victoria,Wind,131,0,131,0,N/A,25.92,0,,,,0.95,0.28,,2043
+Murra Warra Wind Farm - stage 1,Wind,VIC,VIC,Western Victoria,Wind,226,226,226,0,N/A,25.92,0,,,,0.89,0.28,,2049
+Oaklands Hill Wind Farm,Wind,VIC,VIC,South West Victoria,Wind,67,41,63,0,N/A,25.92,0,,,,1,0.28,,2037
+Portland Wind Farm,Wind,VIC,VIC,South West Victoria,Wind,152,92,92,0,N/A,25.92,0,,,,0.99,0.28,,2040
+Salt Creek Wind Farm,Wind,VIC,VIC,South West Victoria,Wind,54,38,54,0,N/A,25.92,0,,,,0.95,0.28,,2043
+Waubra Wind Farm,Wind,VIC,VIC,Western Victoria,Wind,192,192,192,0,N/A,25.92,0,,,,0.92,0.28,,2034
+Yambuk Wind Farm,Wind,VIC,VIC,South West Victoria,Wind,30,30,30,0,N/A,25.92,0,,,,1,0.28,,2040
+Yaloak South Wind Farm,Wind,VIC,VIC,Western Victoria,Wind,29,29,29,0,N/A,25.92,0,,,,0.97,0.28,,2048
+Yendon Wind Farm,Wind,VIC,VIC,Western Victoria,Wind,144,144,144,0,N/A,25.92,0,,,,0.94,0.28,,2049
+Berrybank Wind Farm,Wind,VIC,VIC,South West Victoria,Wind,181,0,0,0,N/A,25.92,0,,,,0.94,0.28,,2050
+Gullen Range Wind Farm 2 ,Wind,NSW,SNSW,N/A,Wind,111,0,0,0,N/A,25.92,0,,,,0.96,0.28,,2120
+Jemalong Solar,Large scale Solar PV,NSW,CNSW,N/A,Solar,55,0,0,0,N/A,17.61,0,,,,0.9,0.2,,2050
+Maryrorough Solar Farm,Large scale Solar PV,QLD,SQ,Darling Downs,Solar,35,0,0,0,N/A,17.61,0,,,,0.98,0.2,,2048
+Stockyard Hill Wind Farm,Wind,VIC,VIC,South West Victoria,Wind,528,0,0,0,N/A,25.92,0,,,,0.97,0.28,,2045
+Wellington Solar Farm,Large scale Solar PV,NSW,CNSW,Central-West Orana,Solar,211,0,0,0,N/A,17.61,0,,,,0.94,0.2,,2051
+Winton Solar Farm,Large scale Solar PV,VIC,VIC,Central North Vic,Solar,85,0,0,0,N/A,17.61,0,,,,1,0.2,,2051
+Kurri Kurri ,OCGT,NSW,SNW,N/A,OCGT,750,750,750,1.37,N/A,10.57,2.49,10.93,11.8,575,0.99,0.72,131.52,2063
+Snapper Point Power Station*,OCGT,SA,SA,N/A,Liquid Fuel,154,123,147,1.37,N/A,13.06,4.25,10.19,12.12,532,1,0.64,127.71,2046
+Kidston ,Pumped Hydro,QLD,CNQ,N/A,Hydro,250,0,0,0.27,N/A,61.14,7.55,,,,1,0.34,7.55,2105
+Snowy 2.0,Pumped Hydro,NSW,SNSW,N/A,Hydro,"2,040",0,0,0.27,N/A,61.14,7.55,,,,0.92,0.34,7.55,2076
+Corowa Solar Farm,Large scale Solar PV,NSW,SNSW,South West NSW,Solar,36,30,30,0,N/A,17.61,0,,,,0.88,0.2,,2051
+Gunnedah Solar Farm,Large scale Solar PV,NSW,NNSW,North West NSW,Solar,110,110,110,0,N/A,17.61,0,,,,0.89,0.2,,2056
+Junee Solar Farm,Large scale Solar PV,NSW,SNSW,Wagga Wagga,Solar,36,30,30,0,N/A,17.61,0,,,,0.89,0.2,,2050
+Metz Solar Farm,Large scale Solar PV,NSW,NNSW,New England,Solar,135,107,115,0,N/A,17.61,0,,,,0.87,0.2,,2052
+New England Solar Farm,Large scale Solar PV,NSW,NNSW,New England,Solar,400,400,400,0,N/A,17.61,0,,,,0.87,0.2,,2052
+Riverina Solar Farm,Large scale Solar PV,NSW,SNSW,N/A,Solar,32,32,32,0,N/A,17.61,0,,,,0.85,0.2,,2046
+Sebastopol Solar Farm,Large scale Solar PV,NSW,SNSW,Wagga Wagga,Solar,90,84,90,0,N/A,17.61,0,,,,0.96,0.2,,2052
+Suntop Solar Farm,Large scale Solar PV,NSW,CNSW,Central-West Orana,Solar,150,150,150,0,N/A,17.61,0,,,,0.99,0.2,,2056
+Wagga North Solar Farm,Large scale Solar PV,NSW,SNSW,Wagga Wagga,Solar,36,46,46,0,N/A,17.61,0,,,,0.89,0.2,,2050
+Bluegrass Solar Farm,Large scale Solar PV,QLD,SQ,Darling Downs,Solar,148,148,148,0,N/A,17.61,0,,,,0.98,0.2,,2057
+Columboola Solar Farm,Large scale Solar PV,QLD,SQ,Darling Downs,Solar,217,160,162,0,N/A,17.61,0,,,,0.98,0.2,,2046
+Gangarri Solar Farm,Large scale Solar PV,QLD,SQ,Darling Downs,Solar,162,120,120,0,N/A,17.61,0,,,,0.98,0.2,,2051
+Kennedy Energy Park Solar Farm*,Large scale Solar PV,QLD,CNQ,North Qld Clean Energy Hub,Solar,15,15,15,0,N/A,17.61,0,,,,0.94,0.2,,2046
+Warwick Solar Farm - stage 1,Large scale Solar PV,QLD,SQ,Darling Downs,Solar,32,32,32,0,N/A,17.61,0,,,,0.98,0.2,,2046
+Warwick Solar Farm - stage 2,Large scale Solar PV,QLD,SQ,Darling Downs,Solar,32,32,32,0,N/A,17.61,0,,,,0.98,0.2,,2045
+Western Downs Green Power Hub,Large scale Solar PV,QLD,SQ,Darling Downs,Solar,400,394,400,0,N/A,17.61,0,,,,0.98,0.2,,2047
+Woolooga Solar Farm,Large scale Solar PV,QLD,SQ,Wide Bay,Solar,223,158,176,0,N/A,17.61,0,,,,0.98,0.2,,2047
+Adelaide Desalination Plant*,Large scale Solar PV,SA,SA,N/A,Solar,11,10,11,0,N/A,17.61,0,,,,1.9,0.2,,2041
+Morgan To Whyalla Pipeline No 1 PS And Water Filtration Plant,Large scale Solar PV,SA,SA,Riverland,Solar,6,6,6,0,N/A,17.61,0,,,,1.03,0.2,,2031
+Morgan To Whyalla Pipeline No 2 PS,Large scale Solar PV,SA,SA,Riverland,Solar,6,6,6,0,N/A,17.61,0,,,,0.97,0.2,,2041
+Morgan To Whyalla Pipeline No 3 PS,Large scale Solar PV,SA,SA,Riverland,Solar,7,7,7,0,N/A,17.61,0,,,,0.97,0.2,,2045
+Morgan To Whyalla Pipeline No 4 PS,Large scale Solar PV,SA,SA,Riverland,Solar,6,6,6,0,N/A,17.61,0,,,,0.98,0.2,,2041
+Cohuna Solar Farm,Large scale Solar PV,VIC,VIC,Murray River,Solar,31,27,27,0,N/A,17.61,0,,,,0.91,0.2,,2045
+Bango 999 Wind Farm,Wind,NSW,SNSW,N/A,Wind,85,0,85,0,N/A,25.92,0,,,,0.96,0.28,,2050
+Kaban Green Power Hub - Wind Farm*,Wind,QLD,CNQ,Far North QLD,Wind,150,120,150,0,N/A,25.92,0,,,,0.98,0.28,,2048
+Kennedy Energy Park Wind Farm*,Wind,QLD,CNQ,North Qld Clean Energy Hub,Wind,43,36,43,0,N/A,25.92,0,,,,0.94,0.28,,2045
+Lincoln Gap Wind Farm - stage 2,Wind,SA,SA,Northern SA,Wind,86,86,86,0,N/A,25.92,0,,,,0.97,0.28,,2045
+Murra Warra Wind Farm - stage 2,Wind,VIC,VIC,Western Victoria,Wind,209,179,198,0,N/A,25.92,0,,,,0.89,0.28,,2052
+Adelaide Desalination Plant,Large scale Solar PV,SA,SA,N/A,Solar,14,10,11,0,N/A,17.61,0,,,,0.95,0.2,,2041
+Bolivar Waste Water Treatment,Large scale Solar PV,SA,SA,N/A,Solar,11,11,11,0,N/A,17.61,0,,,,1,0.2,,2053
+Edenvale Solar Park,Large scale Solar PV,QLD,SQ,Darling Downs,Solar,146,146,146,0,N/A,17.61,0,,,,0.98,0.2,,2053
+Hillston Sun Farm,Large scale Solar PV,NSW,SNSW,South West NSW,Solar,85,77,85,0,N/A,17.61,0,,,,0.98,0.2,,2052
+Mannum Adelaide Pumping Station No 2 - MAPL2 (Palmer),Large scale Solar PV,SA,SA,South East SA,Solar,17,16,17,0,N/A,17.61,0,,,,1.01,0.2,,2041
+Mannum Adelaide Pumping Station No 3 - MAPL3 (Kanmantoo),Large scale Solar PV,SA,SA,South East SA,Solar,17,16,17,0,N/A,17.61,0,,,,1.01,0.2,,2041
+Moura Solar Farm,Large scale Solar PV,QLD,CNQ,Fitzroy,Solar,99,82,82,0,N/A,17.61,0,,,,0.93,0.2,,2057
+Murray Bridge - Onkaparinga Pipeline Pump 2,Large scale Solar PV,SA,SA,South East SA,Solar,14,13,14,0,N/A,17.61,0,,,,1.01,0.2,,2041
+Port Augusta Renewable Energy Park - Solar,Large scale Solar PV,SA,SA,Northern SA,Solar,79,79,79,0,N/A,17.61,0,,,,0.96,0.2,,2047
+Port Augusta Renewable Energy Park - Wind,Wind,SA,SA,Northern SA,Wind,210,210,210,0,N/A,25.92,0,,,,0.97,0.28,,2052
+Wyalong Solar Farm,Large scale Solar PV,NSW,SNSW,N/A,Solar,62,53,53,0,N/A,17.61,0,,,,0.89,0.2,,2058
+Avonlie Solar Farm,Large scale Solar PV,NSW,SNSW,Wagga Wagga,Solar,254,190,190,0,N/A,17.61,0,,,,0.89,0.2,,2058
+Dulacca Wind Farm,Wind,QLD,SQ,Darling Downs,Wind,173,103,173,0,N/A,25.92,0,,,,0.97,0.28,,2053
+Rye Park Wind Farm,Wind,NSW,SNSW,N/A,Wind,396,225,386,0,N/A,25.92,0,,,,0.91,0.28,,2048
+Tallawarra B,OCGT,NSW,SNW,N/A,OCGT,316,314,316,1.37,N/A,10.57,2.49,10.93,11.8,575,0.99,0.72,131.52,2063
+West Wyalong Solar Farm,Large scale Solar PV,NSW,SNSW,N/A,Solar,105,90,90,0,N/A,17.61,0,,,,0.89,0.2,,2047
+Wollar Solar Farm,Large scale Solar PV,NSW,CNSW,N/A,Solar,280,280,280,0,N/A,17.61,0,,,,0.92,0.2,,2053
+Aramara Solar Farm,Large scale Solar PV,QLD,SQ,Wide Bay,Solar,101,101,101,0,N/A,17.61,0,,,,0.98,0.2,,2053
+Munna Creek Solar Farm,Large scale Solar PV,QLD,SQ,Wide Bay,Solar,154,154,154,0,N/A,17.61,0,,,,0.98,0.2,,2053
+Rodds Bay Solar Farm,Large scale Solar PV,QLD,CNQ,Fitzroy,Solar,303,245,250,0,N/A,17.61,0,,,,0.93,0.2,,2053
+Christies Beach Wastewater Treatment Plant,Large scale Solar PV,SA,SA,N/A,Solar,5,5,5,0,N/A,17.61,0,,,,1.01,0.2,,2053
+Happy Valley Reservoir,Large scale Solar PV,SA,SA,N/A,Solar,8,8,8,0,N/A,17.61,0,,,,1.01,0.2,,2053
+Mortlake South Wind Farm,Wind,VIC,VIC,South West Victoria,Wind,158,158,158,0,N/A,25.92,0,,,,0.9,0.28,,2053
+Macintyre Wind Farm,Wind,QLD,SQ,Darling Downs,Wind,300,300,300,0,N/A,25.92,0,,,,0.97,0.28,,2053
+Quorn Park Solar Farm,Large scale Solar PV,NSW,CNSW,N/A,Solar,80,80,80,0,N/A,17.61,0,,,,0.89,0.2,,2053
+Walla Walla Solar Farm,Large scale Solar PV,NSW,SNSW,N/A,Solar,380,299,299,0,N/A,17.61,0,,,,0.89,0.2,,2053
+Wunghnu Solar Farm,Large scale Solar PV,VIC,VIC,N/A,Solar,75,75,75,0,N/A,17.61,0,,,,1,0.2,,2053
+Yanco Solar Farm,Large scale Solar PV,NSW,SNSW,N/A,Solar,60,60,60,0,N/A,17.61,0,,,,0.89,0.2,,2053
+Wallgrove Grid Battery project,Battery Storage,NSW,SNW,N/A,N/A,50,50,50,0,N/A,10.69,0,,,,1,,,2036
+Wandoan South BESS,Battery Storage,QLD,SQ,N/A,N/A,100,100,100,0,N/A,10.69,0,,,,0.98,,,2051
+Adelaide Desalination Plant BESS,Battery Storage,SA,SA,N/A,N/A,6,0,6,0,N/A,10.69,0,,,,1,,,2043
+Bolivar Waste Water Treatment BESS,Battery Storage,SA,SA,N/A,N/A,2,2,2,0,N/A,10.69,0,,,,1,,,2043
+Christies Beach Wastewater Treatment Plant BESS,Battery Storage,SA,SA,N/A,N/A,2,2,2,0,N/A,10.69,0,,,,1,,,2043
+Dalrymple North BESS,Battery Storage,SA,SA,N/A,N/A,30,30,30,0,N/A,6.6,0,,,,0.92,,,2030
+Happy Valley Reservoir BESS,Battery Storage,SA,SA,N/A,N/A,4,4,4,0,N/A,10.69,0,,,,1,,,2043
+Hornsdale Power Reserve Unit 1,Battery Storage,SA,SA,N/A,N/A,150,150,150,0,N/A,6.6,0,,,,0.98,,,2057
+Lake Bonney BESS1,Battery Storage,SA,SA,N/A,N/A,25,25,25,0,N/A,10.69,0,,,,1,,,2034
+Lincoln Gap Wind Farm - BESS,Battery Storage,SA,SA,N/A,N/A,10,10,10,0,N/A,6.6,0,,,,0.97,,,2045
+Torrens Island BESS,Battery Storage,SA,SA,N/A,N/A,250,250,250,0,N/A,6.6,0,,,,1,,,2043
+Ballarat Energy Storage System,Battery Storage,VIC,VIC,N/A,N/A,30,29,30,0,N/A,6.6,0,,,,0.92,,,2033
+Bulgana Green Power Hub - BESS,Battery Storage,VIC,VIC,N/A,N/A,20,20,20,0,N/A,10.69,0,,,,0.92,,,2041
+Gannawarra Energy Storage System,Battery Storage,VIC,VIC,N/A,N/A,25,25,25,0,N/A,10.69,0,,,,0.98,,,2033
+Victorian Big Battery,Battery Storage,VIC,VIC,N/A,N/A,300,50,300,0,N/A,10.69,0,,,,1,,,2041

@@ -1,4 +1,4 @@
 # read version from installed package
 #from importlib.metadata import version
-from . import process
+from .nemed import *
 #__version__ = version("nemed")
