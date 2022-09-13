@@ -29,6 +29,7 @@ myst-nb = "*"
 sphinx-copybutton = "*"
 sphinx_external_toc = "*"
 sphinx-book-theme = "*"
+jupytext = "*"
 
 # Packages for developers for linting/autoformatting
 [tool.poetry.group.style]
