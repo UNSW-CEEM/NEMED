@@ -23,11 +23,12 @@ optional = true
 
 [tool.poetry.group.docs.dependencies]
 # MyST parser for Sphinx documentation with furo theme
-Sphinx = "^5.0.2"
-furo = "^2022.6.21"
+Sphinx = "4.5.0"
 myst-parser = "^0.18.0"
 myst-nb = "*"
 sphinx-copybutton = "*"
+sphinx_external_toc = "*"
+sphinx-book-theme = "*"
 
 # Packages for developers for linting/autoformatting
 [tool.poetry.group.style]
