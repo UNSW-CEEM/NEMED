@@ -16,6 +16,7 @@ datetime = "*"
 pathlib = "*"
 requests = "*"
 xmltodict = "*"
+tqdm = "*"
 
 # Packages for developers for creating documentation
 [tool.poetry.group.docs]
