@@ -3,20 +3,19 @@ import nemed.process as nd
 import nemed.helper_functions.helpers as hp
 
 
-def get_total_emissions(start_time, end_time, cache, filter_regions, by="interval", 
-                        generation_sent_out=True, save_debug_file=False):
+def get_total_emissions(start_time, end_time, cache, filter_regions, by="interval",
+                        generation_sent_out=True):
     # Check if cache folder exists
     hp._check_cache(cache)
 
     # Get emissions for all units by dispatch interval
     raw_table = nd.get_total_emissions_by_DI_DUID(
         start_time, end_time, cache, filter_units=None, filter_regions=filter_regions,
-        generation_sent_out=generation_sent_out,
-        save_debug_file=save_debug_file
-    )
+        generation_sent_out=generation_sent_out)
+    clean_table = raw_table.drop_duplicates(subset=['Time', 'DUID'])
 
     # Pivot and summate data. Aggregates to a regional level on interval
-    data = raw_table.pivot_table(
+    data = clean_table.pivot_table(
         index="Time",
         columns="REGIONID",
         values=["Energy", "Total_Emissions"],
@@ -29,6 +28,7 @@ def get_total_emissions(start_time, end_time, cache, filter_regions, by="interva
             data["Total_Emissions"][region] / data["Energy"][region]
         )
 
+    # Aggregate interval-resolution data to defined resolution
     result = nd.aggregate_data_by(data=data, by=by)
 
     return result

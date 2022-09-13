@@ -9,9 +9,8 @@ from .downloader import download_cdeii_table, download_unit_dispatch, download_p
 DISP_INT_LENGTH = 5 / 60
 
 
-def get_total_emissions_by_DI_DUID(
-    start_time, end_time, cache, filter_units=None, filter_regions=None, generation_sent_out=True, save_debug_file=False
-):
+def get_total_emissions_by_DI_DUID(start_time, end_time, cache, filter_units=None, filter_regions=None,
+                                   generation_sent_out=True):
     """Find the total emissions for each generation unit per dispatch interval. Calculates the Total_Emissions column by
     multiplying Energy (Dispatch (MW) * 5/60 (h)) with Plant Emissions Intensity (tCO2-e/MWh)
 
@@ -39,54 +38,50 @@ def get_total_emissions_by_DI_DUID(
         os.mkdir("CACHE")
         cache = os.path.join(os.getcwd(), "CACHE")
 
-    # Download CDEII and Unit Dispatch Data
+    # Download CDEII, Unit Dispatch Data and Generation Information
     cdeii_df = download_cdeii_table()
     disp_df = download_unit_dispatch(
         start_time, end_time, cache, filter_units, record="INITIALMW"
     )
-    
+    geninfo_df = download_generators_info(cache)
+
+    # Merge unit generation and dispatch type category
+    result = pd.merge(left=disp_df, right=geninfo_df[['DUID', 'Dispatch Type']], on="DUID", how="left")
+
+    # Filter out loads
+    result = result[result['Dispatch Type'] == 'Generator']
+
     # Merge unit generation and emissions factor data
-    result = pd.merge(
-        disp_df,
-        cdeii_df[["DUID", "REGIONID", "CO2E_EMISSIONS_FACTOR"]],
-        how="left",
-        on="DUID",
-    )
+    result = result.merge(right=cdeii_df[["DUID", "REGIONID", "CO2E_EMISSIONS_FACTOR"]], on="DUID", how="left")
 
     # Filter by region is specified
     if filter_regions:
         if not pd.Series(cdeii_df["REGIONID"].unique()).isin(filter_regions).any():
-            raise ValueError(
-                "filter_region paramaters passed were not found in NEM regions"
-            )
+            raise ValueError("filter_region paramaters passed were not found in NEM regions")
         result = result[result["REGIONID"].isin(filter_regions)]
     if result.empty:
-        print(
-            "WARNING: Emissions Dataframe is empty. Check filter_units and filter_regions parameters do not conflict!"
-        )
+        print("WARNING: Emissions Dataframe is empty. Check filter_units and filter_regions parameters do not \
+            conflict!")
 
+    # Calculate Energy (MWh)
     result["Energy"] = result["Dispatch"] * DISP_INT_LENGTH
 
+    # Consider auxillary loads for Sent Out Generation metric
     if generation_sent_out:
-        # Use 'sent_out' generation metrics
-        # Download Auxillary Load Data
+        # Download Auxilary Load Data
         auxload = download_duid_auxload()
+
+        # Merge data and compute auxilary load factor
         result = result.merge(auxload, on=["DUID"], how="left")
         result['pct_sent_out'] = (100 - result['Auxiliary Load (%)']) / 100
         result['pct_sent_out'].fillna(1.0, inplace=True)
+
+        # Adjust Energy for auxilary load
         result["Energy"] = result["Energy"] * result['pct_sent_out']
 
+    # Compute emissions
     result["Total_Emissions"] = result["Energy"] * result["CO2E_EMISSIONS_FACTOR"]
-    result.rename(
-            columns={"CO2E_EMISSIONS_FACTOR": "Plant_Emissions_Intensity"}, inplace=True
-        )
-
-    # Remove duplicates if still existing
-    #result.drop_duplicates(subset=["Time", "DUID"], inplace=True)
-
-    if save_debug_file:
-        result.to_csv('totalemissionsdebug.csv')
-        disp_df.to_csv('rawdispatchdata.csv')
+    result.rename(columns={"CO2E_EMISSIONS_FACTOR": "Plant_Emissions_Intensity"}, inplace=True)
 
     return result[['Time', 'DUID', 'REGIONID', 'Plant_Emissions_Intensity', 'Energy', 'Total_Emissions']]
 

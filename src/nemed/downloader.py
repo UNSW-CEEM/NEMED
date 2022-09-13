@@ -59,7 +59,7 @@ def download_duid_mapping():
 
 def download_iasr_existing_gens(select_columns=['Generator', 'Auxiliary Load (%)'], coltype={'Generator': str,
                                 'Auxiliary Load (%)': float}):
-    filepath = Path(__file__).parent / "./data/existing_gen_data_summary.csv"#"../../data/existing_gen_data_summary.csv"
+    filepath = Path(__file__).parent / "./data/existing_gen_data_summary.csv"
     table = pd.read_csv(filepath, dtype=coltype)
     table = table[table.columns[table.columns.isin(select_columns)]]
     return table
@@ -85,10 +85,10 @@ def download_aemo_cdeii_summary(year, filter_start, filter_end, cache):
 
 
 def download_current_aemo_cdeii_summary(filter_start, filter_end):
-    filepath = Path(__file__).parent / f"./data/CO2EII_SUMMARY_RESULTS_RECENT.csv"
+    filepath = Path(__file__).parent / "./data/CO2EII_SUMMARY_RESULTS_FY2122.csv"  # CO2EII_SUMMARY_RESULTS_RECENT
 
-    aemo = pd.read_csv(filepath, header=1, usecols=[6,7,8,9,10])
-    aemo['SETTLEMENTDATE'] = pd.to_datetime(aemo['SETTLEMENTDATE'],format="%d/%m/%Y %H:%M")
+    aemo = pd.read_csv(filepath, header=1, usecols=[6, 7, 8, 9, 10])
+    aemo['SETTLEMENTDATE'] = pd.to_datetime(aemo['SETTLEMENTDATE'], format="%d/%m/%Y %H:%M")
     table = aemo[aemo['SETTLEMENTDATE'].between(filter_start, filter_end)]
 
     return table
@@ -136,20 +136,23 @@ def download_unit_dispatch(start_time, end_time, cache, filter_units=None, recor
     """
     # Get data from DISPATCHLOAD MMS Table
     if record not in ["INITIALMW", "TOTALCLEARED"]:
-        raise ValueError(
-            "record parameter must be either 'INITIALMW' or 'TOTALCLEARED'"
-        )
-    if record == "INITIALMW":
-        shift_stime = datetime.strptime(start_time, "%Y/%m/%d %H:%M:%S")
-        shift_stime = shift_stime + timedelta(minutes=DISPATCH_INT_MIN)
-        shift_etime = datetime.strptime(end_time, "%Y/%m/%d %H:%M:%S")
-        shift_etime = shift_etime + timedelta(minutes=DISPATCH_INT_MIN)
-        get_start_time = datetime.strftime(shift_stime, "%Y/%m/%d %H:%M:%S")
-        get_end_time = datetime.strftime(shift_etime, "%Y/%m/%d %H:%M:%S")
-    else:
+        raise ValueError("record parameter must be either 'INITIALMW' or 'TOTALCLEARED'")
+
+    if record != "INITIALMW":
+        raise Exception("Current version does not allow TOTALCLEARED as record in `download_unit_dispatch`")
+
+    shift_stime = datetime.strptime(start_time, "%Y/%m/%d %H:%M:%S")
+    shift_stime = shift_stime + timedelta(minutes=DISPATCH_INT_MIN)
+    shift_etime = datetime.strptime(end_time, "%Y/%m/%d %H:%M:%S")
+    shift_etime = shift_etime + timedelta(minutes=DISPATCH_INT_MIN)
+    get_start_time = datetime.strftime(shift_stime, "%Y/%m/%d %H:%M:%S")
+    get_end_time = datetime.strftime(shift_etime, "%Y/%m/%d %H:%M:%S")
+
+    if not record == "INITIALMW":
         get_start_time = start_time
         get_end_time = end_time
 
+    # Download Dispatch Load table via NEMOSIS
     if filter_units:
         disp_load = dynamic_data_compiler(
             start_time=get_start_time,
@@ -171,14 +174,11 @@ def download_unit_dispatch(start_time, end_time, cache, filter_units=None, recor
             fformat="feather",
         )
 
-    disp_load = _check_interventions(disp_load)
-    disp_load = disp_load[["SETTLEMENTDATE", "DUID", record]]
-
-    # Get data from other generators in DISPATCH_UNIT_SCADA MMS Table
+    # Download Dispatch Unit Scada table via NEMOSIS (this includes Non-Scheduled generators)
     if filter_units:
         disp_scada = dynamic_data_compiler(
-            start_time=start_time,
-            end_time=end_time,
+            start_time=get_start_time,
+            end_time=get_end_time,
             table_name="DISPATCH_UNIT_SCADA",
             raw_data_location=cache,
             select_columns=["SETTLEMENTDATE", "DUID", "SCADAVALUE"],
@@ -188,47 +188,62 @@ def download_unit_dispatch(start_time, end_time, cache, filter_units=None, recor
         )
     else:
         disp_scada = dynamic_data_compiler(
-            start_time=start_time,
-            end_time=end_time,
+            start_time=get_start_time,
+            end_time=get_end_time,
             table_name="DISPATCH_UNIT_SCADA",
             raw_data_location=cache,
             select_columns=["SETTLEMENTDATE", "DUID", "SCADAVALUE"],
             fformat="feather",
         )
 
-    disp_load.columns = ["Time", "DUID", "Dispatch"]
-    disp_scada.columns = ["Time", "DUID", "Dispatch"]
+    # Adjust for value from the beginning of the interval, to match reporting end of interval
+    disp_load["Time"] = disp_load["SETTLEMENTDATE"] - timedelta(minutes=DISPATCH_INT_MIN)
+    disp_scada["Time"] = disp_scada["SETTLEMENTDATE"] - timedelta(minutes=DISPATCH_INT_MIN)
 
-    if record == "INITIALMW":
-        disp_load["Time"] = disp_load["Time"] - timedelta(minutes=DISPATCH_INT_MIN)
+    # Merge Dispatch Load and Scada tables
+    master = pd.merge(left=disp_load[['Time', 'DUID', 'INTERVENTION', record]],
+                      right=disp_scada[['Time', 'DUID', 'SCADAVALUE']],
+                      on=['Time', 'DUID'],
+                      how='outer')
 
-    table = pd.concat([disp_load, disp_scada])
+    # Fill in missing data-points and compare conflicting values between INITIALMW and SCADAVALUE
+    master['Dispatch'] = np.nan
+    master["INITIALMW"] = np.where(master["INITIALMW"].isnull(), master['SCADAVALUE'], master['INITIALMW'])
+    master['SCADAVALUE'] = np.where(master["SCADAVALUE"].isnull(), master['INITIALMW'], master['SCADAVALUE'])
+    master['Dispatch'] = np.where(abs(master['INITIALMW'] - master['SCADAVALUE']) < 1, master['INITIALMW'],
+                                  master['Dispatch'])
 
-    final = _clean_duplicates(table)
+    # Report Error Discrepency (if any)
+    if not master[master['Dispatch'].isnull()].empty:
+        print("ERROR DISCREPENCY between SCADAVALUE and INITIALMW")
 
-    return final
+    # Final check for intervention periods and duplicates entries
+    final = _check_interventions(master)
+    final = _clean_duplicates(final)
+    return final[['Time', 'DUID', 'Dispatch']]
 
 
 def _clean_duplicates(table):
-    # TODO: Add warning for duplicate dispatch column greater than 1 MW
+    # Take average values where duplicates differ
     table_clean = table.pivot_table(index=["Time", "DUID"], values="Dispatch", aggfunc=np.mean)
     table_clean = table_clean.reset_index()
-    table_clean = table_clean.drop_duplicates(subset=["Time", "DUID"])
 
-    # Check for duplicate timestamped data
-    # Warn if difference in dispatch column is great than 1 MW
-    # Remove duplicates and return a single entry per DUID
+    # Remove duplicates where Time and DUID match
+    table_clean = table_clean.drop_duplicates(subset=["Time", "DUID"])
     return table_clean
 
+
 def _check_interventions(table):
-    timestamps_w_intervtn = list(table[table["INTERVENTION"]==1]["SETTLEMENTDATE"].unique())
+    # Split table into intervals where intervention has occurred or not
+    timestamps_w_intervtn = list(table[table["INTERVENTION"] == 1]["Time"].unique())
+    data_unchanged = table[~table["Time"].isin(timestamps_w_intervtn)]
+    data_intervtn_updated = table[(table["Time"].isin(timestamps_w_intervtn)) & (table["INTERVENTION"] == 1)]
 
-    data_unchanged = table[~table["SETTLEMENTDATE"].isin(timestamps_w_intervtn)]
-    data_intervtn_updated = table[(table["SETTLEMENTDATE"].isin(timestamps_w_intervtn)) & (table["INTERVENTION"]==1)]
-
-    updated_table = pd.concat([data_unchanged, data_intervtn_updated],ignore_index=True)
-    updated_table.sort_values(by=["SETTLEMENTDATE","DUID"],inplace=True)
+    # Updates table removing intervention == 0 datapoints for intervals where intervention has occurred
+    updated_table = pd.concat([data_unchanged, data_intervtn_updated], ignore_index=True)
+    updated_table.sort_values(by=["Time", "DUID"], inplace=True)
     return updated_table.reset_index(drop=True)
+
 
 def download_pricesetters_xml(cache, start_year, start_month, start_day, end_year, end_month, end_day):
     """Download XML files from AEMO NEMWEB of price setters for each dispatch interval. Converts the downloaded raw
