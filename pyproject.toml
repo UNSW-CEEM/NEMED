@@ -27,6 +27,7 @@ Sphinx = "^5.0.2"
 furo = "^2022.6.21"
 myst-parser = "^0.18.0"
 myst-nb = "*"
+sphinx-copybutton = "*"
 
 # Packages for developers for linting/autoformatting
 [tool.poetry.group.style]
