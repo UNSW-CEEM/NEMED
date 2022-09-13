@@ -1,6 +1,7 @@
 # nemed
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Documentation Status](https://readthedocs.org/projects/nemed/badge/?version=latest)](https://nemed.readthedocs.io/en/latest/?badge=latest)
 
 *"Nemed"*, of the [Irish legend](https://en.wikipedia.org/wiki/Nemed), "was the leader of the third group of people to settle in Ireland".
 

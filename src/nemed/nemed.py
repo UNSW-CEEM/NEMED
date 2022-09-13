@@ -5,6 +5,30 @@ import nemed.helper_functions.helpers as hp
 
 def get_total_emissions(start_time, end_time, cache, filter_regions, by="interval",
                         generation_sent_out=True):
+    """Retrieve Aggregated Emissions data for total and average emissions (emissions intensity), as well as sent-out
+    energy generation for a defined period and time-resolution (e.g. interval, day, month)
+
+    Parameters
+    ----------
+    start_time : str
+        Start Time Period in format 'yyyy/mm/dd HH:MM:SS'
+    end_time : str
+        End Time Period in format 'yyyy/mm/dd HH:MM:SS'
+    cache : str
+        Raw data location in local directory
+    filter_regions : list of str
+        NEM regions to filter for while retrieving the data
+    by : str, one of ['interval', 'hour', 'day', 'month', 'year']
+        The time-resolution of output data to aggregate to, by default "interval"
+    generation_sent_out : bool
+        Considers 'sent_out' generation as opposed to 'as generated' in calculations, by default True
+
+    Returns
+    -------
+    dict
+        Dictionary containing keys ['Energy','Total Emissions','Intensity Index'], each containing a dataframe of the
+        time series results.
+    """
     # Check if cache folder exists
     hp._check_cache(cache)
 
