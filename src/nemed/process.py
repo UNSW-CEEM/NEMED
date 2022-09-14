@@ -35,7 +35,8 @@ def get_total_emissions_by_DI_DUID(start_time, end_time, cache, filter_units=Non
     # Check if cache is an existing directory
     if not os.path.isdir(cache):
         print("Creating new cache in current directory.")
-        os.mkdir("CACHE")
+        if not os.path.isdir(os.path.join(os.getcwd(),"CACHE")):
+            os.mkdir("CACHE")
         cache = os.path.join(os.getcwd(), "CACHE")
 
     # Download CDEII, Unit Dispatch Data and Generation Information
