@@ -16,6 +16,7 @@ def _check_cache(cache):
     """
     if not os.path.isdir(cache):
         print("Creating new cache in current directory.")
-        os.mkdir("CACHE")
+        if not os.path.isdir(os.path.join(os.getcwd(),"CACHE")):
+            os.mkdir("CACHE")
         cache = os.path.join(os.getcwd(), "CACHE")
     return cache
