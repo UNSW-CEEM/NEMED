@@ -88,6 +88,7 @@ myst_enable_extensions = [
     "deflist",
 ]
 nb_execution_timeout = 300
+nb_execution_mode = 'off'
 
 # -- External TOC------------------------------------------------------------
 external_toc_path = "_toc.yml"  # optional, default: _toc.yml
