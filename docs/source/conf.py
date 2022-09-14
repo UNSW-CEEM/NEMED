@@ -110,7 +110,7 @@ html_theme = "sphinx_book_theme"
 html_static_path = ["_static"]
 html_show_sourcelink = False
 html_theme_options = {
-    "repository_url": "https://github.com/dec-heim/NEMGLO",
+    "repository_url": "https://github.com/dec-heim/NEMED",
     "use_repository_button": True,
     "use_issues_button": True,
     }

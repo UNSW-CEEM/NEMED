@@ -5,6 +5,7 @@ import numpy as np
 import os
 from .downloader import download_cdeii_table, download_unit_dispatch, download_pricesetters, download_generators_info, \
     download_duid_auxload
+import nemed.helper_functions.helpers as hp
 
 DISP_INT_LENGTH = 5 / 60
 
@@ -33,11 +34,7 @@ def get_total_emissions_by_DI_DUID(start_time, end_time, cache, filter_units=Non
         Emissions in tCO2-e.
     """
     # Check if cache is an existing directory
-    if not os.path.isdir(cache):
-        print("Creating new cache in current directory.")
-        if not os.path.isdir(os.path.join(os.getcwd(),"CACHE")):
-            os.mkdir("CACHE")
-        cache = os.path.join(os.getcwd(), "CACHE")
+    hp._check_cache(cache)
 
     # Download CDEII, Unit Dispatch Data and Generation Information
     cdeii_df = download_cdeii_table()
