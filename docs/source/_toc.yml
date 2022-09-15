@@ -3,10 +3,8 @@ root: index
 parts:
 - caption: Overview
   chapters:
-  - file: about
-  - file: conduct
-  - file: contributing
-  - file: changelog
+  - file: quickstart
+  - file: glossary
 
 - caption: Examples
   chapters:
@@ -15,3 +13,9 @@ parts:
 - caption: API Reference
   chapters:
   - file: api_reference
+
+- caption: Development
+  chapters:
+  - file: changelog
+  - file: contributing
+  - file: conduct

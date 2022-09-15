@@ -1,7 +1,7 @@
 """Core user interfacing module"""
 import nemed.process as nd
 import nemed.helper_functions.helpers as hp
-
+from datetime import datetime as dt
 
 def get_total_emissions(start_time, end_time, cache, filter_regions, by="interval",
                         generation_sent_out=True):
@@ -54,5 +54,23 @@ def get_total_emissions(start_time, end_time, cache, filter_regions, by="interva
 
     # Aggregate interval-resolution data to defined resolution
     result = nd.aggregate_data_by(data=data, by=by)
+
+    return result
+
+
+def get_marginal_emissions(start_time, end_time, cache, redownload_xml=True):
+    """
+    """
+    # Check if cache folder exists
+    hp._check_cache(cache)
+
+    # Extract datetime
+    sdate = dt.strptime(start_time, "%Y/%m/%d %H:%M:%S")
+    edate = dt.strptime(end_time, "%Y/%m/%d %H:%M:%S")
+
+
+    result = nd.get_marginal_emitter(cache, start_year=sdate.year,
+        start_month=sdate.month, start_day=sdate.day, end_year=edate.year,
+        end_month=edate.month, end_day=edate.day, redownload_xml=redownload_xml)
 
     return result

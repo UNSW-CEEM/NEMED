@@ -113,10 +113,10 @@ def get_marginal_emitter(cache, start_year, start_month, start_day, end_year, en
     pd.DataFrame
         _description_
     """
-    if not os.path.isdir(cache):
-        print("Creating new cache in current directory.")
-        os.mkdir("CACHE")
-        cache = os.path.join(os.getcwd(), "CACHE")
+    # Check if cache is an existing directory
+    hp._check_cache(cache)
+
+    # Download CDEII, Price Setter Files and Generation Information
 
     gen_info = download_generators_info(cache)
     emissions_factors = download_cdeii_table()

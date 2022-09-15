@@ -18,9 +18,11 @@ DISPATCH_INT_MIN = 5
 
 
 def download_cdeii_table():
-    """
-    Retrieves the most recent Carbon emissions factor data per generation unit (DUID) published to NEMWEB by AEMO.
+    """Retrieves the most recent Carbon emissions factor data per generation unit (DUID) published to NEMWEB by AEMO.
 
+    .. warning::
+        This CDEII table is only the most recent data. It is not time-matched to the user requested period!
+    
     Returns
     -------
     pd.DataFrame
@@ -32,32 +34,54 @@ def download_cdeii_table():
 
 
 def download_generators_info(cache):
+    """Retrieves the Generators and Scheduled Loads static table via NEMOSIS (published by AEMO in NEM Registration and
+    Exemption List). Data reflects the most recent file uploaded by AEMO. 
+
+    .. warning::
+        This Generators and Scheduled Load table is only the most recent data. It is not time-matched to the user
+        requested period!
+
+    Parameters
+    ----------
+    cache : str
+        Raw data location in local directory.
+
+    Returns
+    -------
+    pd.DataFrame
+        AEMO data containing columns=['Participant', 'Station Name', 'Region', 'Dispatch Type', 'Category',
+       'Classification', 'Fuel Source - Primary', 'Fuel Source - Descriptor','Technology Type - Primary',
+       'Technology Type - Descriptor', 'Aggregation', 'DUID']
+    """
     table = static_table(table_name="Generators and Scheduled Loads", raw_data_location=cache)
     return table
 
 
 def download_duid_auxload():
-    map = download_duid_mapping()
-    auxload = download_iasr_existing_gens()
+    """Retrieves auxilary load data from AEMO's IASR (most recent data)
+
+    .. warning::
+        This AuxLoad table is only the most recent data. It is not time-matched to the user requested period!
+
+    Returns
+    -------
+    pd.DataFrame
+        AEMO data containing columns=['DUID', 'Generator', 'Auxiliary Load (%)']
+    """
+    map = _download_duid_mapping()
+    auxload = _download_iasr_existing_gens()
     merged_table = pd.merge(map, auxload, on='Generator', how='left')
     return merged_table
 
 
-def download_duid_mapping():
-    """_summary_
-
-    Returns
-    -------
-    _type_
-        _description_
-    """
+def _download_duid_mapping():
     filepath = Path(__file__).parent / "./data/duid_mapping.csv"
     table = pd.read_csv(filepath)[['DUID', '2021-22-IASR_Generator']]
     table.columns = ['DUID', 'Generator']
     return table
 
 
-def download_iasr_existing_gens(select_columns=['Generator', 'Auxiliary Load (%)'], coltype={'Generator': str,
+def _download_iasr_existing_gens(select_columns=['Generator', 'Auxiliary Load (%)'], coltype={'Generator': str,
                                 'Auxiliary Load (%)': float}):
     filepath = Path(__file__).parent / "./data/existing_gen_data_summary.csv"
     table = pd.read_csv(filepath, dtype=coltype)
