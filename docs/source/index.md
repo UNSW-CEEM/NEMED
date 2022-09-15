@@ -1,5 +1,5 @@
 
-```{include} readme.md
+```{include} README.md
 ```
 
 # Table of Contents
