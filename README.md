@@ -19,9 +19,9 @@ This tool is designed to allow users to retrieve historical NEM emissions data, 
 ### How does NEMED calculate emissions?
 Total and Average Emissions are computed by extracting 5-minute dispatch interval data for each generator in the NEM for respective regions, mapping this data to reported CO2-equivalent emissions intensity metrics per unit (generator)-level, and returning the corresponding emissions: total emissions(kg CO2-e), or average emissions, also referred to as, emisssions intensity (kg CO2-e/MWh) per interval. 
 
-```{note}
+Note:
 The current version of NEMED only considers unit (generator)-level emissions intensity metrics (kg/MWh) from (AEMO's Input Assumptions & Scenario Report (IASR) 2021-22)
-```
+
 [See more on IASR.](https://www.aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp/2022-integrated-system-plan-isp/current-inputs-assumptions-and-scenarios)
 
 Marginal Emissions are computed by extracting the marginally dispatched generators from AEMO's Price Setter files, mapping emissions intensity metrics mentioned above and hence computing marginal emissions (kg CO2-e/MWh).
@@ -33,7 +33,7 @@ A [benchmark example](https://nemed.readthedocs.io/en/latest/examples/example_1.
 ## Usage
 
 ### Examples
-Examples can be found in [NEMED's documentation](https://nemed.readthedocs.io/en/latest/examples/).
+Examples can be found in [NEMED's documentation](https://nemed.readthedocs.io/en/latest/examples/example_1.html).
 
 ## Contributing
 Interested in contributing? Check out the [contributing guidelines](CONTRIBUTING.md), which also includes steps to install `NEMED` for development.

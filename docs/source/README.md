@@ -33,7 +33,7 @@ A [benchmark example](https://nemed.readthedocs.io/en/latest/examples/example_1.
 ## Usage
 
 ### Examples
-Examples can be found in [NEMED's documentation](https://nemed.readthedocs.io/en/latest/examples/).
+Examples can be found in [NEMED's documentation](https://nemed.readthedocs.io/en/latest/examples/examples_1.html).
 
 ## Contributing
 Interested in contributing? Check out the [contributing guidelines](CONTRIBUTING.md), which also includes steps to install `NEMED` for development.
