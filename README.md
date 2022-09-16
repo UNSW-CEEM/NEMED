@@ -9,9 +9,9 @@ NEMED[^1], or NEM Emissions Data, is a python package to retrieve and process hi
 
 ## Installation
 ```bash
-pip install https://github.com/dec-heim/NEMED.git
+pip install nemed
 ```
-Alternatively clone the git repo.
+
 ## Introduction
 
 This tool is designed to allow users to retrieve historical NEM emissions data, both total and average emissions (intensity index) metrics, as well as marginal emissions, for any dispatch interval or aggregations thereof. Although data is published by AEMO via the [Carbon Dioxide Equivalent Intensity Index (CDEII) Procedure](https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/market-operations/settlements-and-payments/settlements/carbon-dioxide-equivalent-intensity-index) this only reflects a daily summary by region of total and average emissions.
