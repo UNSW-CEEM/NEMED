@@ -2,7 +2,6 @@
 from datetime import datetime
 import pandas as pd
 import numpy as np
-import os
 from .downloader import download_cdeii_table, download_unit_dispatch, download_pricesetters, download_generators_info, \
     download_duid_auxload
 import nemed.helper_functions.helpers as hp
@@ -111,7 +110,8 @@ def get_marginal_emitter(cache, start_year, start_month, start_day, end_year, en
     Returns
     -------
     pd.DataFrame
-        _description_
+        The resulting marginal emitter dataset with interval timestamps, DUID, emissions factor and generation
+        information
     """
     # Check if cache is an existing directory
     hp._check_cache(cache)
@@ -149,12 +149,26 @@ def get_marginal_emitter(cache, start_year, start_month, start_day, end_year, en
     calc_emissions_df["Date"] = calc_emissions_df.index.date
     calc_emissions_df["Hour"] = calc_emissions_df.index.hour
 
-
     return calc_emissions_df.reset_index()
 
 
 def tech_rename(fuel, tech_descriptor, dispatch_type):
-    """Name technology type based on fuel, and descriptions of AEMO"""
+    """Name technology type based on fuel, and descriptions of AEMO
+
+    Parameters
+    ----------
+    fuel : str
+        Fuel Source - Descriptor field of a specific DUID
+    tech_descriptor : str
+        Technology Type - Descriptor field of a specific DUID
+    dispatch_type : str
+        Dispatch Type field of a specific DUID
+
+    Returns
+    -------
+    str
+        Returns a simplified name for the above arguments
+    """
 
     name = fuel
     if fuel in ['Solar', 'Wind', 'Black Coal', 'Brown Coal']:
@@ -184,123 +198,26 @@ def tech_rename(fuel, tech_descriptor, dispatch_type):
     return name
 
 
-def filter_marginal_table(table, region, condense_same_tech=True):
-
-    region_summary = table[table['RegionID'] == region]
-    region_summary = region_summary.drop_duplicates(subset=['PeriodID','CO2E_EMISSIONS_FACTOR','tech_name'])
-    region_summary = region_summary[['PeriodID','RegionID','Dispatch Type','tech_name','CO2E_EMISSIONS_FACTOR',\
-        'Date','Hour']]
-
-    return None
-
-
-
-
-
-
-def aggregate_marginal_data_by(data, by, maintain_dates=True, agg='sum'):
-
-    # Check timestamp in index col, throw error if not
-    if (not isinstance(data.index.values[0], (datetime, pd.Timestamp))) and (data.index.name != 'PeriodID'):
-        raise ValueError("`data` parsed must have datetime type as index with name 'PeriodID'")
-
-    # Check by value
-    if not by in ['interval','halfhour','hour','day']:
-        raise ValueError("`by` argument must be one of ['interval', 'halfhour', 'hour', 'day']")
-
-    # Check maintain dates
-    if not isinstance(maintain_dates, bool):
-        raise TypeError("`maintain_dates` argument must be a logical 'True' or 'False'")
-
-    # Aggregation options
-    agg_select = {'sum': np.sum, 'mean': np.mean, 'max': np.max, 'min': np.min}
-    if not agg in agg_select.keys():
-        raise ValueError("`agg` argument must be one of ['sum', 'mean', 'max', 'min']")
-
-    # Process...
-    if maintain_dates:
-        # For each region
-        all_regions = None
-        for region in data['RegionID'].unique():
-            sel_data = data[data['RegionID'] == region]
-            # By alternatives...
-            if by == "interval":
-                print("WARNING: Result will appear unchanged since no aggregation occurs with maintain_dates = True"\
-                    + " and by = interval")
-                result = sel_data.loc[:,'CO2E_EMISSIONS_FACTOR']
-            if by == "halfhour":
-                result = sel_data[['CO2E_EMISSIONS_FACTOR']].resample('30min', closed='right', label='right')\
-                    .agg(agg_select[agg])
-            elif by == "hour":
-                result = sel_data[['CO2E_EMISSIONS_FACTOR']].resample('H', closed='right').agg(agg_select[agg])
-            elif by == "day":
-                result = sel_data[['CO2E_EMISSIONS_FACTOR']].resample('D', closed='right').agg(agg_select[agg])
-
-            if isinstance(result, pd.Series):
-                result = pd.DataFrame(result)
-            result.insert(0,'RegionID', region)
-            all_regions = pd.concat([all_regions, result])
-
-        all_regions.reset_index(inplace=True)
-        all_regions.columns = ['Time', 'RegionID', agg[0].upper()+agg[1:]+"_Marginal_Emissions"]
-
-    else:
-        # For each region
-        all_regions = None
-        for region in data['RegionID'].unique():
-            sel_data = data[data['RegionID'] == region]
-            idx_slot = 0
-
-            # IMPLEMENT AGGREGATION purely on time not dates
-            if (by == "interval") or (by == "halfhour") or (by == "hour"):
-                # Set index dummy year-month-day
-                sel_data.index = pd.DatetimeIndex([datetime(year=1800, month=1, day=1, hour=sel_data.index[i].hour, \
-                    minute=sel_data.index[i].minute) for i in range(len(sel_data.index))], name='PeriodID')
-
-                # By alternatives
-                if by == "interval":
-                    result = sel_data.reset_index()
-                    result = result[['PeriodID', 'CO2E_EMISSIONS_FACTOR']].groupby(by='PeriodID').agg(agg_select[agg])
-                elif by == "halfhour":
-                    print(sel_data)
-                    result = sel_data[['CO2E_EMISSIONS_FACTOR']].resample('30min', closed='right', origin='end', label='right')\
-                        .agg(agg_select[agg])
-                elif by == "hour":
-
-                    result = sel_data[['CO2E_EMISSIONS_FACTOR']].resample('H', closed='right', label='right').agg(agg_select[agg])
-            
-
-                # Clean time (index) column
-
-            elif (by == "day"):
-                sel_data.index = pd.DatetimeIndex([datetime(year=1800, month=1, day=sel_data.index[i].day, hour=sel_data.index[i].hour, \
-                    minute=sel_data.index[i].minute) for i in range(len(sel_data.index))], name='PeriodID')
-
-                # sel_data.index = [datetime(year=1000, month=1, day=sel_data.index[i].day, hour=sel_data.index[i].hour,\
-                #     minute=sel_data.index[i].minute) for i in range(len(sel_data.index))]
-                result = sel_data[['CO2E_EMISSIONS_FACTOR']].resample('D', closed='right').agg(agg_select[agg])
-
-                result.insert(idx_slot, 'Day', [result.index[i].day for i in range(len(result.index))])
-                idx_slot += 1
-
-                # mIndex = pd.MultiIndex.from_tuples([(result.index[i].day, result.index[i].hour, \
-                #     result.index[i].minute) for i in range(len(result.index))], names=['Day','Hour','Minute'])
-                # result.set_index(mIndex, inplace=True)
-
-            # Create hour/min columns
-            result.insert(idx_slot, 'Hour', [result.index[i].hour for i in range(len(result.index))])
-            idx_slot += 1
-            result.insert(idx_slot, 'Minute', [result.index[i].minute for i in range(len(result.index))])
-            idx_slot += 1
-            result.index = [datetime.strftime(result.reset_index()['PeriodID'][i], "%H:%M") for i in range(len(result.index))]
-
-            result.insert(idx_slot,'RegionID', region)
-            result = result.rename(columns = {'CO2E_EMISSIONS_FACTOR': agg[0].upper()+agg[1:]+"_Marginal_Emissions"})
-            all_regions = pd.concat([all_regions, result])
-
-    return all_regions
-
 def aggregate_data_by(data, by):
+    """Existing function to aggregate data by time-resolution specified
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        Input data to aggregate
+    by : str
+        Time resolution to aggregate to; e.g. ['hour', 'day', 'month']
+
+    Returns
+    -------
+    pd.DataFrame
+        Resulting time resolved data
+
+    Raises
+    ------
+    Exception
+        Invalid by argument
+    """
     result = {}
     agg_map = {"Energy": np.sum, "Total_Emissions": np.sum, "Intensity_Index": np.mean}
     # Format result to show on interval resolution

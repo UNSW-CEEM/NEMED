@@ -3,6 +3,7 @@ import nemed.process as nd
 import nemed.helper_functions.helpers as hp
 from datetime import datetime as dt
 
+
 def get_total_emissions(start_time, end_time, cache, filter_regions, by="interval",
                         generation_sent_out=True):
     """Retrieve Aggregated Emissions data for total and average emissions (emissions intensity), as well as sent-out
@@ -59,7 +60,24 @@ def get_total_emissions(start_time, end_time, cache, filter_regions, by="interva
 
 
 def get_marginal_emissions(start_time, end_time, cache, redownload_xml=True):
-    """
+    """Retrieve Raw Marginal Emissions data for for a defined period
+
+    Parameters
+    ----------
+    start_time : str
+        Start Time Period in format 'yyyy/mm/dd HH:MM:SS'
+    end_time : str
+        End Time Period in format 'yyyy/mm/dd HH:MM:SS'
+    cache : str
+        Raw data location in local directory
+    redownload_xml : bool
+        If false, attempts to find existing files in cache before downloading .xml files from AEMO database
+
+    Returns
+    -------
+    pd.DataFrame
+        Data containing marginal (price-setter) DUID for each dispatch interval with emissions factor and other
+        useful generation information.
     """
     # Check if cache folder exists
     hp._check_cache(cache)
@@ -68,9 +86,8 @@ def get_marginal_emissions(start_time, end_time, cache, redownload_xml=True):
     sdate = dt.strptime(start_time, "%Y/%m/%d %H:%M:%S")
     edate = dt.strptime(end_time, "%Y/%m/%d %H:%M:%S")
 
-
-    result = nd.get_marginal_emitter(cache, start_year=sdate.year,
-        start_month=sdate.month, start_day=sdate.day, end_year=edate.year,
-        end_month=edate.month, end_day=edate.day, redownload_xml=redownload_xml)
+    result = nd.get_marginal_emitter(cache, start_year=sdate.year, start_month=sdate.month, start_day=sdate.day,
+                                     end_year=edate.year, end_month=edate.month, end_day=edate.day,
+                                     redownload_xml=redownload_xml)
 
     return result
