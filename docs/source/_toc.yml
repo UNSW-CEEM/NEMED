@@ -9,6 +9,7 @@ parts:
 - caption: Examples
   chapters:
   - file: examples/example_1
+  - file: examples/example_2
 
 - caption: API Reference
   chapters:
