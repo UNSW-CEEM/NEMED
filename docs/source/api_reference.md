@@ -4,7 +4,7 @@
 .. currentmodule:: nemed
 ```
 
-## NEMGLO module
+## NEMED module
 ```{tip}
 The key functions to interface with to use this tool. You need not call functions yourself from the <code>Downloader</code> or <code>Process</code> modules.
 ```
