@@ -22,7 +22,7 @@ def download_cdeii_table():
 
     .. warning::
         This CDEII table is only the most recent data. It is not time-matched to the user requested period!
-
+    
     Returns
     -------
     pd.DataFrame
@@ -35,7 +35,7 @@ def download_cdeii_table():
 
 def download_generators_info(cache):
     """Retrieves the Generators and Scheduled Loads static table via NEMOSIS (published by AEMO in NEM Registration and
-    Exemption List). Data reflects the most recent file uploaded by AEMO.
+    Exemption List). Data reflects the most recent file uploaded by AEMO. 
 
     .. warning::
         This Generators and Scheduled Load table is only the most recent data. It is not time-matched to the user
@@ -82,7 +82,7 @@ def _download_duid_mapping():
 
 
 def _download_iasr_existing_gens(select_columns=['Generator', 'Auxiliary Load (%)'], coltype={'Generator': str,
-                                 'Auxiliary Load (%)': float}):
+                                'Auxiliary Load (%)': float}):
     filepath = Path(__file__).parent / "./data/existing_gen_data_summary.csv"
     table = pd.read_csv(filepath, dtype=coltype)
     table = table[table.columns[table.columns.isin(select_columns)]]
@@ -109,22 +109,7 @@ def download_aemo_cdeii_summary(year, filter_start, filter_end, cache):
 
 
 def download_current_aemo_cdeii_summary(filter_start, filter_end):
-    """_summary_
-
-    Parameters
-    ----------
-    filter_start : str
-        Start Time Period to filer from in format 'yyyy/mm/dd HH:MM:SS'
-    filter_end : str
-        End Time Period to filer from in format 'yyyy/mm/dd HH:MM:SS'
-
-
-    Returns
-    -------
-    pd.DataFrame
-        Returns AEMO CDEII summary data for FY2122 unless filtered more strictly by input range.
-    """
-    filepath = Path(__file__).parent / "./data/CO2EII_SUMMARY_RESULTS_FY2122.csv"
+    filepath = Path(__file__).parent / "./data/CO2EII_SUMMARY_RESULTS_FY2122.csv"  # CO2EII_SUMMARY_RESULTS_RECENT
 
     aemo = pd.read_csv(filepath, header=1, usecols=[6, 7, 8, 9, 10])
     aemo['SETTLEMENTDATE'] = pd.to_datetime(aemo['SETTLEMENTDATE'], format="%d/%m/%Y %H:%M")
@@ -254,7 +239,9 @@ def download_unit_dispatch(start_time, end_time, cache, filter_units=None, recor
 
     # Report Error Discrepency (if any)
     if not master[master['Dispatch'].isnull()].empty:
-        print("ERROR DISCREPENCY between SCADAVALUE and INITIALMW")
+        print("ERROR DISCREPENCY between SCADAVALUE and INITIALMW. Assuming INITIALMW")
+        master['Dispatch'] = np.where(abs(master['INITIALMW'] - master['SCADAVALUE']) < 1, master['Dispatch'],
+                                  master['INITIALMW'])
 
     # Final check for intervention periods and duplicates entries
     final = _check_interventions(master)

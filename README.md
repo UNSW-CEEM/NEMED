@@ -47,4 +47,4 @@ Please note that this project is released with a [Code of Conduct](CONDUCT.md). 
 This template was created using the [`UNSW CEEM template`](https://github.com/UNSW-CEEM/ceem-python-template). It also adopts functionality from sister tools including [`NEMOSIS`](https://github.com/UNSW-CEEM/NEMOSIS) and [`NEMPY`](https://github.com/UNSW-CEEM/nempy).
 
 ## Contact Us
-Have questions or feedback on this tool? Reach out to Declan by [email](mailto:d.heim@unsw.edu.au).
+Have questions or feedback on this tool? Please reach out via email [declanheim@outlook.com](mailto:declanheim@outlook.com).
