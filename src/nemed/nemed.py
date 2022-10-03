@@ -1,7 +1,7 @@
 """Core user interfacing module"""
 import nemed.process as nd
 import nemed.helper_functions.helpers as hp
-from datetime import datetime as dt
+from datetime import datetime as dt, timedelta
 
 
 def get_total_emissions(start_time, end_time, cache, filter_regions, by="interval",
@@ -83,11 +83,14 @@ def get_marginal_emissions(start_time, end_time, cache, redownload_xml=True):
     hp._check_cache(cache)
 
     # Extract datetime
-    sdate = dt.strptime(start_time, "%Y/%m/%d %H:%M:%S")
-    edate = dt.strptime(end_time, "%Y/%m/%d %H:%M:%S")
+    input_start = dt.strptime(start_time, "%Y/%m/%d %H:%M:%S")
+    input_end = dt.strptime(end_time, "%Y/%m/%d %H:%M:%S")
+
+    sdate = input_start - timedelta(days=1)
+    edate = input_end + timedelta(days=1)
 
     result = nd.get_marginal_emitter(cache, start_year=sdate.year, start_month=sdate.month, start_day=sdate.day,
                                      end_year=edate.year, end_month=edate.month, end_day=edate.day,
                                      redownload_xml=redownload_xml)
 
-    return result
+    return result[result['PeriodID'].between(input_start+timedelta(minutes=5), input_end)]
