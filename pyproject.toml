@@ -17,6 +17,7 @@ pathlib = "*"
 requests = "*"
 xmltodict = "*"
 tqdm = "*"
+joblib = "^1.2.0"
 
 # Packages for developers for creating documentation
 [tool.poetry.group.docs]
