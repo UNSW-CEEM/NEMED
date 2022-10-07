@@ -24,6 +24,8 @@ Marginal Emissions are computed by extracting the marginally dispatched generato
 ### How accurate is NEMED?
 A [benchmark example](https://nemed.readthedocs.io/en/latest/examples/example_1.html#results-comparison-to-aemo) of total and average emissions provides a comparison between AEMO's daily CDEII reported emissions figures and NEMED's emissions figures which have been aggregated from a dispatch-interval resolution to a daily basis.   
 
+The example includes a region by region comparison for each metric, while an overview of the NEM Emissions Intensity for FY19-20 is shown here.
+![NEM Emissions Intensity](benchmark.png)
 
 ## Usage
 
