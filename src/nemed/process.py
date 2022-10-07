@@ -6,11 +6,11 @@ from .downloader import download_cdeii_table, download_unit_dispatch, download_p
     download_duid_auxload
 import nemed.helper_functions.helpers as hp
 
-DISP_INT_LENGTH = 5 / 60
+DISP_INT_LENGTH = 5
 
 
-def get_total_emissions_by_DI_DUID(start_time, end_time, cache, filter_units=None, filter_regions=None,
-                                   generation_sent_out=True):
+def get_total_emissions_by_DI_DUID(start_time, end_time, cache, filter_regions=None,
+                                   generation_sent_out=True, assume_ramp=True):
     """Find the total emissions for each generation unit per dispatch interval. Calculates the Total_Emissions column by
     multiplying Energy (Dispatch (MW) * 5/60 (h)) with Plant Emissions Intensity (tCO2-e/MWh)
 
@@ -37,10 +37,15 @@ def get_total_emissions_by_DI_DUID(start_time, end_time, cache, filter_units=Non
 
     # Download CDEII, Unit Dispatch Data and Generation Information
     cdeii_df = download_cdeii_table()
-    disp_df = download_unit_dispatch(
-        start_time, end_time, cache, filter_units, record="INITIALMW"
-    )
+    cdeii_df = cdeii_df.drop_duplicates(subset=['DUID'])
+
+    disp_df = download_unit_dispatch(start_time, end_time, cache, source_initialmw=False, source_scada=True,
+                                     return_all=False, check=False, overwrite="scada")
     geninfo_df = download_generators_info(cache)
+
+    # Filter units and replace negatives
+    disp_df = disp_df[disp_df['DUID'].isin(cdeii_df['DUID'])]
+    disp_df['Dispatch'] = np.where(disp_df['Dispatch'] < 0, 0, disp_df['Dispatch'])
 
     # Merge unit generation and dispatch type category
     result = pd.merge(left=disp_df, right=geninfo_df[['DUID', 'Dispatch Type']], on="DUID", how="left")
@@ -61,7 +66,22 @@ def get_total_emissions_by_DI_DUID(start_time, end_time, cache, filter_units=Non
             conflict!")
 
     # Calculate Energy (MWh)
-    result["Energy"] = result["Dispatch"] * DISP_INT_LENGTH
+    if not assume_ramp:
+        result["Energy"] = result["Dispatch"] * (DISP_INT_LENGTH / 60)
+        aggregate = result
+    else:
+        aggregate = pd.DataFrame()
+        for duid in result['DUID'].unique():
+            sub_df = result[result['DUID'] == duid]
+            sub_df = sub_df.sort_values('Time')
+            sub_df.reset_index(drop=True, inplace=True)
+            sub_df['Dispatch_prev'] = np.nan
+            sub_df.loc[1:, 'Dispatch_prev'] = sub_df['Dispatch'][:len(sub_df)-1].to_list()
+
+            sub_df.loc[:, 'Energy'] = (0.5*(sub_df['Dispatch'] - sub_df['Dispatch_prev']) + sub_df['Dispatch_prev']) \
+                * (DISP_INT_LENGTH / 60)
+
+            aggregate = pd.concat([aggregate, sub_df], ignore_index=True)
 
     # Consider auxillary loads for Sent Out Generation metric
     if generation_sent_out:
@@ -69,18 +89,18 @@ def get_total_emissions_by_DI_DUID(start_time, end_time, cache, filter_units=Non
         auxload = download_duid_auxload()
 
         # Merge data and compute auxilary load factor
-        result = result.merge(auxload, on=["DUID"], how="left")
-        result['pct_sent_out'] = (100 - result['Auxiliary Load (%)']) / 100
-        result['pct_sent_out'].fillna(1.0, inplace=True)
+        aggregate = aggregate.merge(auxload, on=["DUID"], how="left")
+        aggregate['pct_sent_out'] = (100 - aggregate['Auxiliary Load (%)']) / 100
+        aggregate['pct_sent_out'].fillna(1.0, inplace=True)
 
         # Adjust Energy for auxilary load
-        result["Energy"] = result["Energy"] * result['pct_sent_out']
+        aggregate["Energy"] = aggregate["Energy"] * aggregate['pct_sent_out']
 
     # Compute emissions
-    result["Total_Emissions"] = result["Energy"] * result["CO2E_EMISSIONS_FACTOR"]
-    result.rename(columns={"CO2E_EMISSIONS_FACTOR": "Plant_Emissions_Intensity"}, inplace=True)
+    aggregate["Total_Emissions"] = aggregate["Energy"] * aggregate["CO2E_EMISSIONS_FACTOR"]
+    aggregate.rename(columns={"CO2E_EMISSIONS_FACTOR": "Plant_Emissions_Intensity"}, inplace=True)
 
-    return result[['Time', 'DUID', 'REGIONID', 'Plant_Emissions_Intensity', 'Energy', 'Total_Emissions']]
+    return aggregate[['Time', 'DUID', 'REGIONID', 'Plant_Emissions_Intensity', 'Energy', 'Total_Emissions']]
 
 
 def get_marginal_emitter(cache, start_year, start_month, start_day, end_year, end_month, end_day, redownload_xml=True):

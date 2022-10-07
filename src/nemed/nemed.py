@@ -5,7 +5,7 @@ from datetime import datetime as dt, timedelta
 
 
 def get_total_emissions(start_time, end_time, cache, filter_regions, by="interval",
-                        generation_sent_out=True):
+                        generation_sent_out=True, assume_ramp=True):
     """Retrieve Aggregated Emissions data for total and average emissions (emissions intensity), as well as sent-out
     energy generation for a defined period and time-resolution (e.g. interval, day, month)
 
@@ -18,11 +18,13 @@ def get_total_emissions(start_time, end_time, cache, filter_regions, by="interva
     cache : str
         Raw data location in local directory
     filter_regions : list of str
-        NEM regions to filter for while retrieving the data
+        NEM regions to filter for while retrieving the data, as a list.
     by : str, one of ['interval', 'hour', 'day', 'month', 'year']
         The time-resolution of output data to aggregate to, by default "interval"
     generation_sent_out : bool
-        Considers 'sent_out' generation as opposed to 'as generated' in calculations, by default True
+        Considers 'sent_out' generation (auxilary loads) as opposed to 'as generated' in calculations, by default True
+    assume_ramp : bool
+        Uses a linear ramp between dispatch datapoints as opposed to a stepped function, by default True
 
     Returns
     -------
@@ -35,8 +37,8 @@ def get_total_emissions(start_time, end_time, cache, filter_regions, by="interva
 
     # Get emissions for all units by dispatch interval
     raw_table = nd.get_total_emissions_by_DI_DUID(
-        start_time, end_time, cache, filter_units=None, filter_regions=filter_regions,
-        generation_sent_out=generation_sent_out)
+        start_time, end_time, cache, filter_regions=filter_regions,
+        generation_sent_out=generation_sent_out, assume_ramp=assume_ramp)
     clean_table = raw_table.drop_duplicates(subset=['Time', 'DUID'])
 
     # Pivot and summate data. Aggregates to a regional level on interval

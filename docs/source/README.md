@@ -17,17 +17,12 @@ pip install nemed
 This tool is designed to allow users to retrieve historical NEM emissions data, both total and average emissions (intensity index) metrics, as well as marginal emissions, for any dispatch interval or aggregations thereof. Although data is published by AEMO via the [Carbon Dioxide Equivalent Intensity Index (CDEII) Procedure](https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/market-operations/settlements-and-payments/settlements/carbon-dioxide-equivalent-intensity-index) this only reflects a daily summary by region of total and average emissions.
 
 ### How does NEMED calculate emissions?
-Total and Average Emissions are computed by extracting 5-minute dispatch interval data for each generator in the NEM for respective regions, mapping this data to reported CO2-equivalent emissions intensity metrics per unit (generator)-level, and returning the corresponding emissions: total emissions(kg CO2-e), or average emissions, also referred to as, emisssions intensity (kg CO2-e/MWh) per interval. 
+Total and Average Emissions are computed by considering 5-minute dispatch interval data for each generator in the NEM for the respective regions, along with their CO2-equivalent emissions factors per unit (generator)-level. A detailed method of the process to produce results for: total emissions(tCO2-e), or average emissions, also referred to as emisssions intensity (tCO2-e/MWh), can be found [here](method.md). The tool is able to provide these metrics on a dispatch interval basis, or aggregated to hourly, daily or monthly measures.
 
-```{note}
-The current version of NEMED only considers unit (generator)-level emissions intensity metrics (kg/MWh) from (AEMO's Input Assumptions & Scenario Report (IASR) 2021-22)
-```
-[See more on IASR.](https://www.aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp/2022-integrated-system-plan-isp/current-inputs-assumptions-and-scenarios)
-
-Marginal Emissions are computed by extracting the marginally dispatched generators from AEMO's Price Setter files, mapping emissions intensity metrics mentioned above and hence computing marginal emissions (kg CO2-e/MWh).
+Marginal Emissions are computed by extracting the marginally dispatched generators from AEMO's Price Setter files, mapping emissions intensity metrics mentioned above and hence computing marginal emissions (tCO2-e/MWh).
 
 ### How accurate is NEMED?
-A [benchmark example](https://nemed.readthedocs.io/en/latest/examples/example_1.html) of total and average emissions provides a comparison between AEMO's daily CDEII reported emissions figures and NEMED's emissions figures which have been aggregated from a dispatch-interval resolution to a daily basis.   
+A [benchmark example](https://nemed.readthedocs.io/en/latest/examples/example_1.html#results-comparison-to-aemo) of total and average emissions provides a comparison between AEMO's daily CDEII reported emissions figures and NEMED's emissions figures which have been aggregated from a dispatch-interval resolution to a daily basis.   
 
 
 ## Usage

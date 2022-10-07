@@ -3,8 +3,7 @@ root: index
 parts:
 - caption: Overview
   chapters:
-  - file: quickstart
-  - file: glossary
+  - file: method
 
 - caption: Examples
   chapters:
