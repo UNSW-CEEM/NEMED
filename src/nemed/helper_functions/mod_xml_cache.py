@@ -116,7 +116,7 @@ def read_json_to_df(cache, start_date_str, end_date_str, clean_up=False):
     JSON_files = glob.glob(os.path.join(cache, "NEMPriceSetter_*.xml"))
     print("Reading selected {} JSON files to pandas, of {} cached files".format(len(JSON_subset),len(JSON_files)))
 
-    all_df = pd.DataFrame()
+    all_df = []
     for file in tqdm(JSON_subset):
         with open(file, 'r') as f:
             data = json.loads(f.read())
@@ -124,8 +124,9 @@ def read_json_to_df(cache, start_date_str, end_date_str, clean_up=False):
         df_nested_list['@Increase'] = df_nested_list['@Increase'].astype(float)
         df_nested_list = df_nested_list[(df_nested_list['@Market'] == 'Energy') &
                                         (df_nested_list['@DispatchedMarket'] == 'ENOF')]
-        all_df = pd.concat([all_df, df_nested_list])
+        all_df += [df_nested_list]
 
+    all_df = pd.concat(all_df)
     all_df.columns = all_df.columns.str.strip('@')
     all_df.rename(columns={'Unit': 'DUID'}, inplace=True)
 
