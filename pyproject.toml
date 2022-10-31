@@ -8,7 +8,7 @@ readme = "README.md"
 
 # Main dependencies for the package via poetry. Package users will need these dependencies.
 [tool.poetry.dependencies]
-python = ">= 3.8, < 3.11"
+python = ">= 3.8, <4.0"
 pandas = "^1.2"
 nemosis = "*"
 nempy = "*"

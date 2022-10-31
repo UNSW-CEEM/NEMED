@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.2 Minor fixes (01/11/2022)
+- Dependency resolution
+
 ## v0.2.1 Minor fixes (16/10/2022)
 - Performance improvement in time to download/process price setter files for marginal emissions.
 - Update documentation readme

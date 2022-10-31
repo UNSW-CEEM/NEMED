@@ -23,7 +23,7 @@ copyright = "2022, Declan Heim, Shayan Naderi"
 author = "Declan Heim, Shayan Naderi"
 
 # The full version, including alpha/beta/rc tags
-release = "0.2.1"
+release = "0.2.2"
 
 
 # -- General configuration ---------------------------------------------------
