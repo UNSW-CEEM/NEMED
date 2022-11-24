@@ -107,7 +107,7 @@ def _download_iasr_existing_gens(select_columns=['Generator', 'Auxiliary Load (%
     Returns
     -------
     pandas.DataFrame
-        Table extract of IASR containing columsn specified as `select_columns`
+        Table extract of IASR containing columns specified as `select_columns`
     """
     filepath = Path(__file__).parent / "./data/existing_gen_data_summary.csv"
     table = pd.read_csv(filepath, dtype=coltype)
