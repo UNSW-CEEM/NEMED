@@ -1,6 +1,6 @@
 """Core user interfacing module"""
-import nemed.process as nd
-import nemed.helper_functions.helpers as hp
+from . import process as nd
+from . helper_functions import helpers as hp
 from datetime import datetime as dt, timedelta
 
 

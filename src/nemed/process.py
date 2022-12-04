@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from .downloader import download_cdeii_table, download_unit_dispatch, download_pricesetters, download_generators_info, \
     download_duid_auxload
-import nemed.helper_functions.helpers as hp
+from .helper_functions import helpers as hp
 
 DISP_INT_LENGTH = 5
 
@@ -24,6 +24,10 @@ def get_total_emissions_by_DI_DUID(start_time, end_time, cache, filter_regions=N
         Raw data location in local directory
     filter_units : list of str
         List of DUIDs to filter data by, by default None
+    generation_sent_out : bool
+        Considers 'sent_out' generation (auxilary loads) as opposed to 'as generated' in calculations, by default True
+    assume_ramp : bool
+        Uses a linear ramp between dispatch datapoints as opposed to a stepped function, by default True
 
     Returns
     -------

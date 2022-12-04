@@ -1,18 +1,16 @@
 # API Reference
+---
+The primary usage of this tool requires only the functions found in the **NEMED** module. However for more advanced usage of debugging refer to the **Downloader** or **Process** modules.
 
-```{eval-rst}
-.. currentmodule:: nemed
-```
 
 ## NEMED module
-```{tip}
-The key functions to interface with to use this tool. You need not call functions yourself from the <code>Downloader</code> or <code>Process</code> modules.
-```
 ```{eval-rst}
 .. automodule:: nemed.nemed
    :members:
 ```
+<br><br>
 
+---
 ## Downloader module
 ```{note}
 It is important to use a different cache folder than other projects of nempy and nemosis that you may already have!
@@ -22,7 +20,9 @@ It is important to use a different cache folder than other projects of nempy and
 .. automodule:: nemed.downloader
    :members:
 ```
+<br><br>
 
+---
 ## Process module
 
 ```{eval-rst}

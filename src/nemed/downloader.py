@@ -2,7 +2,7 @@
 from nemosis import dynamic_data_compiler, static_table
 from nemosis.data_fetch_methods import _read_mms_csv
 from nempy.historical_inputs.xml_cache import XMLCacheManager as XML
-from .defaults import CDEII_URL
+from .defaults import *
 from .helper_functions import helpers as hp
 from .helper_functions.mod_xml_cache import overwrite_xmlcachemanager_with_pricesetter_config, convert_xml_to_json,\
     read_json_to_df
@@ -11,8 +11,7 @@ import glob
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
-
-from pathlib import Path
+import requests
 
 DISPATCH_INT_MIN = 5
 
@@ -53,10 +52,11 @@ def download_generators_info(cache):
     -------
     pandas.DataFrame
         AEMO data containing columns=['Participant', 'Station Name', 'Region', 'Dispatch Type', 'Category',
-       'Classification', 'Fuel Source - Primary', 'Fuel Source - Descriptor','Technology Type - Primary',
-       'Technology Type - Descriptor', 'Aggregation', 'DUID']
+       'Classification', 'Fuel Source - Primary', 'Fuel Source - Descriptor',
+       'Technology Type - Primary', 'Technology Type - Descriptor',
+       'Aggregation', 'DUID', 'Reg Cap (MW)']
     """
-    hp._check_cache(cache)
+    cache = hp._check_cache(cache)
     table = static_table(table_name="Generators and Scheduled Loads", raw_data_location=cache)
     return table
 
@@ -107,7 +107,7 @@ def _download_iasr_existing_gens(select_columns=['Generator', 'Auxiliary Load (%
     Returns
     -------
     pandas.DataFrame
-        Table extract of IASR containing columsn specified as `select_columns`
+        Table extract of IASR containing columns specified as `select_columns`
     """
     filepath = Path(__file__).parent / "./data/existing_gen_data_summary.csv"
     table = pd.read_csv(filepath, dtype=coltype)
@@ -115,28 +115,130 @@ def _download_iasr_existing_gens(select_columns=['Generator', 'Auxiliary Load (%
     return table
 
 
-# def download_aemo_cdeii_summary(year, filter_start, filter_end, cache):
-#     url = f"https://www.aemo.com.au/-/media/files/electricity/nem/settlements_and_payments/settlements/{year}/\
-#             co2eii_summary_results_{year}.csv?la=en"
-#     # filepath = Path(__file__).parent / f"../../data/AEMO_CO2EII_{year}.csv"
-#     filepath = os.path.join(cache, f'AEMO_CO2EII_{year}.csv')
+def download_aemo_cdeii_summary(filter_start, filter_end, cache):
+    """Downloads and combines selected AEMO CDEII Summary Files for a specified date range. The files processed here are
+    available from:
+    https://aemo.com.au/en/energy-systems/electricity/national-electricity-market-nem/market-operations/settlements-and-payments/settlements/carbon-dioxide-equivalent-intensity-index
 
-#     r = requests.get(url, headers=REQ_URL_HEADERS)
-#     with open(filepath, 'wb') as f:
-#         f.write(r.content)
+    Parameters
+    ----------
+    filter_start : str
+        Data download period start, in the format: 'yyyy/mm/dd HH:MM:SS'
+    filter_end : str
+        Data download period end, in the format: 'yyyy/mm/dd HH:MM:SS'
+    cache : str
+        Raw data location in local directory
 
-#     aemo = pd.read_csv(filepath, header=1, usecols=[6, 7, 8, 9, 10])
+    Returns
+    -------
+    pd.DataFrame
+        AEMO data containing columns = 'SETTLEMENTDATE', 'REGIONID', 'TOTAL_SENT_OUT_ENERGY',
+       'TOTAL_EMISSIONS', 'CO2E_INTENSITY_INDEX']
 
-#     fil_start_dt = datetime.strptime(filter_start, "%Y/%m/%d %H:%M:%S")
-#     fil_end_dt = datetime.strptime(filter_end, "%Y/%m/%d %H:%M:%S")
+    Raises
+    ------
+    ValueError
+        Where 'filter_start' exceeds the earliest available CDEII data file supported by NEMED.
+    """
+    cache = hp._check_cache(cache)
 
-#     aemo['SETTLEMENTDATE'] = pd.to_datetime(aemo['SETTLEMENTDATE'], format="%Y/%m/%d %H:%M:%S")
-#     table = aemo[aemo['SETTLEMENTDATE'].between(fil_start_dt, fil_end_dt)]
-#     return table.reset_index(drop=True)
+    # Check filter start and end in defaults files datarange.
+    fil_start_dt = datetime.strptime(filter_start, "%Y/%m/%d %H:%M:%S")
+    fil_end_dt = datetime.strptime(filter_end, "%Y/%m/%d %H:%M:%S")
+
+    default_start_yearname, default_end_yearname = list(CDEII_SUMFILES)[0], list(CDEII_SUMFILES)[-1]
+
+    if fil_start_dt < datetime.strptime(CDEII_SUMFILES[default_start_yearname]['start'],
+                                        CDEII_SUMFILES_DTFMT[default_start_yearname]):
+        raise ValueError("'filter_start' date exceeds the available CDEII data backdated to {}"\
+                            .format(CDEII_SUMFILES[default_start_yearname]['start']))
+    elif (fil_end_dt > datetime.strptime(CDEII_SUMFILES[default_end_yearname]['end'],
+                                        CDEII_SUMFILES_DTFMT[default_end_yearname])):
+        extract_current = True
+        if fil_start_dt >= datetime.strptime(CDEII_SUMFILES[default_end_yearname]['start'],
+                                        CDEII_SUMFILES_DTFMT[default_end_yearname]):
+            extract_historical = False
+        else:
+            extract_historical = True
+    else:
+        extract_historical = True
+
+    aemodata = []
+    if extract_historical:
+        # Extract CDEII datafiles for historical
+        files_sdt = [datetime.strptime(CDEII_SUMFILES[i]['start'], CDEII_SUMFILES_DTFMT[i]) \
+                     for i in CDEII_SUMFILES.keys()]
+        files_edt = [datetime.strptime(CDEII_SUMFILES[i]['end'], CDEII_SUMFILES_DTFMT[i]) \
+                     for i in CDEII_SUMFILES.keys()]
+
+        # Find nearest dataseries start date
+        if np.searchsorted(files_sdt, fil_start_dt)==0:
+            extract_from_idx = np.searchsorted(files_sdt, fil_start_dt)
+        else :
+            extract_from_idx = (np.searchsorted(files_sdt, fil_start_dt)-1)
+        ## extract_from = list(CDEII_SUMFILES)[extract_from_idx]
+
+        # Find nearest dataseries end date
+        if np.searchsorted(files_edt, fil_end_dt)==0:
+            extract_to_idx = np.searchsorted(files_edt, fil_end_dt)+1
+        else :
+            extract_to_idx = (np.searchsorted(files_edt, fil_end_dt))
+
+        # If date falls in current datafile (not historical)
+        if extract_to_idx > len(list(CDEII_SUMFILES)) - 1:
+            extract_to_idx = (len(list(CDEII_SUMFILES)) - 1)
+        ## extract_to = list(CDEII_SUMFILES)[extract_to_idx]
+
+        # Extract Datafile from AEMO
+        for idx in range(extract_from_idx, extract_to_idx+1):
+            yearname = list(CDEII_SUMFILES)[idx]
+            year = CDEII_SUMFILES[yearname]['year']
+            print(f"Extracting AEMO CDEII Datafile for: {yearname}, {year}")
+            # Manual request for change in file naming on aemo website
+            if year == '2015':
+                url = f"https://www.aemo.com.au/-/media/files/electricity/nem/settlements_and_payments/settlements/\
+                    {year}/cdeii-20160105.csv?la=en"
+            else:
+                url = f"https://www.aemo.com.au/-/media/files/electricity/nem/settlements_and_payments/settlements/\
+                    {year}/co2eii_summary_results_{yearname}.csv?la=en"
+
+            filepath = os.path.join(cache, f'AEMO_CO2EII_{yearname}.csv')
+            if os.path.exists(filepath):
+                os.remove(filepath)
+            r = requests.get(url, headers=REQ_URL_HEADERS)
+            with open(filepath, 'wb') as f:
+                f.write(r.content)
+            aemo_file = pd.read_csv(filepath, header=1, usecols=[6, 7, 8, 9, 10])
+            aemo_file['SETTLEMENTDATE'] = pd.to_datetime(aemo_file['SETTLEMENTDATE'],
+                                                         format=CDEII_SUMFILES_DTFMT[yearname])
+            aemodata += [aemo_file]
+
+    if extract_current:
+        # Extract CDEII datafiles from current file
+        print(f"Extracting AEMO CDEII Datafile for: CURRENT")
+        url = "https://www.nemweb.com.au/Reports/Current/CDEII/CO2EII_SUMMARY_RESULTS.CSV"
+        filepath = os.path.join(cache, f'AEMO_CO2EII_CURRENT.csv')
+        r = requests.get(url, headers=REQ_URL_HEADERS)
+        with open(filepath, 'wb') as f:
+            f.write(r.content)
+        aemo_file = pd.read_csv(filepath, header=1, usecols=[6, 7, 8, 9, 10])
+        aemo_file['SETTLEMENTDATE'] = pd.to_datetime(aemo_file['SETTLEMENTDATE'], format="%Y/%m/%d %H:%M:%S")
+        aemodata += [aemo_file]
+
+    table = pd.concat(aemodata)
+    table = table[table['SETTLEMENTDATE'].between(fil_start_dt, fil_end_dt)]
+    if max(table['SETTLEMENTDATE']) < fil_end_dt:
+        print("WARNING: 'filter_end' date exceeds available data from CURRENT CDEII. Latest available data is {}"\
+            .format(max(table['SETTLEMENTDATE'])))
+    return table.sort_values('SETTLEMENTDATE').reset_index(drop=True)
 
 
 def download_current_aemo_cdeii_summary(filter_start, filter_end, financialyear="1920"):
-    """Retrieve the AEMO CDEII daily summary file by financial year.
+    """
+    .. warning::
+        TO BE DEPRECATED IN FUTURE VERSIONS. Replaced by **download_aemo_cdeii_summary**
+   
+    Retrieve the AEMO CDEII daily summary file by financial year.
 
     Parameters
     ----------
@@ -207,7 +309,7 @@ def download_unit_dispatch(start_time, end_time, cache, source_initialmw=False, 
 
     """
     # Check inputs
-    hp._check_cache(cache)
+    cache = hp._check_cache(cache)
     assert(isinstance(start_time, str)), "`start_time` must be a string in format yyyy/mm/dd HH:MM:SS"
     assert(isinstance(end_time, str)), "`end_time` must be a string in format yyyy/mm/dd HH:MM:SS"
     assert(isinstance(overwrite, (str, type(None)))), "`overwrite` must be a string; one of ['initialmw','scada',\

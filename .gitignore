@@ -146,3 +146,4 @@ dmypy.json
 
 # Custom folders
 localonly/
+docs/source/examples/CACHE/
