@@ -32,6 +32,7 @@ myst-nb = "*"
 sphinx-copybutton = "*"
 sphinx_external_toc = "*"
 sphinx-book-theme = "*"
+sphinx-design = "*"
 jupytext = "*"
 
 
