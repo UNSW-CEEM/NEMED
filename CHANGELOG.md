@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.0 Major update to Total Emissions (10/01/2023)
+- New method for extracting total emissions data.
+- Updated examples for CDEII Comparison and Total emissions.
+- Extended usable historical date range, tested to at least as early as 2015.
+- Updated readme and documentation
+
 ## v0.2.2 Minor fixes (01/11/2022)
 - Dependency resolution
 

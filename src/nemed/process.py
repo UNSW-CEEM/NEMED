@@ -1,110 +1,210 @@
 """ Process functions for calculations based on downloaded data """
-from datetime import datetime
+from datetime import datetime as dt, timedelta
 import pandas as pd
 import numpy as np
+import logging
+import os
 from .downloader import download_cdeii_table, download_unit_dispatch, download_pricesetters, download_generators_info, \
-    download_duid_auxload
+    download_duid_auxload, download_plant_emissions_factors, read_plant_auxload_csv, download_genset_map, download_dudetailsummary
 from .helper_functions import helpers as hp
 
 DISP_INT_LENGTH = 5
+logger = logging.getLogger(__name__)
 
 
-def get_total_emissions_by_DI_DUID(start_time, end_time, cache, filter_regions=None,
-                                   generation_sent_out=True, assume_ramp=True):
-    """Find the total emissions for each generation unit per dispatch interval. Calculates the Total_Emissions column by
-    multiplying Energy (Dispatch (MW) * 5/60 (h)) with Plant Emissions Intensity (tCO2-e/MWh)
+def get_total_emissions_by_DI_DUID(start_time, end_time, cache, filter_regions=None, generation_sent_out=True, \
+                                   assume_energy_ramp=True, dropna_co2factors=True, return_all=False):
+    """Retrieve the total emissions for each generation unit per dispatch interval.
 
     Parameters
     ----------
     start_time : str
-        Start Time Period in format 'yyyy/mm/dd HH:MM:SS'
+        Start Time Period in format 'yyyy/mm/dd HH:MM'
     end_time : str
-        End Time Period in format 'yyyy/mm/dd HH:MM:SS'
+        End Time Period in format 'yyyy/mm/dd HH:MM'
     cache : str
         Raw data location in local directory
-    filter_units : list of str
-        List of DUIDs to filter data by, by default None
+    filter_regions : list(str)
+        NEM regions to filter for while retrieving the data, as a list, by default None to collect all region data
     generation_sent_out : bool
         Considers 'sent_out' generation (auxilary loads) as opposed to 'as generated' in calculations, by default True
-    assume_ramp : bool
-        Uses a linear ramp between dispatch datapoints as opposed to a stepped function, by default True
+    assume_energy_ramp : bool
+        Uses a linear ramp between dispatch scada points as opposed to a stepped function, by default True
+    dropna_co2factors : bool
+        Removes data (generation) entries which do not have a CO2E_EMISSIONS_FACTOR mapped to them, by default True
+    return_all : bool
+        Returns the entire table will all columns as opposed to tidied up table, by default False
 
     Returns
     -------
-    pd.DataFrame
-        Calculated data table containing columns=["Time","DUID","Plant_Emissions_Intensity","Energy",
-        "Total_Emissions"]. Plant_Emissions_Intensity is a static metric in tCO2-e/MWh, Energy is in MWh, Total
-        Emissions in tCO2-e.
+    pandas.DataFrame
+        Data is returned as formatted if `return_all` = False, `generation_sent_out` = True:
+
+        =========================  ========  ===================================================================================================================
+        Columns:                   Type:     Description:
+        DUID                       str       Generator Identifier.
+        Time                       datetime  Timestamp for end of interval.
+        Region                     str       The NEM region corresponding to data.
+        Plant_Emissions_Intensity  float     The CO2_EMISSIONS_FACTOR [tCO2-e/MWh] corresponding to DUID.
+        Energy                     float     The energy [MWh] (as generated) calculated as step or ramp depending on `assume_energy_ramp`.
+        PCT_AUXILIARY_LOAD         int       The percentage of auxiliary load corresponding to DUID.
+        Energy_SO                  float     The energy [MWh] (sent out) calculated based on Energy and PCT_AUXILIARY_LOAD
+        Total_Emissions            float     The emissions [tCO2-e] for the DUID and Time based on Energy_SO and Plant_Emissions_Intensity
+        =========================  ========  ===================================================================================================================
+
     """
     # Check if cache is an existing directory
     hp._check_cache(cache)
 
-    # Download CDEII, Unit Dispatch Data and Generation Information
-    cdeii_df = download_cdeii_table()
-    cdeii_df = cdeii_df.drop_duplicates(subset=['DUID'])
+    # Adjust to also collect prior DI to calculate energy ramp 
+    actual_stime = dt.strptime(start_time, "%Y/%m/%d %H:%M")
+    actual_etime = dt.strptime(end_time, "%Y/%m/%d %H:%M")
+    if actual_etime < actual_stime:
+        raise Exception("end_time cannot be prior start_time")
 
+    prior_start_time = actual_stime - timedelta(minutes=DISP_INT_LENGTH)
+    prior_start_time = dt.strftime(prior_start_time, "%Y/%m/%d %H:%M")
+
+    # Segment emissions calculations into smaller chunks
+    ts = _generate_timeseries_loop(prior_start_time, end_time)
+    res_str = []
+    for sdate, edate, st, et in zip(ts['start'], ts['end'], ts['s_str'], ts['e_str']):
+        logger.info(f"Processing total emissions from {st} to {et}")
+        df = _total_emissions_process(sdate, edate, cache, filter_regions, generation_sent_out, assume_energy_ramp, \
+                                      dropna_co2factors)
+        name = 'processed_co2_total_{}_{}.parquet'.format(st, et)
+        res_str += [name]
+        df.to_parquet(os.path.join(cache, name))
+
+    # Load cached results files
+    results_df = []
+    for name in res_str:
+        logger.info(f"Loading results file {name}")
+        results_df += [pd.read_parquet(os.path.join(cache, name))]
+    
+    flatten = pd.concat(results_df, ignore_index=True)
+    res = flatten[flatten['Time'].between(start_time, end_time, inclusive="right")]
+
+    logger.info('Completed get_total_emissions_by_DI_DUID')
+
+    if return_all:
+        return res
+    else:
+        if generation_sent_out:
+            return res[['DUID', 'Time', 'Region', 'Plant_Emissions_Intensity', 'Energy', 'PCT_AUXILIARY_LOAD', \
+                        'Energy_SO', 'Total_Emissions']]
+        else:
+            return res[['DUID', 'Time', 'Region', 'Plant_Emissions_Intensity', 'Energy', 'Total_Emissions']]
+
+
+def _generate_timeseries_loop(actual_start, actual_end):
+    """Generates a dict of start and end times for looping through the `_total_emissions_process` computation.
+    """
+    stime = dt.strptime(actual_start, "%Y/%m/%d %H:%M")
+    etime = dt.strptime(actual_end, "%Y/%m/%d %H:%M")
+    start_series = pd.date_range(stime, etime, freq='MS', normalize=True, inclusive="neither")
+    end_series = pd.date_range(stime, etime, freq='MS', normalize=True, inclusive="neither")
+    time_segments = {
+        'start': [actual_start[0:10]+" 00:00"] + start_series.strftime("%Y/%m/%d %H:%M").to_list(),
+        'end': end_series.strftime("%Y/%m/%d %H:%M").to_list() + [actual_end],
+        's_str': [stime.strftime("%Y-%m-%d")] + start_series.strftime("%Y-%m-%d").to_list(),
+        'e_str': end_series.strftime("%Y-%m-%d").to_list() + [etime.strftime("%Y-%m-%d")]
+    }
+    return time_segments
+
+
+def _total_emissions_process(start_time, end_time, cache, filter_regions=None,
+                             generation_sent_out=True, assume_energy_ramp=True, dropna_co2factors=True):
+    """Process for calculating total emissions based on the parameters defined in `get_total_emissions_by_DI_DUID`.
+    """
+    # Download Unit Dispatch Data and Generation Information
     disp_df = download_unit_dispatch(start_time, end_time, cache, source_initialmw=False, source_scada=True,
-                                     return_all=False, check=False, overwrite="scada")
-    geninfo_df = download_generators_info(cache)
+                                     return_all=False, check=False, overwrite="scada", rm_negative=True)
 
-    # Filter units and replace negatives
-    disp_df = disp_df[disp_df['DUID'].isin(cdeii_df['DUID'])]
-    disp_df['Dispatch'] = np.where(disp_df['Dispatch'] < 0, 0, disp_df['Dispatch'])
+    geninfo_df = download_dudetailsummary(cache) #download_generators_info(cache)
 
-    # Merge unit generation and dispatch type category
-    result = pd.merge(left=disp_df, right=geninfo_df[['DUID', 'Dispatch Type']], on="DUID", how="left")
+    # Merge geninfo and filter out loads
+    disp_df.set_index('DUID', inplace=True)
+    geninfo_df.set_index('DUID', inplace=True)
+    filt_df = disp_df.join(geninfo_df[['REGIONID', 'DISPATCHTYPE']], how="left")
+    filt_df.reset_index(inplace=True)
+    
+    filt_df = filt_df[filt_df['DISPATCHTYPE'] == 'GENERATOR']
 
-    # Filter out loads
-    result = result[result['Dispatch Type'] == 'Generator']
-
-    # Merge unit generation and emissions factor data
-    result = result.merge(right=cdeii_df[["DUID", "REGIONID", "CO2E_EMISSIONS_FACTOR"]], on="DUID", how="left")
-
-    # Filter by region is specified
+    # Filter by region if specified
     if filter_regions:
-        if not pd.Series(cdeii_df["REGIONID"].unique()).isin(filter_regions).any():
+        if not pd.Series(filt_df["REGIONID"].unique()).isin(filter_regions).any():
             raise ValueError("filter_region paramaters passed were not found in NEM regions")
-        result = result[result["REGIONID"].isin(filter_regions)]
-    if result.empty:
-        print("WARNING: Emissions Dataframe is empty. Check filter_units and filter_regions parameters do not \
-            conflict!")
+        filt_df = filt_df[filt_df["REGIONID"].isin(filter_regions)]
+
+    # Merge Energy data with Plant Emissions Factors
+    filt_df['year'], filt_df['month'] = filt_df['Time'].dt.year, filt_df['Time'].dt.month
+    co2factors_df = download_plant_emissions_factors(cache, start_time, end_time)
+    genset_map = download_genset_map(cache)
+    co2factors_df = co2factors_df.merge(right=genset_map[["GENSETID", "DUID"]],
+                                        on=["GENSETID"],
+                                        how="left")
+    plt_df = pd.merge(left=filt_df,
+                      right=co2factors_df[["file_year", "file_month", "DUID", "CO2E_EMISSIONS_FACTOR"]],
+                      left_on=["year", "month", "DUID"],
+                      right_on=["file_year", "file_month", "DUID"],
+                      how="left")
+
+    # Filter out Data with Null CO2_EMISSIONS_FACTORS
+    if dropna_co2factors:
+        plt_df = plt_df[~plt_df['CO2E_EMISSIONS_FACTOR'].isna()]
 
     # Calculate Energy (MWh)
-    if not assume_ramp:
-        result["Energy"] = result["Dispatch"] * (DISP_INT_LENGTH / 60)
-        aggregate = result
+    if not assume_energy_ramp:
+        plt_df["Energy"] = plt_df["Dispatch"] * (DISP_INT_LENGTH / 60)
+        result = plt_df
     else:
-        aggregate = pd.DataFrame()
-        for duid in result['DUID'].unique():
-            sub_df = result[result['DUID'] == duid]
-            sub_df = sub_df.sort_values('Time')
-            sub_df.reset_index(drop=True, inplace=True)
-            sub_df['Dispatch_prev'] = np.nan
-            sub_df.loc[1:, 'Dispatch_prev'] = sub_df['Dispatch'][:len(sub_df)-1].to_list()
-
-            sub_df.loc[:, 'Energy'] = (0.5*(sub_df['Dispatch'] - sub_df['Dispatch_prev']) + sub_df['Dispatch_prev']) \
-                * (DISP_INT_LENGTH / 60)
-
-            aggregate = pd.concat([aggregate, sub_df], ignore_index=True)
-
-    # Consider auxillary loads for Sent Out Generation metric
+        result = _calculate_energy_ramp(plt_df)
+        
+    # Calculate Sent-Out Energy (MWh)
     if generation_sent_out:
-        # Download Auxilary Load Data
-        auxload = download_duid_auxload()
+        result = _calculate_sent_out(result)
+        # Compute emissions
+        result["Total_Emissions"] = result["Energy_SO"] * result["CO2E_EMISSIONS_FACTOR"]
+    else:
+        result["Total_Emissions"] = result["Energy"] * result["CO2E_EMISSIONS_FACTOR"]
 
-        # Merge data and compute auxilary load factor
-        aggregate = aggregate.merge(auxload, on=["DUID"], how="left")
-        aggregate['pct_sent_out'] = (100 - aggregate['Auxiliary Load (%)']) / 100
-        aggregate['pct_sent_out'].fillna(1.0, inplace=True)
+    result.rename(columns={"CO2E_EMISSIONS_FACTOR": "Plant_Emissions_Intensity",
+                           "REGIONID": "Region"}, inplace=True)
+    return result
 
-        # Adjust Energy for auxilary load
-        aggregate["Energy"] = aggregate["Energy"] * aggregate['pct_sent_out']
 
-    # Compute emissions
-    aggregate["Total_Emissions"] = aggregate["Energy"] * aggregate["CO2E_EMISSIONS_FACTOR"]
-    aggregate.rename(columns={"CO2E_EMISSIONS_FACTOR": "Plant_Emissions_Intensity"}, inplace=True)
+def _calculate_energy_ramp(dispatch_df):
+    """Returns dataframe with energy calculated as ramp between dispatch scada points.
+    """
+    logger.info('Compiling Energy from Dispatch')
+    aggregate = []
+    for duid in dispatch_df['DUID'].unique():
+        sub_df = dispatch_df[dispatch_df['DUID'] == duid]
+        sub_df = sub_df.sort_values('Time')
+        sub_df.reset_index(drop=True, inplace=True)
+        sub_df['Dispatch_prev'] = np.nan
+        sub_df.loc[1:, 'Dispatch_prev'] = sub_df['Dispatch'][:len(sub_df)-1].to_list()
+        sub_df.loc[:, 'Energy'] = (0.5*(sub_df['Dispatch'] - sub_df['Dispatch_prev']) + sub_df['Dispatch_prev']) \
+            * (DISP_INT_LENGTH / 60)
+        aggregate += [sub_df]
+    aggregate = pd.concat(aggregate, ignore_index=True)
+    return aggregate.reset_index(drop=True)
 
-    return aggregate[['Time', 'DUID', 'REGIONID', 'Plant_Emissions_Intensity', 'Energy', 'Total_Emissions']]
+
+def _calculate_sent_out(energy_df):
+    """Returns dataframe with sent-out generation calculated by considering auxload factor for corresponding DUID.
+    """
+    logger.info('Compiling Sent Out Generation')
+    auxload = read_plant_auxload_csv()
+
+    # Merge data and compute auxilary load factor
+    so_df = energy_df.merge(auxload, on=["DUID"], how="left")
+    so_df['pct_sent_out'] = (100 - so_df["PCT_AUXILIARY_LOAD"]) / 100
+    """add error checking measure for % of no matches in auxload"""
+    so_df['pct_sent_out'].fillna(1.0, inplace=True)
+    so_df["Energy_SO"] = so_df["Energy"] * so_df['pct_sent_out']
+    return so_df
 
 
 def get_marginal_emitter(cache, start_year, start_month, start_day, end_year, end_month, end_day, redownload_xml=True):
@@ -223,124 +323,141 @@ def tech_rename(fuel, tech_descriptor, dispatch_type):
 
 
 def aggregate_data_by(data, by):
-    """Existing function to aggregate data by time-resolution specified
+    """Aggregate the total emissions dataset metrics of Sent Out Generation, Total Emissions and Intensity Index.
 
     Parameters
     ----------
-    data : pd.DataFrame
-        Input data to aggregate
+    data : pandas.DataFrame
+        Dataframe input must correspond to the output from `get_total_emissions` with the `by` arugment set to None.
     by : str
-        Time resolution to aggregate to; e.g. ['hour', 'day', 'month']
+        One of ['interval', 'hour', 'day', 'month', 'year']
 
     Returns
     -------
-    pd.DataFrame
-        Resulting time resolved data
+    pandas.DataFrame
+        Data is returned as:
+
+        ===============  ========  ==============================================================================================================================================
+        Columns:         Type:     Description:
+        TimeBeginning    datetime  Timestamp for start of interval or aggregation period. Only returned if `by` parameter is set.
+        TimeEnding       datetime  Timestamp for end of interval or aggregation period.
+        Region           str       The NEM region corresponding to data. 'NEM' field reflects all regions and is returned if `filter_regions` is None from `get_total_emissions`. 
+        Energy           float     The total (sent-out if `generation_sent_out` is True from `get_total_emissions`) energy for the corresponding region and time.
+        Total_Emissions  float     The total emissions for the corresponding region and time.
+        Intensity_Index  float     The intensity index as above, considering the total emissions divided by (sent-out) energy.
+        ===============  ========  ==============================================================================================================================================
 
     Raises
     ------
     Exception
-        Invalid by argument
+        Invalid dataframe input.
     """
-    result = {}
-    agg_map = {"Energy": np.sum, "Total_Emissions": np.sum, "Intensity_Index": np.mean}
-    # Format result to show on interval resolution
+    aggregate = []
+    for region in data['Region'].unique():
+        sub_df = data[data['Region']==region]
+        if ('TimeEnding' in sub_df.columns):
+            sub_df = sub_df.rename(columns={'TimeEnding': 'Time'})
+        
+        if ('TimeBeginning' in sub_df.columns):
+            raise Exception("already aggregated data cannot be passed to `aggregate_data_by` function. " +\
+                "The `get_total_emissions` `by` input must be set to None to use this function post-operand")       
+
+        sub_df = _time_aggregations(data=sub_df, by=by)
+        sub_df.insert(2, 'Region', region)
+        aggregate += [sub_df]
+    aggregate = pd.concat(aggregate, ignore_index=True)
+    return aggregate
+
+
+def _time_aggregations(data, by):
+    """Aggregations of total emissions dataset from 5-minute DI resolution to hour, day, month, or year
+    """
+    result = data.copy()
+    en_colname = result.columns[result.columns.str.contains('Energy')][0]
+    agg_map = {en_colname: np.sum, "Total_Emissions": np.sum}
+    if 'Intensity_Index' in result.columns:
+        reproduce_II = True
+        result.drop(['Intensity_Index'], axis=1, inplace=True)
+    else:
+        reproduce_II = False
+
+    # Shift data to time-beginning for aggregations
+    result['Time'] = result['Time'] - timedelta(minutes=5)
+    result.set_index(['Time'], inplace=True)
+
+    # Aggregations
     if by == "interval":
-        for metric in data.columns.levels[0]:
-            result[metric] = data[metric].round(2)
-
-    # Format result to show on hourly resolution
+        # Format result to show on interval resolution
+        result.drop(["Region"],axis=1,inplace=True)
+        result.insert(0, "TimeBeginning", result.index)
+        result.insert(1, "TimeEnding", result.index + timedelta(minutes=5))
+        result.reset_index(drop=True, inplace=True)
+        
     elif by == "hour":
-        for metric in data.columns.levels[0]:
-            result[metric] = (
-                data[metric]
-                .groupby(
-                    by=[
-                        data.index.year,
-                        data.index.month,
-                        data.index.day,
-                        data.index.hour,
-                    ]
-                )
-                .agg(agg_map[metric])
-            )
-            result[metric] = result[metric].round(2)
-            result[metric]["reconstr_time"] = None
-            for row in result[metric].index:
-                result[metric].loc[row, "reconstr_time"] = datetime(
-                    year=row[0], month=row[1], day=row[2], hour=row[3]
-                )
-            result[metric].set_index("reconstr_time", inplace=True)
-            result[metric].index.name = "Time"
-            result[metric] = result[metric][:-1]
+        # Hourly time resolution
+        result = result.groupby(by=[result.index.year,
+                                    result.index.month,
+                                    result.index.day,
+                                    result.index.hour]).agg(agg_map)
 
-    # Format result to show on daily resolution
+        result.index.names = ['Y','m','d','H']
+        result.reset_index(inplace=True)
+        result.insert(0,"TimeBeginning", pd.to_datetime(dict(year=result.Y,
+                                                             month=result.m,
+                                                             day=result.d,
+                                                             hour=result.H)))
+        result.drop(['Y','m','d','H'], axis=1, inplace=True)
+        result.insert(1,"TimeEnding", result['TimeBeginning'] + timedelta(hours=1))
+
     elif by == "day":
-        for metric in data.columns.levels[0]:
-            result[metric] = (
-                data[metric]
-                .groupby(
-                    by=[
-                        data.index.year,
-                        data.index.month,
-                        data.index.day,
-                    ]
-                )
-                .agg(agg_map[metric])
-            )
-            result[metric] = result[metric].round(2)
-            result[metric]["reconstr_time"] = None
-            for row in result[metric].index:
-                result[metric].loc[row, "reconstr_time"] = datetime(
-                    year=row[0], month=row[1], day=row[2]
-                )
-            result[metric].set_index("reconstr_time", inplace=True)
-            result[metric].index.name = "Time"
-            result[metric] = result[metric][:-1]
+        # Daily time resolution
+        result = result.groupby(by=[result.index.year,
+                                    result.index.month,
+                                    result.index.day]).agg(agg_map)
 
-    # Format result to show on monthly resolution
+        result.index.names = ['Y','m','d']
+        result.reset_index(inplace=True)
+        result.insert(0,"TimeBeginning", pd.to_datetime(dict(year=result.Y,
+                                                             month=result.m,
+                                                             day=result.d)))
+        result.drop(['Y','m','d'], axis=1, inplace=True)
+        result.insert(1, "TimeEnding", result['TimeBeginning'] + timedelta(days=1))
+
     elif by == "month":
-        for metric in data.columns.levels[0]:
-            result[metric] = (
-                data[metric]
-                .groupby(
-                    by=[
-                        data.index.year,
-                        data.index.month,
-                    ]
-                )
-                .agg(agg_map[metric])
-            )
-            result[metric] = result[metric].round(2)
-            result[metric]["reconstr_time"] = None
-            for row in result[metric].index:
-                result[metric].loc[row, "reconstr_time"] = datetime(
-                    year=row[0], month=row[1], day=1
-                )
-            result[metric].set_index("reconstr_time", inplace=True)
-            result[metric].index.name = "Time"
-            result[metric] = result[metric][:-1]
+        # Monthly time resolution
+        result = result.groupby(by=[result.index.year,
+                                    result.index.month]).agg(agg_map)
+        result.index.names = ['Y','m']
+        result.reset_index(inplace=True)
+        result.insert(0,"TimeBeginning", pd.to_datetime(dict(year=result.Y,
+                                                             month=result.m,
+                                                             day=1)))
+        result.insert(1,"TimeEnding", pd.to_datetime(dict(year=result.Y,
+                                                          month=result.m + 1,
+                                                          day=result['TimeBeginning'].dt.day)))
+        result.drop(['Y','m'], axis=1, inplace=True)
 
-    # Format result to show on annual resolution
     elif by == "year":
-        for metric in data.columns.levels[0]:
-            result[metric] = (
-                data[metric].groupby(by=[data.index.year]).agg(agg_map[metric])
-            )
-            print("UNTESTED for request spanning multiple years")
-            result[metric] = result[metric].round(2)
-            result[metric]["reconstr_time"] = None
-            for row in result[metric].index:
-                result[metric].loc[row, "reconstr_time"] = datetime(
-                    year=row, month=1, day=1
-                )
-            result[metric].set_index("reconstr_time", inplace=True)
-            result[metric].index.name = "Time"
-            result[metric] = result[metric][:-1]
+        # Annual time resolution
+        result = result.groupby(by=[result.index.year]).agg(agg_map)
+        result.index.names = ['Y']
+        result.reset_index(inplace=True)
+        result.insert(0,"TimeBeginning", pd.to_datetime(dict(year=result.Y,
+                                                             month=1,
+                                                             day=1)))
+        result.insert(1,"TimeEnding", pd.to_datetime(dict(year=result.Y + 1,
+                                                          month=1,
+                                                          day=1)))
+        result.drop(['Y'], axis=1, inplace=True)
 
     else:
         raise Exception(
             "Error: invalid by argument. Must be one of [interval, hour, day, month, year]"
         )
 
-    return result
+    # Update Intensity Index is found in data input
+    if reproduce_II:
+        result['Intensity_Index'] = result['Total_Emissions'] / result[en_colname]
+        result['Intensity_Index'] = result['Intensity_Index'].fillna(0.0)
+
+    return result.round(3)

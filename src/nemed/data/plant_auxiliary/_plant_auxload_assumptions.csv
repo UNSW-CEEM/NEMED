@@ -1,0 +1,326 @@
+EFFECTIVEFROM,DATASOURCE,DUID,GENERATOR,PCT_AUXILIARY_LOAD,NOTE
+17/07/2018,2018_ISP_assumptions_workbook,AGLHAL,Hallett GT,1,
+17/07/2018,2018_ISP_assumptions_workbook,AGLSOM,Somerton,1,
+17/07/2018,2018_ISP_assumptions_workbook,ANGAST1,Angaston,2.5,
+17/07/2018,2018_ISP_assumptions_workbook,ARWF1,Ararat WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,BALBG1,Ballarat Battery Energy Storage System,1,STORAGE NOT FOUND IN ISP. ASSUMED VALUE
+17/07/2018,2018_ISP_assumptions_workbook,BALBL1,Ballarat Battery Energy Storage System,1,STORAGE NOT FOUND IN ISP. ASSUMED VALUE
+17/07/2018,2018_ISP_assumptions_workbook,BALDHWF1,Bald Hills WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,BANN1,Bannerton Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,BARCALDN,Barcaldine,1,
+17/07/2018,2018_ISP_assumptions_workbook,BARCSF1,Barcaldine Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,BARKIPS1,Barker Inlet,3,COMMITTED PROJECT IN ISP. ASSUMED NEW ENTRANT VALUE
+17/07/2018,2018_ISP_assumptions_workbook,BARRON-1,Barron Gorge,1,
+17/07/2018,2018_ISP_assumptions_workbook,BARRON-2,Barron Gorge,1,
+17/07/2018,2018_ISP_assumptions_workbook,BASTYAN,Bastyan,1,
+17/07/2018,2018_ISP_assumptions_workbook,BBTHREE1,Bell Bay Three,3,
+17/07/2018,2018_ISP_assumptions_workbook,BBTHREE2,Bell Bay Three,3,
+17/07/2018,2018_ISP_assumptions_workbook,BBTHREE3,Bell Bay Three,3,
+17/07/2018,2018_ISP_assumptions_workbook,BDL01,Bairnsdale,1,
+17/07/2018,2018_ISP_assumptions_workbook,BDL02,Bairnsdale,1,
+17/07/2018,2018_ISP_assumptions_workbook,BERYLSF1,Beryl Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,BLOWERNG,Blowering,1,
+17/07/2018,2018_ISP_assumptions_workbook,BLUFF1,The Bluff,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,BNGSF1,BULGANAWF,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,BNGSF2,BULGANAWF,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,BOCORWF1,Boco Rock WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,BODWF1,Bodangora WF,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,BOMENSF1,Bomen Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,BRAEMAR1,Braemar,1,
+17/07/2018,2018_ISP_assumptions_workbook,BRAEMAR2,Braemar,1,
+17/07/2018,2018_ISP_assumptions_workbook,BRAEMAR3,Braemar,1,
+17/07/2018,2018_ISP_assumptions_workbook,BRAEMAR5,Braemar,1,
+17/07/2018,2018_ISP_assumptions_workbook,BRAEMAR6,Braemar,1,
+17/07/2018,2018_ISP_assumptions_workbook,BRAEMAR7,Braemar,1,
+17/07/2018,2018_ISP_assumptions_workbook,BROKENH1,Broken Hill Solar Plant,1,
+17/07/2018,2018_ISP_assumptions_workbook,BULGANA1,Bulgana Green Power Hub,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,BUTLERSG,Butlers Gorge Power Station,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,BW01,Bayswater,6,
+17/07/2018,2018_ISP_assumptions_workbook,BW02,Bayswater,6,
+17/07/2018,2018_ISP_assumptions_workbook,BW03,Bayswater,6,
+17/07/2018,2018_ISP_assumptions_workbook,BW04,Bayswater,6,
+17/07/2018,2018_ISP_assumptions_workbook,CALL_A_4,Callide Power Plant,6,
+17/07/2018,2018_ISP_assumptions_workbook,CALL_B_1,Callide B,9,
+17/07/2018,2018_ISP_assumptions_workbook,CALL_B_2,Callide B,9,
+17/07/2018,2018_ISP_assumptions_workbook,CAPTL_WF,Capital WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,CATHROCK,Cathedral Rocks WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,CETHANA,Cethana,1,
+17/07/2018,2018_ISP_assumptions_workbook,CG1,Colongra,1,
+17/07/2018,2018_ISP_assumptions_workbook,CG2,Colongra,1,
+17/07/2018,2018_ISP_assumptions_workbook,CG3,Colongra,1,
+17/07/2018,2018_ISP_assumptions_workbook,CG4,Colongra,1,
+17/07/2018,2018_ISP_assumptions_workbook,CHALLHWF,Challicum Hills WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,CHILDSF1,Childers Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,CHYTWF1,Cherry Tree Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,CLARESF1,Clare Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,CLEMGPWF,Clements Gap WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,CLERMSF1,Clermont Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,CLOVER,Clover Power Station,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,CLUNY,Cluny Power Station,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,CNUNDAWF,Canunda WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,COLEASF1,Coleambally Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,COOPGWF1,Coopers Gap WF,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,CPP_3,Callide C,,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,CPP_4,Callide C,,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,CPSA,Condamine,3,
+17/07/2018,2018_ISP_assumptions_workbook,CROOKWF2,Crookwell 2 WF,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,CROWLWF1,CROWLANDSWF,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,CSPVPS1,Collinsville Solar Power Station,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,CTHLWF1,Cattle Hill Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,CULLRGWF,Cullerin Range WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,DALNTH01,Dalrymple North BESS,1,STORAGE NOT FOUND IN ISP. ASSUMED VALUE
+17/07/2018,2018_ISP_assumptions_workbook,DALNTHL1,Dalrymple North BESS,1,STORAGE NOT FOUND IN ISP. ASSUMED VALUE
+17/07/2018,2018_ISP_assumptions_workbook,DARTM1,Dartmouth,1,
+17/07/2018,2018_ISP_assumptions_workbook,DAYDSF1,Daydream Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,DDPS1,Darling Downs,6,
+17/07/2018,2018_ISP_assumptions_workbook,DDSF1,Darling Downs Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,DEVILS_G,Devils Gate,1,
+17/07/2018,2018_ISP_assumptions_workbook,DRYCGT1,Dry Creek,1,
+17/07/2018,2018_ISP_assumptions_workbook,DRYCGT2,Dry Creek,1,
+17/07/2018,2018_ISP_assumptions_workbook,DRYCGT3,Dry Creek,1,
+17/07/2018,2018_ISP_assumptions_workbook,DUNDWF1,Dundonnell Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,DUNDWF2,Dundonnell Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,DUNDWF3,Dundonnell Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,EILDON1,Eildon,1,
+17/07/2018,2018_ISP_assumptions_workbook,EILDON2,Eildon,1,
+17/07/2018,2018_ISP_assumptions_workbook,ELAINWF1,Elaine Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,EMERASF1,Emerald Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,ER01,Eraring,6,
+17/07/2018,2018_ISP_assumptions_workbook,ER02,Eraring,6,
+17/07/2018,2018_ISP_assumptions_workbook,ER03,Eraring,6,
+17/07/2018,2018_ISP_assumptions_workbook,ER04,Eraring,6,
+17/07/2018,2018_ISP_assumptions_workbook,ERGT01,Eraring Gas Turbine,,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,FINLYSF1,Finley Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,FISHER,Fisher,1,
+17/07/2018,2018_ISP_assumptions_workbook,GANNBG1,Gannawarra Energy Storage System,1,STORAGE NOT FOUND IN ISP. ASSUMED VALUE
+17/07/2018,2018_ISP_assumptions_workbook,GANNBL1,Gannawarra Energy Storage System,1,STORAGE NOT FOUND IN ISP. ASSUMED VALUE
+17/07/2018,2018_ISP_assumptions_workbook,GANNSF1,Gannawarra Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,GB01,Broken Hill Gas Turbines,,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,GERMCRK,German Creek Power Station,,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,GOONSF1,Goonumbla Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,GORDON,Gordon,1,
+17/07/2018,2018_ISP_assumptions_workbook,GRANWF1,Granville Harbour Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,GRIFSF1,Griffith Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,GSTONE1,Gladstone,8,
+17/07/2018,2018_ISP_assumptions_workbook,GSTONE2,Gladstone,8,
+17/07/2018,2018_ISP_assumptions_workbook,GSTONE3,Gladstone,8,
+17/07/2018,2018_ISP_assumptions_workbook,GSTONE4,Gladstone,8,
+17/07/2018,2018_ISP_assumptions_workbook,GSTONE5,Gladstone,8,
+17/07/2018,2018_ISP_assumptions_workbook,GSTONE6,Gladstone,8,
+17/07/2018,2018_ISP_assumptions_workbook,GULLRSF1,Gullen Range Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,GULLRWF1,Gullen Range WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,GULLRWF2,Gullen Range WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,GUNNING1,Gunning WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,GUTHEGA,Guthega,1,
+17/07/2018,2018_ISP_assumptions_workbook,HALLWF1,Hallett 1 Brown Hill WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,HALLWF2,Hallett 2 Hallett Hill WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,HAMISF1,Hamilton Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,HAUGHT11,Haughton Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,HAYMSF1,Hayman Solar,1,
+17/07/2018,2018_ISP_assumptions_workbook,HDWF1,Hornsdale S1 WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,HDWF2,Hornsdale S2 WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,HDWF3,Hornsdale S3 WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,HPRG1,Hornsdale Power Reserve,1,STORAGE NOT FOUND IN ISP. ASSUMED VALUE
+17/07/2018,2018_ISP_assumptions_workbook,HPRL1,Hornsdale Power Reserve,1,STORAGE NOT FOUND IN ISP. ASSUMED VALUE
+17/07/2018,2018_ISP_assumptions_workbook,HUGSF1,Hughenden Solar Farm,1,
+17/07/2018,2018_ISP_assumptions_workbook,HUMENSW,Hume,1,
+17/07/2018,2018_ISP_assumptions_workbook,HUMEV,Hume,1,
+17/07/2018,2018_ISP_assumptions_workbook,HVGTS,Hunter Valley GT,1,
+17/07/2018,2018_ISP_assumptions_workbook,INVICTA,Invicta Sugar Mill,,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,JBUTTERS,John Butters,1,
+17/07/2018,2018_ISP_assumptions_workbook,JLA01,Jeeralang A,3,
+17/07/2018,2018_ISP_assumptions_workbook,JLA02,Jeeralang A,3,
+17/07/2018,2018_ISP_assumptions_workbook,JLA03,Jeeralang A,3,
+17/07/2018,2018_ISP_assumptions_workbook,JLA04,Jeeralang A,3,
+17/07/2018,2018_ISP_assumptions_workbook,JLB01,Jeeralang B,3,
+17/07/2018,2018_ISP_assumptions_workbook,JLB02,Jeeralang B,3,
+17/07/2018,2018_ISP_assumptions_workbook,JLB03,Jeeralang B,3,
+17/07/2018,2018_ISP_assumptions_workbook,KAREEYA1,Kareeya,1,
+17/07/2018,2018_ISP_assumptions_workbook,KAREEYA2,Kareeya,1,
+17/07/2018,2018_ISP_assumptions_workbook,KAREEYA3,Kareeya,1,
+17/07/2018,2018_ISP_assumptions_workbook,KAREEYA4,Kareeya,1,
+17/07/2018,2018_ISP_assumptions_workbook,KARSF1,Karadoc Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,KIATAWF1,Kiata WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,KPP_1,Kogan Creek,9,
+17/07/2018,2018_ISP_assumptions_workbook,KSP1,Kidston Solar,1,
+17/07/2018,2018_ISP_assumptions_workbook,LADBROK1,Ladbroke Grove,1,
+17/07/2018,2018_ISP_assumptions_workbook,LADBROK2,Ladbroke Grove,1,
+17/07/2018,2018_ISP_assumptions_workbook,LBBG1,Lake Bonney BESS1,1,STORAGE NOT FOUND IN ISP. ASSUMED VALUE
+17/07/2018,2018_ISP_assumptions_workbook,LBBL1,Lake Bonney BESS1,1,STORAGE NOT FOUND IN ISP. ASSUMED VALUE
+17/07/2018,2018_ISP_assumptions_workbook,LD01,Liddell,5,
+17/07/2018,2018_ISP_assumptions_workbook,LD02,Liddell,5,
+17/07/2018,2018_ISP_assumptions_workbook,LD03,Liddell,5,
+17/07/2018,2018_ISP_assumptions_workbook,LD04,Liddell,5,
+17/07/2018,2018_ISP_assumptions_workbook,LEM_WIL,Lemonthyme,1,STATION NAME LISTED SEPARATELY IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,LEM_WIL,Wilmot,1,STATION NAME LISTED SEPARATELY IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,LGAPWF1,Lincoln Gap Wind Farm,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,LI_WY_CA,Catagunya,1,STATION NAME LISTED SEPARATELY IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,LI_WY_CA,Liapootah,1,STATION NAME LISTED SEPARATELY IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,LI_WY_CA,Wayatinah,1,STATION NAME LISTED SEPARATELY IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,LILYSF1,Lilyvale Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,LIMOSF11,Limondale Solar Farm 1,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,LIMOSF21,Limondale Solar Farm 2,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,LK_ECHO,Lake Echo,1,
+17/07/2018,2018_ISP_assumptions_workbook,LKBONNY1,Lake Bonney 1 WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,LKBONNY2,Lake Bonney 2 WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,LKBONNY3,Lake Bonney 3 WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,LNGS1,Laverton North,3,
+17/07/2018,2018_ISP_assumptions_workbook,LNGS2,Laverton North,3,
+17/07/2018,2018_ISP_assumptions_workbook,LONSDALE,Lonsdale,2.5,
+17/07/2018,2018_ISP_assumptions_workbook,LOYYB1,Loy Yang B,8,
+17/07/2018,2018_ISP_assumptions_workbook,LOYYB2,Loy Yang B,8,
+17/07/2018,2018_ISP_assumptions_workbook,LRSF1,Longreach Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,LYA1,Loy Yang A,9,
+17/07/2018,2018_ISP_assumptions_workbook,LYA2,Loy Yang A,9,
+17/07/2018,2018_ISP_assumptions_workbook,LYA3,Loy Yang A,9,
+17/07/2018,2018_ISP_assumptions_workbook,LYA4,Loy Yang A,9,
+17/07/2018,2018_ISP_assumptions_workbook,MACARTH1,Macarthur WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,MACKAYGT,Mackay GT,1,
+17/07/2018,2018_ISP_assumptions_workbook,MACKNTSH,Mackintosh,1,
+17/07/2018,2018_ISP_assumptions_workbook,MANSLR1,Manildra Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,MARYRSF1,Maryrorough Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,MBAHNTH,Moranbah North Waste Coal Mine Gas Power Station,,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,MCKAY1,Bogong,1,
+17/07/2018,2018_ISP_assumptions_workbook,MEADOWBK,Meadowbank,1,
+17/07/2018,2018_ISP_assumptions_workbook,MERCER01,Mt Mercer Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,MEWF1,Mt Emerald,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,MINTARO,Mintaro,1,
+17/07/2018,2018_ISP_assumptions_workbook,MLSP1,Mugga Lane Solar Park,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,MLWF1,Mortons Lane,1,
+17/07/2018,2018_ISP_assumptions_workbook,MOREESF1,Moree Solar,1,
+17/07/2018,2018_ISP_assumptions_workbook,MORTLK11,Mortlake,1,
+17/07/2018,2018_ISP_assumptions_workbook,MORTLK12,Mortlake,1,
+17/07/2018,2018_ISP_assumptions_workbook,MP1,Mount Piper,5,
+17/07/2018,2018_ISP_assumptions_workbook,MP2,Mount Piper,5,
+17/07/2018,2018_ISP_assumptions_workbook,MPP_1,Millmerran,6,
+17/07/2018,2018_ISP_assumptions_workbook,MPP_2,Millmerran,6,
+17/07/2018,2018_ISP_assumptions_workbook,MSTUART1,Mount Stuart,1,
+17/07/2018,2018_ISP_assumptions_workbook,MSTUART2,Mount Stuart,1,
+17/07/2018,2018_ISP_assumptions_workbook,MSTUART3,Mount Stuart,1,
+17/07/2018,2018_ISP_assumptions_workbook,MTGELWF1,Mt Gellibrand WF,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,MTMILLAR,Mount Millar WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,MURRAY,Murray 1,1,STATION NAME LISTED SEPARATELY IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,MURRAY,Murray 2,1,STATION NAME LISTED SEPARATELY IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,MUSSELR1,Musselroe WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,MUWAWF1,Murra Warra Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,NBHWF1,North Brown Hill Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,NEVERSF1,Nevertire Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,NPS,Newport,5,
+17/07/2018,2018_ISP_assumptions_workbook,NUMURSF1,Numurkah Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,NYNGAN1,Nyngan Solar,1,
+17/07/2018,2018_ISP_assumptions_workbook,OAKEY1,Oakey,1,
+17/07/2018,2018_ISP_assumptions_workbook,OAKEY1SF,Oakey Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,OAKEY2,Oakey,1,
+17/07/2018,2018_ISP_assumptions_workbook,OAKEY2SF,Oakey Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,OAKLAND1,Oaklands Hill Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,OSB-AG,Osborne,5,
+17/07/2018,2018_ISP_assumptions_workbook,PALOONA,Paloona Power Station,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,PARSF1,Parkes Solar,1,
+17/07/2018,2018_ISP_assumptions_workbook,PIONEER,Pioneer Sugar Mill ,,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,POAT110,Poatina,1,
+17/07/2018,2018_ISP_assumptions_workbook,POAT220,Poatina,1,
+17/07/2018,2018_ISP_assumptions_workbook,POR01,Port Lincoln,8,
+17/07/2018,2018_ISP_assumptions_workbook,POR03,Port Lincoln 3,8,
+17/07/2018,2018_ISP_assumptions_workbook,PORTWF,Portland Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,PPCCGT,Pelican Point,2,
+17/07/2018,2018_ISP_assumptions_workbook,PTSTAN1,Port Stanvac,2.5,
+17/07/2018,2018_ISP_assumptions_workbook,PUMP1,Wivenhoe,1,
+17/07/2018,2018_ISP_assumptions_workbook,PUMP2,Wivenhoe,1,
+17/07/2018,2018_ISP_assumptions_workbook,QPS1,Quarantine,5,
+17/07/2018,2018_ISP_assumptions_workbook,QPS2,Quarantine,5,
+17/07/2018,2018_ISP_assumptions_workbook,QPS3,Quarantine,5,
+17/07/2018,2018_ISP_assumptions_workbook,QPS4,Quarantine,5,
+17/07/2018,2018_ISP_assumptions_workbook,QPS5,Quarantine,5,
+17/07/2018,2018_ISP_assumptions_workbook,REECE1,Reece,1,
+17/07/2018,2018_ISP_assumptions_workbook,REECE2,Reece,1,
+17/07/2018,2018_ISP_assumptions_workbook,REPULSE,Repulse Power Station,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,ROMA_7,Roma,1,
+17/07/2018,2018_ISP_assumptions_workbook,ROMA_8,Roma,1,
+17/07/2018,2018_ISP_assumptions_workbook,ROWALLAN,Rowallan Power Station,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,ROYALLA1,Royalla Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,RPCG,Rocky Point Cogeneration Plant,,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,RRSF1,Ross River Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,RUBICON,Rubicon Mountain Streams Station,,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,RUGBYR1,Rugby Run Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,SALTCRK1,Salt Creek WF,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,SAPHWF1,Sapphire WF,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,SATGS1,Temporary Generation South,,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,SHGEN,Shoalhaven,1,
+17/07/2018,2018_ISP_assumptions_workbook,SHPUMP,Shoalhaven,1,
+17/07/2018,2018_ISP_assumptions_workbook,SITHE01,Smithfield 1,5,
+17/07/2018,2018_ISP_assumptions_workbook,SMCSF1,Sun Metals Solar,1,
+17/07/2018,2018_ISP_assumptions_workbook,SNOWNTH1,Snowtown 2 North WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,SNOWSTH1,Snowtown 2 South WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,SNOWTWN1,Snowtown 1 WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,SNOWYP,Tumut 3,1,
+17/07/2018,2018_ISP_assumptions_workbook,SNUG1,Snuggery,3,
+17/07/2018,2018_ISP_assumptions_workbook,SRSF1,Susan River Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,STAN-1,Stanwell,9,
+17/07/2018,2018_ISP_assumptions_workbook,STAN-2,Stanwell,9,
+17/07/2018,2018_ISP_assumptions_workbook,STAN-3,Stanwell,9,
+17/07/2018,2018_ISP_assumptions_workbook,STAN-4,Stanwell,9,
+17/07/2018,2018_ISP_assumptions_workbook,STARHLWF,Starfish Hill WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,STWF1,Silverton WF,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,SWAN_E,Swanbank E2,3,
+17/07/2018,2018_ISP_assumptions_workbook,TALWA1,Tallawarra,3,
+17/07/2018,2018_ISP_assumptions_workbook,TARALGA1,Taralga Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,TARONG#1,Tarong,8,
+17/07/2018,2018_ISP_assumptions_workbook,TARONG#2,Tarong,8,
+17/07/2018,2018_ISP_assumptions_workbook,TARONG#3,Tarong,8,
+17/07/2018,2018_ISP_assumptions_workbook,TARONG#4,Tarong,8,
+17/07/2018,2018_ISP_assumptions_workbook,TARRALEA,Tarraleah,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,TBSF1,Tailem Bend Solar Project 1,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,TNPS1,Tarong North,6,
+17/07/2018,2018_ISP_assumptions_workbook,TORRA1,Torrens Island A,5,
+17/07/2018,2018_ISP_assumptions_workbook,TORRA2,Torrens Island A,5,
+17/07/2018,2018_ISP_assumptions_workbook,TORRA3,Torrens Island A,5,
+17/07/2018,2018_ISP_assumptions_workbook,TORRA4,Torrens Island A,5,
+17/07/2018,2018_ISP_assumptions_workbook,TORRB1,Torrens Island B,5,
+17/07/2018,2018_ISP_assumptions_workbook,TORRB2,Torrens Island B,5,
+17/07/2018,2018_ISP_assumptions_workbook,TORRB3,Torrens Island B,5,
+17/07/2018,2018_ISP_assumptions_workbook,TORRB4,Torrens Island B,5,
+17/07/2018,2018_ISP_assumptions_workbook,TREVALLN,Trevallyn,1,
+17/07/2018,2018_ISP_assumptions_workbook,TRIBUTE,Tribute,1,
+17/07/2018,2018_ISP_assumptions_workbook,TUMUT3,Tumut 3,1,
+17/07/2018,2018_ISP_assumptions_workbook,TUNGATIN,Tungatinah,1,
+17/07/2018,2018_ISP_assumptions_workbook,TVCC201,Tamar Valley CCGT,1,
+17/07/2018,2018_ISP_assumptions_workbook,TVPP104,Bell Bay Three,3,
+17/07/2018,2018_ISP_assumptions_workbook,UPPTUMUT,Tumut 1,1,
+17/07/2018,2018_ISP_assumptions_workbook,UPPTUMUT,Tumut 2,1,
+17/07/2018,2018_ISP_assumptions_workbook,URANQ11,Uranquinty,1,
+17/07/2018,2018_ISP_assumptions_workbook,URANQ12,Uranquinty,1,
+17/07/2018,2018_ISP_assumptions_workbook,URANQ13,Uranquinty,1,
+17/07/2018,2018_ISP_assumptions_workbook,URANQ14,Uranquinty,1,
+17/07/2018,2018_ISP_assumptions_workbook,VP5,Vales Point,5,
+17/07/2018,2018_ISP_assumptions_workbook,VP6,Vales Point,5,
+17/07/2018,2018_ISP_assumptions_workbook,VPGS1,Valley Power,1,
+17/07/2018,2018_ISP_assumptions_workbook,VPGS2,Valley Power,1,
+17/07/2018,2018_ISP_assumptions_workbook,VPGS3,Valley Power,1,
+17/07/2018,2018_ISP_assumptions_workbook,VPGS4,Valley Power,1,
+17/07/2018,2018_ISP_assumptions_workbook,VPGS5,Valley Power,1,
+17/07/2018,2018_ISP_assumptions_workbook,VPGS6,Valley Power,1,
+17/07/2018,2018_ISP_assumptions_workbook,W/HOE#1,Wivenhoe,1,
+17/07/2018,2018_ISP_assumptions_workbook,W/HOE#2,Wivenhoe,1,
+17/07/2018,2018_ISP_assumptions_workbook,WATERLWF,Waterloo WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,WAUBRAWF,Waubra WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,WEMENSF1,Wemen Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,WGWF1,Willogoleche WF,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,WHITSF1,Whitsunday Solar,1,COMMITTED PROJECT IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,WKIEWA1,West Kiewa,1,
+17/07/2018,2018_ISP_assumptions_workbook,WKIEWA2,West Kiewa,1,
+17/07/2018,2018_ISP_assumptions_workbook,WOODLWN1,Woodlawn WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,WOOLNTH1,Woolnorth WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,WPWF,Wattle Point WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,WRSF1,White Rock Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,WRWF1,White Rock WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,YABULU,Yabulu,3,
+17/07/2018,2018_ISP_assumptions_workbook,YABULU2,Yabulu,3,
+17/07/2018,2018_ISP_assumptions_workbook,YAMBUKWF,PWEP 1 Yambuk WF,1,
+17/07/2018,2018_ISP_assumptions_workbook,YARANSF1,Yarranlea Solar Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,YARWUN_1,Yarwun,2,
+17/07/2018,2018_ISP_assumptions_workbook,YENDWF1,Yendon Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,YSWF1,Yaloak South Wind Farm,1,GENERATOR NOT FOUND IN ISP
+17/07/2018,2018_ISP_assumptions_workbook,YWPS1,Yallourn,10,
+17/07/2018,2018_ISP_assumptions_workbook,YWPS2,Yallourn,10,
+17/07/2018,2018_ISP_assumptions_workbook,YWPS3,Yallourn,10,
+17/07/2018,2018_ISP_assumptions_workbook,YWPS4,Yallourn,10,

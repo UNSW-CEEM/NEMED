@@ -1,38 +1,44 @@
 """ Downloader functions for retrieving data from various sources"""
 from nemosis import dynamic_data_compiler, static_table
-from nemosis.data_fetch_methods import _read_mms_csv
+from nemosis.data_fetch_methods import _read_mms_csv, _dynamic_data_fetch_loop
 from nempy.historical_inputs.xml_cache import XMLCacheManager as XML
 from .defaults import *
 from .helper_functions import helpers as hp
 from .helper_functions.mod_xml_cache import overwrite_xmlcachemanager_with_pricesetter_config, convert_xml_to_json,\
     read_json_to_df
+from .helper_functions.mod_nemosis import overwrite_nemosis_defaults, mod_dynamic_data_fetch_loop
+
 import os
 import glob
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
 import requests
-
+from pathlib import Path
 DISPATCH_INT_MIN = 5
 
 
 def download_cdeii_table():
-    """Retrieves the most recent Carbon Emissions Factor data per generation unit (DUID) published to CDEII dataset in
-    AEMO NEMWEB.
+    # """LEGACY. DEPRECATED.
+    
+    # Retrieves the most recent Carbon Emissions Factor data per generation unit (DUID) published to CDEII dataset in
+    # AEMO NEMWEB.
 
-    .. warning::
-        This CDEII table ('Available Generators File') is only the most recent generating units from AEMO's current
-        CDEII reporting week. Attempting to retrieve older historical data may lead to missing generating unit emissions
-        factors.
+    # .. warning::
+    #     This CDEII table ('Available Generators File') is only the most recent generating units from AEMO's current
+    #     CDEII reporting week. Attempting to retrieve older historical data may lead to missing generating unit emissions
+    #     factors.
 
-    Returns
-    -------
-    pandas.DataFrame
-        AEMO CDEII data containing columns=["STATIONNAME","DUID","REGIONID","CO2E_EMISSIONS_FACTOR",
-        "CO2E_ENERGY_SOURCE","CO2E_DATA_SOURCE"]. CO2E_EMISSIONS_FACTOR is a measure in tCO2-e/MWh
-    """
-    table = _read_mms_csv(CDEII_URL, usecols=[4, 5, 7, 8, 9, 10])
-    return table
+    # Returns
+    # -------
+    # pandas.DataFrame
+    #     AEMO CDEII data containing columns=["STATIONNAME","DUID","REGIONID","CO2E_EMISSIONS_FACTOR",
+    #     "CO2E_ENERGY_SOURCE","CO2E_DATA_SOURCE"]. CO2E_EMISSIONS_FACTOR is a measure in tCO2-e/MWh
+    # """
+    # table = _read_mms_csv(CDEII_URL, usecols=[4, 5, 7, 8, 9, 10])
+    # return table
+    raise Exception("DEPRECATED in this version of NEMED.")
+
 
 
 def download_generators_info(cache):
@@ -40,8 +46,7 @@ def download_generators_info(cache):
     Exemption List file). Data reflects the most recent file uploaded by AEMO.
 
     .. warning::
-        This Generators and Scheduled Load table is only the most recent data. It is not time-matched to the user
-        requested period!
+        This Generators and Scheduled Load table is only the most recent data and is a static file
 
     Parameters
     ----------
@@ -62,57 +67,257 @@ def download_generators_info(cache):
 
 
 def download_duid_auxload():
-    """Retrieves auxilary load data from AEMO's IASR (most recent data)
+    # """DEPRECATED: Replaced by read_plant_auxload_csv()
+    # Retrieves auxilary load data from static AEMO's ISP assumptions.
 
-    .. warning::
-        This AuxLoad table is only the most recent data. It is not time-matched to the user requested period!
+    # .. info::
+    #     This data is obtained from a static datasource for which the majority of plant data is obtained from the 2020
+    #     ISP. More recent data published by AEMO does not reflect unit-level, rather only fuel/technology type
+    #     assumptions. Refer to NEMED documentation for more details.
+
+    # Returns
+    # -------
+    # pandas.DataFrame
+    #     AEMO data containing columns=['EFFECTIVEFROM', 'DATASOURCE', 'DUID', 'GENERATOR', 'PCT_AUXILIARY_LOAD', 'NOTE']
+    # """
+    # map = _download_duid_mapping()
+    # auxload = _download_iasr_existing_gens()
+    # merged_table = pd.merge(map, auxload, on='Generator', how='left')
+    # return merged_table
+    raise Exception("DEPRECATED in this version of NEMED. See `read_plant_auxload_csv`")
+
+
+def read_plant_auxload_csv(select_columns=['EFFECTIVEFROM', 'DUID', 'PCT_AUXILIARY_LOAD'],
+                            coltype={'EFFECTIVEFROM': str, 'DUID': str, 'PCT_AUXILIARY_LOAD': float}):
+    """Reads locally stored .csv in package with auxiliary load data mapped to each DUID. Users can update this .csv
+    with custom/missing values should they wish.
+
+    Parameters
+    ----------
+    select_columns : list, optional
+        Columns of the dataset to return, by default ['EFFECTIVEFROM', 'DUID', 'PCT_AUXILIARY_LOAD']
+    coltype : dict, optional
+        Datatype corresponding to each field, by default {'EFFECTIVEFROM': datetime, 'DUID': str,
+        'PCT_AUXILIARY_LOAD': float}
 
     Returns
     -------
     pandas.DataFrame
-        AEMO data containing columns=['DUID', 'Generator', 'Auxiliary Load (%)']
+        Custom table containing columns=['EFFECTIVEFROM', 'DUID', 'PCT_AUXILIARY_LOAD']
     """
-    map = _download_duid_mapping()
-    auxload = _download_iasr_existing_gens()
-    merged_table = pd.merge(map, auxload, on='Generator', how='left')
-    return merged_table
+    filepath = Path(__file__).parent / "./data/plant_auxiliary/_plant_auxload_assumptions.csv"
+    table = pd.read_csv(filepath)
+    table['EFFECTIVEFROM'] = pd.to_datetime(table['EFFECTIVEFROM'], format="%d/%m/%Y")
+    return table[table.columns[table.columns.isin(select_columns)]]
+
+
+def download_plant_emissions_factors(cache, start_date, end_date):
+    """Retrieves CO2-equivalent emissions intensity factors (tCO2-e/MWh) for each generator. Metric is reflective of
+    sent-out generation. Underlying data is sourced from the 'GENUNITS' table of AEMO MMS at monthly time resolution.
+
+    Parameters
+    ----------
+    cache : str
+        Raw data location in local directory
+    start_date : str
+        Data download period start, in the format: 'yyyy/mm/dd HH:MM'
+    end_date : str
+        Data download period end, in the format: 'yyyy/mm/dd HH:MM'
+
+    Returns
+    -------
+    pandas.DataFrame
+        Plant Emissions Factor Data with columns=['file_year', 'file_month', 'GENSETID', 'CO2E_EMISSIONS_FACTOR',
+        'CO2E_ENERGY_SOURCE', 'CO2E_DATA_SOURCE'] 
+
+    Raises
+    ------
+    Exception
+        Data Unavailable for dates prior 05-2011
+    """
+    # Input Validation
+    hp._validate_variable_type(start_date, str, "start_date")
+    hp._validate_variable_type(end_date, str, "end_date")
+    start_date = hp._validate_and_convert_date(start_date, "start_date")
+    end_date = hp._validate_and_convert_date(end_date, "end_date")
+    cache = hp._check_cache(cache)
+
+    overwrite_nemosis_defaults()
+
+    if start_date < datetime(2011,5,1):
+        raise Exception("DATA UNAVAILABLE: GENUNITS table is not found in MMS prior to 05-2011. \
+                        Unit emissions factors cannot be obtained.")
+
+    # Data Retrieval
+    df = mod_dynamic_data_fetch_loop(start_search=start_date,
+                                    start_time=start_date,
+                                    end_time=end_date,
+                                    table_name="GENUNITS",
+                                    raw_data_location=cache,
+                                    select_columns=["GENSETID", "CO2E_EMISSIONS_FACTOR", "CO2E_ENERGY_SOURCE", \
+                                        'CO2E_DATA_SOURCE'],
+                                    date_filter=None,
+                                    fformat="feather",
+                                    )
+    df = pd.concat(df)
+    df['file_year'] = df['file_year'].astype(int)
+    df['file_month'] = df['file_month'].astype(int)
+    df['CO2E_EMISSIONS_FACTOR'] = df['CO2E_EMISSIONS_FACTOR'].astype(float)
+    return df.sort_values(['GENSETID','file_year','file_month'])
+
+
+def download_genset_map(cache, asof_date=None):
+    """Download the GENSETID to DUID mapping from DUALLOC MMS Table.
+
+    Parameters
+    ----------
+    cache : str
+        Raw data location in local directory
+    asof_date : str, optional
+        Date to retrieve DUALLOC table as of, in the format: 'yyyy/mm/dd HH:MM', by default None which will retrieve
+        recent data 
+
+    Returns
+    -------
+    pandas.DataFrame
+
+        =============  =====  ================================================
+        Columns:       Type:  Description:
+        EFFECTIVEDATE  str    Effective Date as defined by AEMO.
+        DUID           str    Dispatchable Unit Identifier as defined by AEMO.
+        GENSETID       str    Generator Set Identifier as defined by AEMO.
+        =============  =====  ================================================
+
+    Raises
+    ------
+    Exception
+        Parameter `asof_date` exceeds the earliest available DUALLOC table in MMS
+    """
+    if asof_date != None:
+        latest = hp._validate_and_convert_date(asof_date, "asof_date")
+    else:
+        latest = datetime(datetime.now().year, datetime.now().month, 1) - timedelta(days = 90)
+    
+    cache = hp._check_cache(cache)
+    overwrite_nemosis_defaults()
+
+    if latest < datetime(2020,10,1):
+        raise Exception("DATA UNAVAILABLE: DUALLOC table is not found in MMS prior to 10-2020. " + \
+                        "Cannot correctly map emissions factors. Retry function without specifying `asof_date`")
+
+    # Data Retrieval
+    df = mod_dynamic_data_fetch_loop(start_search=latest,
+                                    start_time=latest - timedelta(hours=1),
+                                    end_time=latest,
+                                    table_name="DUALLOC",
+                                    raw_data_location=cache,
+                                    select_columns=["EFFECTIVEDATE", "DUID", "GENSETID", "LASTCHANGED"],
+                                    date_filter=None,
+                                    fformat="feather",
+                                    )
+    df = pd.concat(df)
+    df = df.drop(['file_year','file_month', 'LASTCHANGED'], axis=1)
+    filtered = df.sort_values('EFFECTIVEDATE').drop_duplicates(['GENSETID'], keep='last')
+    return filtered.sort_values(['GENSETID','EFFECTIVEDATE']).reset_index(drop=True)
+
+
+def download_dudetailsummary(cache, asof_date=None):
+    """Download the DUDETAILSUMMARY MMS table with mapping of Dispatch Type and Region to DUID
+
+    Parameters
+    ----------
+    cache : str
+        Raw data location in local directory
+    asof_date : str, optional
+        Date to retrieve DUALLOC table as of, in the format: 'yyyy/mm/dd HH:MM', by default None which will retrieve
+        recent data 
+
+    Returns
+    -------
+    pandas.DataFrame
+
+        ============  =====  ================================================
+        Columns:      Type:  Description:
+        DUID          str    Dispatchable Unit Identifier as defined by AEMO.
+        START_DATE    str    Date of data entry as defined by AEMO.
+        DISPATCHTYPE  str    Dispatch Type of DUID as 'GENERATOR' or 'LOAD'.
+        REGIONID      str    Region of DUID.
+        ============  =====  ================================================
+
+    Raises
+    ------
+    Exception
+        Parameter `asof_date` exceeds the earliest available DUALLOC table in MMS
+    """
+    if asof_date != None:
+        latest = hp._validate_and_convert_date(asof_date, "asof_date")
+    else:
+        latest = datetime(datetime.now().year, datetime.now().month, 1) - timedelta(days = 90)
+    
+    cache = hp._check_cache(cache)
+    overwrite_nemosis_defaults()
+
+    if latest < datetime(2009,7,1):
+        raise Exception("DATA UNAVAILABLE: DUDETAILSUMMARY table is not found in MMS prior to 07-2009. " + \
+                        "Cannot correctly map emissions factors. Retry function without specifying `asof_date`")
+
+    # Data Retrieval
+    df = mod_dynamic_data_fetch_loop(start_search=latest,
+                                    start_time=latest - timedelta(hours=1),
+                                    end_time=latest,
+                                    table_name="DUDETAILSUMMARY",
+                                    raw_data_location=cache,
+                                    select_columns=["START_DATE", "DUID", "DISPATCHTYPE", "REGIONID", "LASTCHANGED"],
+                                    date_filter=None,
+                                    fformat="feather",
+                                    )
+    df = pd.concat(df)
+    df = df.drop(['file_year','file_month', 'LASTCHANGED'], axis=1)
+    filtered = df.sort_values('START_DATE').drop_duplicates(['DUID'], keep='last')
+    return filtered.sort_values(['DUID','START_DATE']).reset_index(drop=True)
 
 
 def _download_duid_mapping():
-    """A manual record of duid mappings which match unit-level DUIDs to station-level generation names in the IASR
-    dataset.
+    # """LEGACY. TO BE DEPRECATED.
+    
+    # A manual record of duid mappings which match unit-level DUIDs to station-level generation names in the IASR
+    # dataset.
 
-    Returns
-    -------
-    pandas.DataFrame
-        Custom table containing columns=['DUID', 'Generator']
-    """
-    filepath = Path(__file__).parent / "./data/duid_mapping.csv"
-    table = pd.read_csv(filepath)[['DUID', '2021-22-IASR_Generator']]
-    table.columns = ['DUID', 'Generator']
-    return table
+    # Returns
+    # -------
+    # pandas.DataFrame
+    #     Custom table containing columns=['DUID', 'Generator']
+    # """
+    # filepath = Path(__file__).parent / "./data/duid_mapping.csv"
+    # table = pd.read_csv(filepath)[['DUID', '2021-22-IASR_Generator']]
+    # table.columns = ['DUID', 'Generator']
+    # return table
+    raise Exception("DEPRECATED in this version of NEMED. Use `download_genset_map`")
 
 
 def _download_iasr_existing_gens(select_columns=['Generator', 'Auxiliary Load (%)'], coltype={'Generator': str,
                                  'Auxiliary Load (%)': float}):
-    """Retrieves a static data of the 2021 AEMO IASR Gen Data Summary.
+    # """LEGACY. TO BE DEPRECATED.
+    
+    # Retrieves a static data of the 2021 AEMO IASR Gen Data Summary.
 
-    Parameters
-    ----------
-    select_columns : list(str), optional
-        Column names from the IASR to retrieve, by default ['Generator', 'Auxiliary Load (%)']
-    coltype : dict, optional
-        Data types to use for the selected columns, by default {'Generator': str, 'Auxiliary Load (%)': float}
+    # Parameters
+    # ----------
+    # select_columns : list(str), optional
+    #     Column names from the IASR to retrieve, by default ['Generator', 'Auxiliary Load (%)']
+    # coltype : dict, optional
+    #     Data types to use for the selected columns, by default {'Generator': str, 'Auxiliary Load (%)': float}
 
-    Returns
-    -------
-    pandas.DataFrame
-        Table extract of IASR containing columns specified as `select_columns`
-    """
-    filepath = Path(__file__).parent / "./data/existing_gen_data_summary.csv"
-    table = pd.read_csv(filepath, dtype=coltype)
-    table = table[table.columns[table.columns.isin(select_columns)]]
-    return table
+    # Returns
+    # -------
+    # pandas.DataFrame
+    #     Table extract of IASR containing columns specified as `select_columns`
+    # """
+    # filepath = Path(__file__).parent / "./data/existing_gen_data_summary.csv"
+    # table = pd.read_csv(filepath, dtype=coltype)
+    # table = table[table.columns[table.columns.isin(select_columns)]]
+    # return table
+    raise Exception("DEPRECATED in this verion of NEMED")
 
 
 def download_aemo_cdeii_summary(filter_start, filter_end, cache):
@@ -143,8 +348,8 @@ def download_aemo_cdeii_summary(filter_start, filter_end, cache):
     cache = hp._check_cache(cache)
 
     # Check filter start and end in defaults files datarange.
-    fil_start_dt = datetime.strptime(filter_start, "%Y/%m/%d %H:%M:%S")
-    fil_end_dt = datetime.strptime(filter_end, "%Y/%m/%d %H:%M:%S")
+    fil_start_dt = datetime.strptime(filter_start, "%Y/%m/%d %H:%M")
+    fil_end_dt = datetime.strptime(filter_end, "%Y/%m/%d %H:%M")
 
     default_start_yearname, default_end_yearname = list(CDEII_SUMFILES)[0], list(CDEII_SUMFILES)[-1]
 
@@ -162,6 +367,7 @@ def download_aemo_cdeii_summary(filter_start, filter_end, cache):
             extract_historical = True
     else:
         extract_historical = True
+        extract_current = False
 
     aemodata = []
     if extract_historical:
@@ -226,7 +432,7 @@ def download_aemo_cdeii_summary(filter_start, filter_end, cache):
         aemodata += [aemo_file]
 
     table = pd.concat(aemodata)
-    table = table[table['SETTLEMENTDATE'].between(fil_start_dt, fil_end_dt)]
+    table = table[table['SETTLEMENTDATE'].between(fil_start_dt, fil_end_dt, inclusive="left")]
     if max(table['SETTLEMENTDATE']) < fil_end_dt:
         print("WARNING: 'filter_end' date exceeds available data from CURRENT CDEII. Latest available data is {}"\
             .format(max(table['SETTLEMENTDATE'])))
@@ -234,59 +440,62 @@ def download_aemo_cdeii_summary(filter_start, filter_end, cache):
 
 
 def download_current_aemo_cdeii_summary(filter_start, filter_end, financialyear="1920"):
-    """
-    .. warning::
-        TO BE DEPRECATED IN FUTURE VERSIONS. Replaced by **download_aemo_cdeii_summary**
+    # """
+    # LEGACY. TO BE DEPRECATED.
+    # .. warning::
+    #     TO BE DEPRECATED IN FUTURE VERSIONS. Replaced by **download_aemo_cdeii_summary**
    
-    Retrieve the AEMO CDEII daily summary file by financial year.
+    # Retrieve the AEMO CDEII daily summary file by financial year.
 
-    Parameters
-    ----------
-    filter_start : str
-        Data download period start, in the format: 'yyyy/mm/dd HH:MM:SS'
-    filter_end : str
-        Data download period end, in the format: 'yyyy/mm/dd HH:MM:SS'
-    financialyear : str, optional
-        The financial year to get the cdeii file for, one of ['1920','2122'], by default "1920"
+    # Parameters
+    # ----------
+    # filter_start : str
+    #     Data download period start, in the format: 'yyyy/mm/dd HH:MM:SS'
+    # filter_end : str
+    #     Data download period end, in the format: 'yyyy/mm/dd HH:MM:SS'
+    # financialyear : str, optional
+    #     The financial year to get the cdeii file for, one of ['1920','2122'], by default "1920"
 
-    Returns
-    -------
-    _type_
-        _description_
-    """
-    assert(financialyear in ['1920', '2122']), "Financial Year must be one of ['1920','2122']"
-    filepath = Path(__file__).parent / f"./data/CO2EII_SUMMARY_RESULTS_FY{financialyear}.csv"
+    # Returns
+    # -------
+    # _type_
+    #     _description_
+    # """
+    # assert(financialyear in ['1920', '2122']), "Financial Year must be one of ['1920','2122']"
+    # filepath = Path(__file__).parent / f"./data/CO2EII_SUMMARY_RESULTS_FY{financialyear}.csv"
 
-    aemo = pd.read_csv(filepath, header=1, usecols=[6, 7, 8, 9, 10])
-    aemo['SETTLEMENTDATE'] = pd.to_datetime(aemo['SETTLEMENTDATE'], format="%d/%m/%Y %H:%M")
-    table = aemo[aemo['SETTLEMENTDATE'].between(filter_start, filter_end)]
-    return table
+    # aemo = pd.read_csv(filepath, header=1, usecols=[6, 7, 8, 9, 10])
+    # aemo['SETTLEMENTDATE'] = pd.to_datetime(aemo['SETTLEMENTDATE'], format="%d/%m/%Y %H:%M")
+    # table = aemo[aemo['SETTLEMENTDATE'].between(filter_start, filter_end)]
+    # return table
+    raise Exception("DEPRECATED in this version of NEMED. Use `download_aemo_cdeii_summary`")
 
 
-# def get_aemo_comparison_data(filter_start, filter_end, filename='AEMO_CO2EII_August_2022_dataset.csv'):
-#     # Call the download func.
+def get_aemo_comparison_data(filter_start, filter_end, filename='AEMO_CO2EII_August_2022_dataset.csv'):
+    # # Call the download func.
 
-#     filepath = Path(__file__).parent / f"../../data/{filename}"
-#     aemo = pd.read_csv(filepath, header=1, usecols=[6, 7, 8, 9, 10])
+    # filepath = Path(__file__).parent / f"../../data/{filename}"
+    # aemo = pd.read_csv(filepath, header=1, usecols=[6, 7, 8, 9, 10])
 
-#     fil_start_dt = datetime.strptime(filter_start, "%Y/%m/%d %H:%M:%S")
-#     fil_end_dt = datetime.strptime(filter_end, "%Y/%m/%d %H:%M:%S")
+    # fil_start_dt = datetime.strptime(filter_start, "%Y/%m/%d %H:%M:%S")
+    # fil_end_dt = datetime.strptime(filter_end, "%Y/%m/%d %H:%M:%S")
 
-#     aemo['SETTLEMENTDATE'] = pd.to_datetime(aemo['SETTLEMENTDATE'], format="%d/%m/%Y %H:%M")
-#     table = aemo[aemo['SETTLEMENTDATE'].between(fil_start_dt, fil_end_dt)]
-#     return table
+    # aemo['SETTLEMENTDATE'] = pd.to_datetime(aemo['SETTLEMENTDATE'], format="%d/%m/%Y %H:%M")
+    # table = aemo[aemo['SETTLEMENTDATE'].between(fil_start_dt, fil_end_dt)]
+    # return table
+    raise Exception("DEPRECATED in this version of NEMED.")
 
 
 def download_unit_dispatch(start_time, end_time, cache, source_initialmw=False, source_scada=True, overwrite='scada',
-                           return_all=True, check=True):
+                           return_all=True, check=True, rm_negative=True):
     """Downloads historical generation dispatch data via NEMOSIS.
 
     Parameters
     ----------
     start_time : str
-        Start Time Period in format 'yyyy/mm/dd HH:MM:SS'
+        Start Time Period in format 'yyyy/mm/dd HH:MM'
     end_time : str
-        End Time Period in format 'yyyy/mm/dd HH:MM:SS'
+        End Time Period in format 'yyyy/mm/dd HH:MM'
     cache : str
         Raw data location in local directory
     source_initialmw : bool
@@ -301,6 +510,8 @@ def download_unit_dispatch(start_time, end_time, cache, source_initialmw=False, 
         Whether to return all columns or only ['Time','DUID','Dispatch'], by default False.
     check : bool
         Whether to check for, and remove duplicates after function is complete, by default True.
+    rm_negative: bool
+        Checks for negative dispatch values in SCADA and replaces them with zero, by default True.
 
     Returns
     -------
@@ -310,8 +521,8 @@ def download_unit_dispatch(start_time, end_time, cache, source_initialmw=False, 
     """
     # Check inputs
     cache = hp._check_cache(cache)
-    assert(isinstance(start_time, str)), "`start_time` must be a string in format yyyy/mm/dd HH:MM:SS"
-    assert(isinstance(end_time, str)), "`end_time` must be a string in format yyyy/mm/dd HH:MM:SS"
+    assert(isinstance(start_time, str)), "`start_time` must be a string in format yyyy/mm/dd HH:MM"
+    assert(isinstance(end_time, str)), "`end_time` must be a string in format yyyy/mm/dd HH:MM"
     assert(isinstance(overwrite, (str, type(None)))), "`overwrite` must be a string; one of ['initialmw','scada',\
            'average']"
     if overwrite:
@@ -319,9 +530,9 @@ def download_unit_dispatch(start_time, end_time, cache, source_initialmw=False, 
                'scada', 'average']"
 
     # Adjust timestamps for Scada interval-beginning
-    shift_stime = datetime.strptime(start_time, "%Y/%m/%d %H:%M:%S")
+    shift_stime = datetime.strptime(start_time, "%Y/%m/%d %H:%M")
     shift_stime = shift_stime + timedelta(minutes=DISPATCH_INT_MIN)
-    shift_etime = datetime.strptime(end_time, "%Y/%m/%d %H:%M:%S")
+    shift_etime = datetime.strptime(end_time, "%Y/%m/%d %H:%M")
     shift_etime = shift_etime + timedelta(minutes=DISPATCH_INT_MIN)
     get_start_time = datetime.strftime(shift_stime, "%Y/%m/%d %H:%M:%S")
     get_end_time = datetime.strftime(shift_etime, "%Y/%m/%d %H:%M:%S")
@@ -406,6 +617,9 @@ def download_unit_dispatch(start_time, end_time, cache, source_initialmw=False, 
     else:
         final = master
 
+    if rm_negative:
+        final['Dispatch'] = np.where(final['Dispatch'] < 0, 0, final['Dispatch'])
+
     # Return dataset
     if return_all:
         return final
@@ -414,6 +628,7 @@ def download_unit_dispatch(start_time, end_time, cache, source_initialmw=False, 
 
 
 def _clean_duplicates(table, value_col="Dispatch"):
+    """Clean duplicate data of Time and DUID from dataframe"""
     if any(table.duplicated(subset=['Time', 'DUID'])):
         print("Duplicate Timestamped DUIDs found. Updating dataset for duplicates.")
         # Take average values where duplicates differ
@@ -428,6 +643,7 @@ def _clean_duplicates(table, value_col="Dispatch"):
 
 
 def _check_interventions(table):
+    """Check and account for intervention flag for data from DISPATCHLOAD MMS table. Not required for DISPATCH_UNIT_SCADA table"""
     # Split table into intervals where intervention has occurred or not
     timestamps_w_intervtn = list(table[table["INTERVENTION"] == 1]["Time"].unique())
 
