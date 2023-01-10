@@ -7,12 +7,19 @@ parts:
 
 - caption: Examples
   chapters:
-  - file: examples/example_1
+  - file: examples/total_emissions
+  - file: examples/cdeii_parent
+    sections:
+      - file: examples/cdeii_benchmark
+      - file: examples/cdeii_sourcecode
   - file: examples/example_2
+
 
 - caption: API Reference
   chapters:
-  - file: api_reference
+  - file: api/nemed
+  - file: api/process
+  - file: api/downloader
 
 - caption: Development
   chapters:

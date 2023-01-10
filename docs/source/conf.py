@@ -23,7 +23,7 @@ copyright = "2022, Declan Heim, Shayan Naderi"
 author = "Declan Heim, Shayan Naderi"
 
 # The full version, including alpha/beta/rc tags
-release = "0.2.2"
+release = "0.3.0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -49,6 +49,8 @@ extensions = [
     "sphinx.ext.todo",
     "sphinx_copybutton",
     "sphinx_external_toc",
+    "sphinx_design",
+
     "myst_nb"
 ]
 
@@ -108,6 +110,7 @@ html_theme = "sphinx_book_theme"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+html_css_files = ["custom.css"]
 html_show_sourcelink = False
 html_theme_options = {
     "repository_url": "https://github.com/dec-heim/NEMED",
