@@ -116,6 +116,6 @@ def get_marginal_emissions(start_time, end_time, cache):
     # Check if cache folder exists
     hp._check_cache(cache)
 
-    result = nd.get_marginal_emitter(cache, start_time, end_time)
+    result = nd.get_marginal_emitter(start_time, end_time, cache)
 
     return result
