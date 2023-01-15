@@ -55,7 +55,7 @@ def overwrite_xmlcachemanager_with_pricesetter_config():
     XMLCacheManager.get_file_name = modpricesetter_get_file_name
     XMLCacheManager._download_xml_from_nemweb = modpricesetter_download_xml_from_nemweb
 
-def convert_xml_to_json(cache, start_date_str, end_date_str, clean_up=False):
+def convert_xml_to_json(start_date_str, end_date_str, cache, clean_up=False):
     """Converts all XML files found in cache to JSON format. Best to use an entirely separate cache folder from other
     nemosis or nempy projects!
 
@@ -94,7 +94,7 @@ def convert_xml_to_json(cache, start_date_str, end_date_str, clean_up=False):
             os.remove(os.path.join(cache, filename))
 
 
-def read_json_to_df(cache, start_dt, end_dt):
+def read_json_to_df(start_dt, end_dt, cache):
     """Reads JSON files found in cache and returns price setter data as pandas dataframe.
 
     Parameters

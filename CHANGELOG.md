@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.2 Bug fixes (15/01/2023)
+- Fix function argument errors
+- v0.3.0 and v0.3.1 have known issues. Use v0.3.2
+
 ## v0.3.1 Major update to Marginal Emissions (15/01/2023)
 - Refined extraction of price-setter files for marginal emissions data.
 - Updated example for marginal emissions

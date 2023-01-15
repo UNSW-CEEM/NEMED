@@ -171,9 +171,9 @@ def _total_emissions_process(start_time, end_time, cache, filter_regions=None,
     return result
 
 
-def _get_duid_emissions_intensities(cache, start_time, end_time):
+def _get_duid_emissions_intensities(start_time, end_time, cache):
     """Merges emissions factors from GENSETID to DUID and cleans data"""
-    co2factors_df = download_plant_emissions_factors(cache, start_time, end_time)
+    co2factors_df = download_plant_emissions_factors(start_time, end_time, cache)
     genset_map = download_genset_map(cache)
     co2factors_df = co2factors_df.merge(right=genset_map[["GENSETID", "DUID"]],
                                         on=["GENSETID"],
@@ -259,7 +259,7 @@ def _calculate_sent_out(energy_df):
     return so_df
 
 
-def get_marginal_emitter(cache, start_time, end_time):
+def get_marginal_emitter(start_time, end_time, cache):
     """Retrieves the marginal emissions intensity for each dispatch interval and region. This factor being the weighted
     sum of the generators contributing to price-setting. Although not necessarily common, there may be times where
     multiple technology types contribute to the marginal emissions - note however that the 'DUID' and 'CO2E_ENERGY_SOURCE'
@@ -295,8 +295,8 @@ def get_marginal_emitter(cache, start_time, end_time):
     # Download CDEII, Price Setter Files and Generation Information
     ## gen_info = download_generators_info(cache)
     logger.warning('Warning: Gen_info table only has most recent NEM registration and exemption list. Does not account for retired generators')
-    co2_factors = _get_duid_emissions_intensities(cache, start_time, end_time)
-    price_setters = download_pricesetter_files(cache, start_time, end_time)
+    co2_factors = _get_duid_emissions_intensities(start_time, end_time, cache)
+    price_setters = download_pricesetter_files(start_time, end_time, cache)
 
     # Drop Basslink
     filt_df = price_setters[~price_setters['Unit'].str.contains('T-V-MNSP1')]

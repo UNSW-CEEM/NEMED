@@ -115,7 +115,7 @@ def read_plant_auxload_csv(select_columns=['EFFECTIVEFROM', 'DUID', 'PCT_AUXILIA
     return table[table.columns[table.columns.isin(select_columns)]]
 
 
-def download_plant_emissions_factors(cache, start_date, end_date):
+def download_plant_emissions_factors(start_date, end_date, cache):
     """Retrieves CO2-equivalent emissions intensity factors (tCO2-e/MWh) for each generator. Metric is reflective of
     sent-out generation. Underlying data is sourced from the 'GENUNITS' table of AEMO MMS at monthly time resolution.
 
@@ -664,7 +664,7 @@ def _check_interventions(table):
         return table
 
 
-def download_pricesetter_files(cache, start_time, end_time):
+def download_pricesetter_files(start_time, end_time, cache):
     """Download NEM Price Setter files from MMS table.
     First caches raw XML files as JSON and then reads and returns data in the form of pandas.DataFrame.
     Processed data only considers the marginal generator for the Energy market.
@@ -725,7 +725,7 @@ def download_pricesetter_files(cache, start_time, end_time):
             logger.warning("PriceSetter Download for {} failed. Continuing with remaining dates...".format(date))
 
     # Read cached JSON Price Setter Files
-    table = read_json_to_df(cache, start_dt=start_time, end_dt=end_time)
+    table = read_json_to_df(start_time, end_time, cache)
     return table
 
 
