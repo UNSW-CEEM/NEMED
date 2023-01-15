@@ -12,8 +12,7 @@ parts:
     sections:
       - file: examples/cdeii_benchmark
       - file: examples/cdeii_sourcecode
-  - file: examples/example_2
-
+  - file: examples/marginal_emissions
 
 - caption: API Reference
   chapters:
