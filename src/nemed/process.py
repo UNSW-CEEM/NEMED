@@ -4,9 +4,10 @@ import pandas as pd
 import numpy as np
 import logging
 import os
-from .downloader import download_cdeii_table, download_unit_dispatch, download_pricesetters, download_generators_info, \
+from .downloader import download_cdeii_table, download_unit_dispatch, download_pricesetter_files, download_generators_info, \
     download_duid_auxload, download_plant_emissions_factors, read_plant_auxload_csv, download_genset_map, download_dudetailsummary
 from .helper_functions import helpers as hp
+from .defaults import CO2E_DATA_SOURCE_YEARMAP
 
 DISP_INT_LENGTH = 5
 logger = logging.getLogger(__name__)
@@ -121,7 +122,7 @@ def _total_emissions_process(start_time, end_time, cache, filter_regions=None,
     disp_df = download_unit_dispatch(start_time, end_time, cache, source_initialmw=False, source_scada=True,
                                      return_all=False, check=False, overwrite="scada", rm_negative=True)
 
-    geninfo_df = download_dudetailsummary(cache) #download_generators_info(cache)
+    geninfo_df = download_dudetailsummary(cache)
 
     # Merge geninfo and filter out loads
     disp_df.set_index('DUID', inplace=True)
@@ -139,11 +140,7 @@ def _total_emissions_process(start_time, end_time, cache, filter_regions=None,
 
     # Merge Energy data with Plant Emissions Factors
     filt_df['year'], filt_df['month'] = filt_df['Time'].dt.year, filt_df['Time'].dt.month
-    co2factors_df = download_plant_emissions_factors(cache, start_time, end_time)
-    genset_map = download_genset_map(cache)
-    co2factors_df = co2factors_df.merge(right=genset_map[["GENSETID", "DUID"]],
-                                        on=["GENSETID"],
-                                        how="left")
+    co2factors_df = _get_duid_emissions_intensities(start_time, end_time, cache)
     plt_df = pd.merge(left=filt_df,
                       right=co2factors_df[["file_year", "file_month", "DUID", "CO2E_EMISSIONS_FACTOR"]],
                       left_on=["year", "month", "DUID"],
@@ -172,6 +169,61 @@ def _total_emissions_process(start_time, end_time, cache, filter_regions=None,
     result.rename(columns={"CO2E_EMISSIONS_FACTOR": "Plant_Emissions_Intensity",
                            "REGIONID": "Region"}, inplace=True)
     return result
+
+
+def _get_duid_emissions_intensities(cache, start_time, end_time):
+    """Merges emissions factors from GENSETID to DUID and cleans data"""
+    co2factors_df = download_plant_emissions_factors(cache, start_time, end_time)
+    genset_map = download_genset_map(cache)
+    co2factors_df = co2factors_df.merge(right=genset_map[["GENSETID", "DUID"]],
+                                        on=["GENSETID"],
+                                        how="left")
+
+    # Filter out older assumptions, where duplicate CO2 factors exist for data entry
+    co2factors_df['CO2E_DATA_YEAR'] = co2factors_df['CO2E_DATA_SOURCE'].map(CO2E_DATA_SOURCE_YEARMAP)
+    co2factors_df = co2factors_df.sort_values(['CO2E_DATA_YEAR'], ascending=True)
+    co2factors_df = co2factors_df.drop_duplicates(['file_year', 'file_month', 'CO2E_ENERGY_SOURCE', 'DUID'], keep='last')
+
+    # Find and correct duplicate entries for DUIDs
+    co2factors_df = _condense_genset_co2_differences(co2factors_df)
+
+    # Ammend Hydro NaN values to zero
+    co2factors_df.loc[(co2factors_df['CO2E_EMISSIONS_FACTOR'].isna()) & \
+                    (co2factors_df['CO2E_ENERGY_SOURCE']=='Hydro'), 'CO2E_EMISSIONS_FACTOR'] = 0.0
+
+    return co2factors_df[['file_year', 'file_month', 'DUID', 'CO2E_EMISSIONS_FACTOR', \
+                          'CO2E_ENERGY_SOURCE', 'CO2E_DATA_SOURCE']]
+
+
+def _condense_genset_co2_differences(all_df):
+    """Patch duplicate or differing co2 factors for the same year-month-DUID."""
+    for duid in all_df[all_df.duplicated(['file_year','file_month','DUID'])]['DUID'].unique():
+        correction = all_df[all_df['DUID']==duid].dropna(subset=['CO2E_EMISSIONS_FACTOR', 'CO2E_ENERGY_SOURCE', \
+                                                                 'CO2E_DATA_SOURCE'])
+
+        # If year-month-gensetid is duplicated in correction df, average vals and drop correction
+        if correction.duplicated(subset=['file_year','file_month','DUID']).any():
+            result = []
+            for yr in correction['file_year'].unique():
+                for mn in correction[correction['file_year'] == yr]['file_month'].unique():
+                    subset = correction[(correction['file_year'] == yr) & (correction['file_month'] == mn)]
+                    descriptor = [' / '.join(subset['CO2E_ENERGY_SOURCE'].to_list()) \
+                        if len(subset['CO2E_DATA_SOURCE'].unique())==1 else subset['CO2E_ENERGY_SOURCE'].iloc[0]][0]
+                    emissions = subset['CO2E_EMISSIONS_FACTOR'].mean()
+                    subset = subset.drop_duplicates(['file_year','file_month','DUID'], keep='first')
+                    subset['CO2E_ENERGY_SOURCE'] = descriptor
+                    subset['CO2E_EMISSIONS_FACTOR'] = emissions
+                    result += [subset]
+            result = pd.concat(result,ignore_index=True)
+        else:
+            result = correction
+        
+        # Remove duid entry in main df
+        all_df = all_df[~all_df['DUID'].isin([duid])]
+
+        # Add resultant duid entry to main df
+        all_df = pd.concat([all_df, result], ignore_index=True)
+    return all_df.drop(['GENSETID'], axis=1).reset_index(drop=True)
 
 
 def _calculate_energy_ramp(dispatch_df):
@@ -207,119 +259,118 @@ def _calculate_sent_out(energy_df):
     return so_df
 
 
-def get_marginal_emitter(cache, start_year, start_month, start_day, end_year, end_month, end_day, redownload_xml=True):
-    """Retrieves the marginal emitter (DUID) and Technology Type information for dispatch intervals in the given date
-    range. This information is a combination of AEMO price setter files, generation information and CDEII information.
+def get_marginal_emitter(cache, start_time, end_time):
+    """Retrieves the marginal emissions intensity for each dispatch interval and region. This factor being the weighted
+    sum of the generators contributing to price-setting. Although not necessarily common, there may be times where
+    multiple technology types contribute to the marginal emissions - note however that the 'DUID' and 'CO2E_ENERGY_SOURCE'
+    returned will reflect only the plant which makes the greatest contribution towards price-setting.
 
     Parameters
     ----------
     cache : str
         Raw data location in local directory
-    start_year : int
-        Year in format 20XX
-    start_month : int
-        Month from 1..12
-    start_day : int
-        Day from 1..31
-    end_year : int
-        Year in format 20XX
-    end_month : int
-        Month from 1..12
-    end_day : int
-        Day from 1..31
-    redownload_xml : bool, optional
-        Setting to True will force new download of XML files irrespective of existing files in cache, by default False.
-
+    start_time : str
+        Start Time Period in format 'yyyy/mm/dd HH:MM'
+    end_time : str
+        End Time Period in format 'yyyy/mm/dd HH:MM'
 
     Returns
     -------
-    pd.DataFrame
-        The resulting marginal emitter dataset with interval timestamps, DUID, emissions factor and generation
-        information
+    pandas.DataFrame
+        Data is returned as:
+
+        ==================  ========  ==================================================================================================
+        Columns:            Type:     Description:
+        Time                datetime  Timestamp reported as end of dispatch interval.
+        Region              str       The NEM region corresponding to the marginal emitter data. 
+        Intensity_Index     float     The intensity index [tCO2e/MWh] (as by weighted contributions) of the price-setting generators.
+        DUID                str       Unit identifier of the generator with the largest contribution on the margin for that Time-Region.
+        CO2E_ENERGY_SOURCE  str       Unit energy source with the largest contribution on the margin for that Time-Region.
+        ==================  ========  ==================================================================================================
+
     """
     # Check if cache is an existing directory
     hp._check_cache(cache)
 
     # Download CDEII, Price Setter Files and Generation Information
-    gen_info = download_generators_info(cache)
-    emissions_factors = download_cdeii_table()
-    price_setters = download_pricesetters(cache, start_year, start_month, start_day, end_year, end_month, end_day,
-                                          redownload_xml)
+    ## gen_info = download_generators_info(cache)
+    logger.warning('Warning: Gen_info table only has most recent NEM registration and exemption list. Does not account for retired generators')
+    co2_factors = _get_duid_emissions_intensities(cache, start_time, end_time)
+    price_setters = download_pricesetter_files(cache, start_time, end_time)
 
-    # Merge generation info to price setter file
-    calc_emissions_df = price_setters[["PeriodID", "RegionID", "DUID"]].merge(
-        gen_info[["Dispatch Type", "Fuel Source - Primary", "Fuel Source - Descriptor", "Technology Type - Primary",
-                  "Technology Type - Descriptor", "DUID"]],
-        how="left", on="DUID", sort=False)
+    # Drop Basslink
+    filt_df = price_setters[~price_setters['Unit'].str.contains('T-V-MNSP1')]
+    filt_df = filt_df.rename(columns={'Unit': 'DUID', 'PeriodID': 'Time', 'RegionID': 'Region'})
+    filt_df['file_year'], filt_df['file_month'] = filt_df['Time'].dt.year, filt_df['Time'].dt.month
 
-    # Merge emissions factors
-    calc_emissions_df = calc_emissions_df.merge(emissions_factors[["DUID", "CO2E_EMISSIONS_FACTOR"]], how="left",
-                                                on="DUID")
+    # Merge CO2 Factors
+    filt_df = pd.merge(filt_df[["Time", "Region", "DUID", "Increase", "file_year", "file_month"]],
+        co2_factors[["DUID", "file_year", "file_month", "CO2E_EMISSIONS_FACTOR", "CO2E_ENERGY_SOURCE"]],
+        how="left", on=["DUID", "file_year", "file_month"], sort=False)
 
-    # Simplify naming conventions
-    calc_emissions_df["tech_name"] = calc_emissions_df.apply(
-        lambda x: tech_rename(
-            x["Fuel Source - Descriptor"],
-            x["Technology Type - Descriptor"],
-            x["Dispatch Type"],
-        ),
-        axis=1,
-    )
+    filt_df.drop(['file_year', 'file_month'], axis=1, inplace=True)
 
-    calc_emissions_df["PeriodID"] = pd.to_datetime(calc_emissions_df["PeriodID"])
-    calc_emissions_df["PeriodID"] = calc_emissions_df["PeriodID"].apply(lambda x: x.replace(tzinfo=None))
-    calc_emissions_df.set_index("PeriodID", inplace=True)
+    # Weigh CO2 intensity by 'Increase' contributions
+    filt_df['weighted_co2_factor'] = filt_df['Increase'] * filt_df['CO2E_EMISSIONS_FACTOR']
 
-    calc_emissions_df["Date"] = calc_emissions_df.index.date
-    calc_emissions_df["Hour"] = calc_emissions_df.index.hour
+    # Aggregate sum of weighted CO2 intensities
+    values = filt_df.groupby(by=['Time','Region'], axis=0).sum()
+    values = values.reset_index()[['Time','Region','weighted_co2_factor']]
+    values.rename(columns={'weighted_co2_factor': 'Intensity_Index'}, inplace=True)
 
-    return calc_emissions_df.reset_index()
+    # Identify Emissions tech/DUID with the largest contribution (increase) value for Time-Region
+    source = filt_df.sort_values(['Increase']).drop_duplicates(['Time','Region'], keep="last")[['Time', 'Region', 'DUID', 'CO2E_ENERGY_SOURCE']]
+    result = values.merge(source, on=['Time','Region'], how='left')
+
+    return result
 
 
 def tech_rename(fuel, tech_descriptor, dispatch_type):
-    """Name technology type based on fuel, and descriptions of AEMO
+    # """LEGACY. DEPRECATED.
+    # Name technology type based on fuel, and descriptions of AEMO
 
-    Parameters
-    ----------
-    fuel : str
-        Fuel Source - Descriptor field of a specific DUID
-    tech_descriptor : str
-        Technology Type - Descriptor field of a specific DUID
-    dispatch_type : str
-        Dispatch Type field of a specific DUID
+    # Parameters
+    # ----------
+    # fuel : str
+    #     Fuel Source - Descriptor field of a specific DUID
+    # tech_descriptor : str
+    #     Technology Type - Descriptor field of a specific DUID
+    # dispatch_type : str
+    #     Dispatch Type field of a specific DUID
 
-    Returns
-    -------
-    str
-        Returns a simplified name for the above arguments
-    """
+    # Returns
+    # -------
+    # str
+    #     Returns a simplified name for the above arguments
+    # """
 
-    name = fuel
-    if fuel in ['Solar', 'Wind', 'Black Coal', 'Brown Coal']:
-        pass
-    elif tech_descriptor == 'Battery':
-        if dispatch_type == 'Load':
-            name = 'Battery Charge'
-        else:
-            name = 'Battery Discharge'
-    elif tech_descriptor in ['Hydro - Gravity', 'Run of River']:
-        name = tech_descriptor
-    elif tech_descriptor == 'Pump Storage':
-        if dispatch_type == 'Load':
-            name = 'Pump Storage Charge'
-        else:
-            name = 'Pump Storage Discharge'
-    elif tech_descriptor == '-' and fuel == '-' and dispatch_type == 'Load':
-        name = 'Pump Storage Charge'
-    elif tech_descriptor == 'Open Cycle Gas turbines (OCGT)':
-        name = 'OCGT'
-    elif tech_descriptor == 'Combined Cycle Gas Turbine (CCGT)':
-        name = 'CCGT'
-    elif fuel in ['Natural Gas / Fuel Oil', 'Natural Gas'] and tech_descriptor == 'Steam Sub-Critical':
-        name = 'Gas Thermal'
-    elif isinstance(tech_descriptor, str) and 'Engine' in tech_descriptor:
-        name = 'Reciprocating Engine'
-    return name
+    # name = fuel
+    # if fuel in ['Solar', 'Wind', 'Black Coal', 'Brown Coal']:
+    #     pass
+    # elif tech_descriptor == 'Battery':
+    #     if dispatch_type == 'Load':
+    #         name = 'Battery Charge'
+    #     else:
+    #         name = 'Battery Discharge'
+    # elif tech_descriptor in ['Hydro - Gravity', 'Run of River']:
+    #     name = tech_descriptor
+    # elif tech_descriptor == 'Pump Storage':
+    #     if dispatch_type == 'Load':
+    #         name = 'Pump Storage Charge'
+    #     else:
+    #         name = 'Pump Storage Discharge'
+    # elif tech_descriptor == '-' and fuel == '-' and dispatch_type == 'Load':
+    #     name = 'Pump Storage Charge'
+    # elif tech_descriptor == 'Open Cycle Gas turbines (OCGT)':
+    #     name = 'OCGT'
+    # elif tech_descriptor == 'Combined Cycle Gas Turbine (CCGT)':
+    #     name = 'CCGT'
+    # elif fuel in ['Natural Gas / Fuel Oil', 'Natural Gas'] and tech_descriptor == 'Steam Sub-Critical':
+    #     name = 'Gas Thermal'
+    # elif isinstance(tech_descriptor, str) and 'Engine' in tech_descriptor:
+    #     name = 'Reciprocating Engine'
+    # return name
+    raise Exception("DEPRECATED in this version of NEMED. Refer to documentation: https://nemed.readthedocs.io/en/latest/")
 
 
 def aggregate_data_by(data, by):

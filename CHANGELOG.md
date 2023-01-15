@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.1 Major update to Marginal Emissions (15/01/2023)
+- Refined extraction of price-setter files for marginal emissions data.
+- Updated example for marginal emissions
+- Updated readme and documentation
+
 ## v0.3.0 Major update to Total Emissions (10/01/2023)
 - New method for extracting total emissions data.
 - Updated examples for CDEII Comparison and Total emissions.

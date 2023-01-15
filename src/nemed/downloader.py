@@ -5,17 +5,21 @@ from nempy.historical_inputs.xml_cache import XMLCacheManager as XML
 from .defaults import *
 from .helper_functions import helpers as hp
 from .helper_functions.mod_xml_cache import overwrite_xmlcachemanager_with_pricesetter_config, convert_xml_to_json,\
-    read_json_to_df
+    read_json_to_df, modpricesetter_get_file_name, modpricesetter_download_xml_from_nemweb
 from .helper_functions.mod_nemosis import overwrite_nemosis_defaults, mod_dynamic_data_fetch_loop
 
+import logging
 import os
+import json
 import glob
+from tqdm import tqdm
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
 import requests
 from pathlib import Path
 DISPATCH_INT_MIN = 5
+logger = logging.getLogger(__name__)
 
 
 def download_cdeii_table():
@@ -399,14 +403,14 @@ def download_aemo_cdeii_summary(filter_start, filter_end, cache):
         for idx in range(extract_from_idx, extract_to_idx+1):
             yearname = list(CDEII_SUMFILES)[idx]
             year = CDEII_SUMFILES[yearname]['year']
-            print(f"Extracting AEMO CDEII Datafile for: {yearname}, {year}")
+            urlbase = CDEII_SUMFILES[yearname]['url']
             # Manual request for change in file naming on aemo website
             if year == '2015':
-                url = f"https://www.aemo.com.au/-/media/files/electricity/nem/settlements_and_payments/settlements/\
-                    {year}/cdeii-20160105.csv?la=en"
+                url = urlbase
+            elif urlbase == 'http://nemweb.com.au/Reports/Current/CDEII/':
+                url = urlbase + f"CO2EII_SUMMARY_RESULTS_{year}.CSV"
             else:
-                url = f"https://www.aemo.com.au/-/media/files/electricity/nem/settlements_and_payments/settlements/\
-                    {year}/co2eii_summary_results_{yearname}.csv?la=en"
+                url = urlbase + f'{year}/co2eii_summary_results_{yearname}.csv?la=en'
 
             filepath = os.path.join(cache, f'AEMO_CO2EII_{yearname}.csv')
             if os.path.exists(filepath):
@@ -660,95 +664,171 @@ def _check_interventions(table):
         return table
 
 
-def download_pricesetters_xml(cache, start_year, start_month, start_day, end_year, end_month, end_day):
-    """Download XML files from AEMO NEMWEB of price setters for each dispatch interval. Converts the downloaded raw
-    files to JSON format and stored in cache.
+def download_pricesetter_files(cache, start_time, end_time):
+    """Download NEM Price Setter files from MMS table.
+    First caches raw XML files as JSON and then reads and returns data in the form of pandas.DataFrame.
+    Processed data only considers the marginal generator for the Energy market.
+
+    For further explaination on NEMPriceSetting refer to: https://aemo.com.au/-/media/files/electricity/nem/it-systems-and-change/nemde-queue/nemde_queue_users_guide.pdf?la=en
 
     Parameters
     ----------
     cache : str
         Raw data location in local directory
-    start_year : int
-        Year in format 20XX
-    start_month : int
-        Month from 1..12
-    start_day : int
-        Day from 1..31
-    end_year : int
-        Year in format 20XX
-    end_month : int
-        Month from 1..12
-    end_day : int
-        Day from 1..31
-    """
-    overwrite_xmlcachemanager_with_pricesetter_config()
-    os.chdir(cache)
-    xml_cache_manager = XML(cache)
-    xml_cache_manager.populate_by_day(start_year=start_year, start_month=start_month, start_day=start_day,
-                                      end_year=end_year, end_month=end_month, end_day=end_day)
+    start_time : str
+        Start Time Period in format 'yyyy/mm/dd HH:MM'
+    end_time : str
+        End Time Period in format 'yyyy/mm/dd HH:MM'
 
-    start_date_str = str(start_year) + "/" + str(start_month).zfill(2) + "/" + str(start_day).zfill(2)
-    end_date_str = str(end_year) + "/" + str(end_month).zfill(2) + "/" + str(end_day).zfill(2)
-    convert_xml_to_json(cache, start_date_str, end_date_str, clean_up=False)
+    Returns
+    -------
+    pandas.DataFrame
+
+        ============  ========  ================================================================================================
+        Columns:      Type:     Description:
+        PeriodID      datetime  The NEM market dispatch interval.
+        RegionID      str       The NEM market region.
+        Price         float     The market price for dispatch interval.
+        Unit          str       A DUID who contributes to setting the price (in most cases).
+        BandNo        int       Trade band number of the unit's contribution to price setting.
+        Increase      float     A marginal increase (in MW) in the unit band for a 1MW increase in energy demand for the region.
+        RRNBandPrice  float     Unit Band price as referred to the RRN
+        BandCost      float     Amount in $/h (Increase column multiplied by RRNBandPrice)
+        ============  ========  ================================================================================================
+
+    """
+    # Check inputs
+    cache = hp._check_cache(cache)
+    start_time = hp._validate_and_convert_date(start_time, "start_time")
+    end_time = hp._validate_and_convert_date(end_time, "end_time")
+
+    # Adjust data collection date range
+    collect_sdt = datetime(start_time.year, start_time.month, start_time.day)
+    if (end_time.hour == 0) & (end_time.minute == 0):
+        collect_edt = datetime(end_time.year, end_time.month, end_time.day)
+    else:
+        collect_edt = datetime(end_time.year, end_time.month, end_time.day) + timedelta(days=1)
+
+    daterange_list = pd.date_range(collect_sdt, collect_edt)
+
+    # Check if any files in cache already exist within daterange, remove them from new dateranges to create json for new dates only
+    xml_files = glob.glob(os.path.join(cache, "NEMED_PS_DAILY_*.json"))
+    exist_file_list = [datetime.strptime(existing_files[-15:-5],"%Y-%m-%d") for existing_files in xml_files]
+    new_daterange_only = [x for x in daterange_list if x not in exist_file_list]
+
+    # Download & Process Price Setter Files
+    logger.info("Processing Price Setter Files...")
+    for date in tqdm(new_daterange_only):
+        try:
+            _populate_xml_into_daily_json(cache, year=date.year, month=date.month, day=date.day)
+        except:
+            logger.warning("PriceSetter Download for {} failed. Continuing with remaining dates...".format(date))
+
+    # Read cached JSON Price Setter Files
+    table = read_json_to_df(cache, start_dt=start_time, end_dt=end_time)
+    return table
+
+
+def _populate_xml_into_daily_json(cache, year, month, day, rm_xml=True):
+    """Iterative function to extract all price setter xml files for a single day and combined into a single JSON file"""
+    sdate = datetime(year, month, day)
+    edate = sdate + timedelta(days=1)
+    date_str_list = [datetime.strftime(i,"%Y/%m/%d %H:%M:%S") for i in pd.date_range(sdate, edate, freq='5T', \
+        inclusive="right")]
+
+    # Load individual xml files
+    dataset = []
+    for interval in date_str_list:
+        xml_cache_manager = XML(cache)
+        overwrite_xmlcachemanager_with_pricesetter_config()
+
+        xml_cache_manager.load_interval(interval)
+        d = xml_cache_manager.xml['SolutionAnalysis']['PriceSetting']
+        dataset += [d]
+    dataset = [item for sublist in dataset for item in sublist]
+
+    # Write JSON daily summary file to cache
+    write_file = "NEMED_PS_DAILY_" + sdate.strftime("%Y-%m-%d") + ".json"
+    json_path = os.path.join(cache, write_file)
+    with open(json_path, 'w') as fp:
+        json.dump(dataset, fp)
+
+    if rm_xml:
+        # Remove XML files cached by nempy XMLCacheManager
+        prev_date = datetime(year, month, day) - timedelta(days=1)
+        XML_files = glob.glob(os.path.join(cache, "NEMPriceSetter_{}{}{}*.xml"\
+            .format(year,str(month).zfill(2),str(day).zfill(2))))
+        XML_files += glob.glob(os.path.join(cache, "NEMPriceSetter_{}{}{}*.xml"\
+            .format(prev_date.year,str(prev_date.month).zfill(2),str(prev_date.day).zfill(2))))
+
+        for filepath in XML_files:
+            os.remove(filepath)
+    return
+
 
 
 def download_pricesetters(cache, start_year, start_month, start_day, end_year, end_month, end_day,
                           redownload_xml=False):
-    """Downloads price setter from AEMO NEMWEB for each dispatch interval if JSON files do not already exist in cache.
-    Returns this data in a pandas dataframe.
+    # """LEGACY: Deprecated
 
-    Parameters
-    ----------
-    cache : str
-        Raw data location in local directory
-    start_year : int
-        Year in format 20XX
-    start_month : int
-        Month from 1..12
-    start_day : int
-        Day from 1..31
-    end_year : int
-        Year in format 20XX
-    end_month : int
-        Month from 1..12
-    end_day : int
-        Day from 1..31
-    redownload_xml : bool, optional
-        Setting to True will force new download of XML files irrespective of existing files in cache, by default False.
+    # Downloads price setter from AEMO NEMWEB for each dispatch interval if JSON files do not already exist in cache.
+    # Returns this data in a pandas dataframe.
 
-    Returns
-    -------
-    pd.DataFrame
-        Price Setter dataframe containing columns: [PeriodID, RegionID, Market, Price, DUID, DispatchedMarket, BandNo,
-        Increase, RRNBandPrice, BandCost]
-    """
-    if not redownload_xml:
-        # Check if JSON files already exist in cache for downloaded data daterange.
-        start = datetime(year=start_year, month=start_month, day=start_day) - timedelta(days=1)
-        if end_month == 12:
-            end_month = 0
-            end_year += 1
-        end = datetime(year=end_year, month=end_month, day=end_day)
-        download_date = start
+    # Parameters
+    # ----------
+    # cache : str
+    #     Raw data location in local directory
+    # start_year : int
+    #     Year in format 20XX
+    # start_month : int
+    #     Month from 1..12
+    # start_day : int
+    #     Day from 1..31
+    # end_year : int
+    #     Year in format 20XX
+    # end_month : int
+    #     Month from 1..12
+    # end_day : int
+    #     Day from 1..31
+    # redownload_xml : bool, optional
+    #     Setting to True will force new download of XML files irrespective of existing files in cache, by default False.
 
-        JSON_files = glob.glob(os.path.join(cache, "*.json"))
+    # Returns
+    # -------
+    # pd.DataFrame
+    #     Price Setter dataframe containing columns: [PeriodID, RegionID, Market, Price, DUID, DispatchedMarket, BandNo,
+    #     Increase, RRNBandPrice, BandCost]
+    # """
 
-        while download_date <= end:
-            searchfor = str(download_date.year) + str(download_date.month).zfill(2) + str(download_date.day).zfill(2)
+    # if not redownload_xml:
+    #     # Check if JSON files already exist in cache for downloaded data daterange.
+    #     start = datetime(year=start_year, month=start_month, day=start_day) - timedelta(days=1)
+    #     if end_month == 12:
+    #         end_month = 0
+    #         end_year += 1
+    #     end = datetime(year=end_year, month=end_month, day=end_day)
+    #     download_date = start
 
-            if not any([item.__contains__(searchfor) for item in JSON_files]):
-                print("No existing JSON found for date {}".format(download_date))
-                redownload_xml = True
-                break
-            download_date += timedelta(days=1)
+    #     JSON_files = glob.glob(os.path.join(cache, "*.json"))
 
-    # Download PriceSetter XML if not found in cache
-    if redownload_xml:
-        print("Redownloading XML data")
-        download_pricesetters_xml(cache , start_year, start_month, start_day, end_year, end_month, end_day)
+    #     while download_date <= end:
+    #         searchfor = str(download_date.year) + str(download_date.month).zfill(2) + str(download_date.day).zfill(2)
 
-    print("Reading JSON to pandas Dataframe")
-    start_date_str = str(start_year) + "/" + str(start_month).zfill(2) + "/" + str(start_day).zfill(2)
-    end_date_str = str(end_year) + "/" + str(end_month).zfill(2) + "/" + str(end_day).zfill(2)
-    table = read_json_to_df(cache, start_date_str, end_date_str)
-    return table
+    #         if not any([item.__contains__(searchfor) for item in JSON_files]):
+    #             print("No existing JSON found for date {}".format(download_date))
+    #             redownload_xml = True
+    #             break
+    #         download_date += timedelta(days=1)
+
+    # # Download PriceSetter XML if not found in cache
+    # if redownload_xml:
+    #     print("Redownloading XML data")
+    #     download_pricesetters_xml(cache , start_year, start_month, start_day, end_year, end_month, end_day)
+
+    # print("Reading JSON to pandas Dataframe")
+    # start_date_str = str(start_year) + "/" + str(start_month).zfill(2) + "/" + str(start_day).zfill(2)
+    # end_date_str = str(end_year) + "/" + str(end_month).zfill(2) + "/" + str(end_day).zfill(2)
+    # table = read_json_to_df(cache, start_date_str, end_date_str)
+    # return table
+    raise Exception("DEPRECATED in this version of NEMED. Refer to documentation: https://nemed.readthedocs.io/en/latest/")
+

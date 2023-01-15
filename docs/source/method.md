@@ -18,11 +18,9 @@ NEMED reproduces emissions data from a number of AEMO datasets, as such:
 7. Aggregating the final dataset by 'hour','day','month', or 'year' if desired. Alternatively the user can simply retrieve the 5-minute time resolution data.
 8. Processing the 'Intensity_Index' for the dataset by dividing Total Emissions by the Sent-Out Energy.
 
-#### Saved Sample Data
-Saved .csv files with sample processed data from NEMED are available in the [NEMED Sourcecode Data Folder]() such as the data displayed in the NEMED [CDEII Comparison Example](./examples/cdeii_benchmark.md)
 
 #### Auxiliary Load Factors
-Almost all data tables in NEMED originate from a dynamic source. However, auxiliary loads are applied from a static .csv file based on data assumptions published in AEMO ISP workbooks. Should you wish to access these assumptions they can be found in the [NEMED Sourcecode Data Folder](). Editing this file (which is discouraged) will apply changes to the results produced by NEMED
+Almost all data tables in NEMED originate from a dynamic source. However, auxiliary loads are applied from a static .csv file based on data assumptions published in AEMO ISP workbooks. Should you wish to access these assumptions they can be found in the [NEMED Sourcecode Data Folder](https://github.com/UNSW-CEEM/NEMED/tree/master/src/nemed/data/plant_auxiliary). Editing this file (which is discouraged) will apply changes to the results produced by NEMED
 
 ### Why NEMED is a good, not perfect tool!
 There a numerous factors leading to discrepency between NEMED processed data and AEMO daily summary files of emissions metrics. Notwithstanding that it is impossible to measure emissions exactly in the real world, NEMED is a good shot at reproducing AEMO data but is not perfect as:
@@ -53,7 +51,7 @@ Similar remarks can be made about the assumptions of plant emissions intensity a
 
 A brief note on some critical points:
 
-- Storages (Pumped Hydro, Batteries) are considered by AEMO to have plant emissions factors of zero! There are quite a few ways one might consider to handle this more cautiously, but we'll leave it to you :) Check the [nemed.process]() module where by using `get_total_emissions_by_DI_DUID` you can access the full NEMED dataset per DUID before it is aggregated regionally. Then you could overwrite the emissions factors for storages and continue from there (at least the tedious raw data extraction and mapping is already done for you!)
+- Storages (Pumped Hydro, Batteries) are considered by AEMO to have plant emissions factors of zero! There are quite a few ways one might consider to handle this more cautiously, but we'll leave it to you :) Check the [nemed.process](https://nemed.readthedocs.io/en/latest/api/process.html) module where by using `get_total_emissions_by_DI_DUID` you can access the full NEMED dataset per DUID before it is aggregated regionally. Then you could overwrite the emissions factors for storages and continue from there (at least the tedious raw data extraction and mapping is already done for you!)
 
 - Total (Average) emissions reflect only the generation within that region. NEMED does not account for interconnector flows or losses between generation and the point at which you might assume a load to be consuming grid-energy and hence have this assosciated average emissions intensity.
 

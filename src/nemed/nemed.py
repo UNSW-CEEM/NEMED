@@ -83,38 +83,39 @@ def get_total_emissions(start_time, end_time, cache, filter_regions=None, by=Non
     return aggregate
 
 
-def get_marginal_emissions(start_time, end_time, cache, redownload_xml=True):
-    """Retrieve Raw Marginal Emissions data for for a defined period
+def get_marginal_emissions(start_time, end_time, cache):
+    """Retrieves the marginal emissions intensity for each dispatch interval and region. This factor being the weighted
+    sum of the generators contributing to price-setting. Although not necessarily common, there may be times where
+    multiple technology types contribute to the marginal emissions - note however that the 'DUID' and 'CO2E_ENERGY_SOURCE'
+    returned will reflect only the plant which makes the greatest contribution towards price-setting.
 
     Parameters
     ----------
-    start_time : str
-        Start Time Period in format 'yyyy/mm/dd HH:MM:SS'
-    end_time : str
-        End Time Period in format 'yyyy/mm/dd HH:MM:SS'
     cache : str
         Raw data location in local directory
-    redownload_xml : bool
-        If false, attempts to find existing files in cache before downloading .xml files from AEMO database
+    start_time : str
+        Start Time Period in format 'yyyy/mm/dd HH:MM'
+    end_time : str
+        End Time Period in format 'yyyy/mm/dd HH:MM'
 
     Returns
     -------
-    pd.DataFrame
-        Data containing marginal (price-setter) DUID for each dispatch interval with emissions factor and other
-        useful generation information.
+    pandas.DataFrame
+        Data is returned as:
+
+        ==================  ========  ==================================================================================================
+        Columns:            Type:     Description:
+        Time                datetime  Timestamp reported as end of dispatch interval.
+        Region              str       The NEM region corresponding to the marginal emitter data. 
+        Intensity_Index     float     The intensity index [tCO2e/MWh] (as by weighted contributions) of the price-setting generators.
+        DUID                str       Unit identifier of the generator with the largest contribution on the margin for that Time-Region.
+        CO2E_ENERGY_SOURCE  str       Unit energy source with the largest contribution on the margin for that Time-Region.
+        ==================  ========  ==================================================================================================
+
     """
     # Check if cache folder exists
     hp._check_cache(cache)
 
-    # Extract datetime
-    input_start = dt.strptime(start_time, "%Y/%m/%d %H:%M:%S")
-    input_end = dt.strptime(end_time, "%Y/%m/%d %H:%M:%S")
+    result = nd.get_marginal_emitter(cache, start_time, end_time)
 
-    sdate = input_start - timedelta(days=1)
-    edate = input_end + timedelta(days=1)
-
-    result = nd.get_marginal_emitter(cache, start_year=sdate.year, start_month=sdate.month, start_day=sdate.day,
-                                     end_year=edate.year, end_month=edate.month, end_day=edate.day,
-                                     redownload_xml=redownload_xml)
-
-    return result[result['PeriodID'].between(input_start+timedelta(minutes=5), input_end)]
+    return result

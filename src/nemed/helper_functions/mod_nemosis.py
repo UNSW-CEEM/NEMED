@@ -129,9 +129,9 @@ def mod_dynamic_data_fetch_loop(
     return data_tables
 
 
-def overwrite_nemosis_data_fetch():
-    """Overwrites nemosis dyanmic_data_fetch_loop with added file year-month properties inserted into extracted data
-    table from AEMO NEMWEB.
-    """
-    data_fetch_methods._dynamic_data_fetch_loop = mod_dynamic_data_fetch_loop
+# def overwrite_nemosis_data_fetch():
+#     """Overwrites nemosis dyanmic_data_fetch_loop with added file year-month properties inserted into extracted data
+#     table from AEMO NEMWEB.
+#     """
+#     data_fetch_methods._dynamic_data_fetch_loop = mod_dynamic_data_fetch_loop
 

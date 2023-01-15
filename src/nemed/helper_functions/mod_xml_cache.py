@@ -7,10 +7,12 @@ import os
 import glob
 import json
 import xmltodict
+import logging
 import pandas as pd
 from tqdm import tqdm
-from datetime import datetime
+from datetime import datetime, timedelta
 from nempy.historical_inputs.xml_cache import XMLCacheManager
+logger = logging.getLogger(__name__)
 
 
 def modpricesetter_get_file_name(self):
@@ -48,9 +50,10 @@ def modpricesetter_download_xml_from_nemweb(self):
 def overwrite_xmlcachemanager_with_pricesetter_config():
     """Overwrites nempy xml_cache with modified functions to pull price setter data from AEMO NEMWEB.
     """
+    # XMLCacheManager.get_file_name = modpricesetter_get_file_name(xmlcachemanager)
+    # XMLCacheManager._download_xml_from_nemweb = modpricesetter_download_xml_from_nemweb(xmlcachemanager)
     XMLCacheManager.get_file_name = modpricesetter_get_file_name
     XMLCacheManager._download_xml_from_nemweb = modpricesetter_download_xml_from_nemweb
-
 
 def convert_xml_to_json(cache, start_date_str, end_date_str, clean_up=False):
     """Converts all XML files found in cache to JSON format. Best to use an entirely separate cache folder from other
@@ -73,7 +76,7 @@ def convert_xml_to_json(cache, start_date_str, end_date_str, clean_up=False):
     xml_subset = [item for sublist in xml_subset_nested for item in sublist]
     xml_files = glob.glob(os.path.join(cache, "NEMPriceSetter_*.xml"))
     print("Converting selected {} XML files to JSON, of {} cached files".format(len(xml_subset),len(xml_files)))
-
+    print(xml_subset)
     # Read XML files and convert to JSON
     for filename in tqdm(xml_subset):
         handle = open(filename, 'r')
@@ -91,7 +94,7 @@ def convert_xml_to_json(cache, start_date_str, end_date_str, clean_up=False):
             os.remove(os.path.join(cache, filename))
 
 
-def read_json_to_df(cache, start_date_str, end_date_str, clean_up=False):
+def read_json_to_df(cache, start_dt, end_dt):
     """Reads JSON files found in cache and returns price setter data as pandas dataframe.
 
     Parameters
@@ -105,35 +108,36 @@ def read_json_to_df(cache, start_date_str, end_date_str, clean_up=False):
         Price Setter dataframe containing columns: [PeriodID, RegionID, Market, Price, DUID, DispatchedMarket, BandNo,
         Increase, RRNBandPrice, BandCost]
     """
-    # Establish daterange
-    sdate = datetime.strptime(start_date_str, "%Y/%m/%d")
-    edate = datetime.strptime(end_date_str, "%Y/%m/%d")
-    date_str_list = [datetime.strftime(i,"%Y%m%d") for i in pd.date_range(sdate,edate)]
+    # Establish files daterange
+    collect_sdt = start_dt
+    if (end_dt.hour == 0) & (end_dt.minute == 0):
+        collect_edt = end_dt
+    else:
+        collect_edt = end_dt + timedelta(days=1)
+
+    date_str_list = [datetime.strftime(i,"%Y-%m-%d") for i in pd.date_range(collect_sdt, collect_edt)]
 
     # Find only a subset of JSON files in the given daterange
-    JSON_subset_nested = [glob.glob(os.path.join(cache, "NEMPriceSetter_{}*.json".format(i))) for i in date_str_list]
-    JSON_subset = [item for sublist in JSON_subset_nested for item in sublist]
-    JSON_files = glob.glob(os.path.join(cache, "NEMPriceSetter_*.xml"))
-    print("Reading selected {} JSON files to pandas, of {} cached files".format(len(JSON_subset),len(JSON_files)))
+    JSON_subset = [glob.glob(os.path.join(cache, "NEMED_PS_DAILY_{}*.json".format(i))) for i in date_str_list]
+    JSON_subset = [item for sublist in JSON_subset for item in sublist]
+
+    print("Reading selected {} JSON files to pandas, of cached files".format(len(JSON_subset)))
+    logger.info("Loading Cached Price Setter Files...")
 
     all_df = []
     for file in tqdm(JSON_subset):
         with open(file, 'r') as f:
             data = json.loads(f.read())
         df_nested_list = pd.json_normalize(data)
-        df_nested_list['@Increase'] = df_nested_list['@Increase'].astype(float)
+        df_nested_list['@PeriodID'] = pd.to_datetime(df_nested_list['@PeriodID'], format="%Y-%m-%d %H:%M:%S").dt.tz_localize(None)
         df_nested_list = df_nested_list[(df_nested_list['@Market'] == 'Energy') &
                                         (df_nested_list['@DispatchedMarket'] == 'ENOF')]
         all_df += [df_nested_list]
 
     all_df = pd.concat(all_df)
     all_df.columns = all_df.columns.str.strip('@')
-    all_df.rename(columns={'Unit': 'DUID'}, inplace=True)
-
-    # Remove XML files if clean_up
-    if clean_up:
-        print("Clearing {} JSON files from cache".format(len(JSON_files)))
-        for filename in JSON_files:
-            os.remove(os.path.join(cache, filename))
-
-    return all_df
+    all_df.drop(['Market','DispatchedMarket'], axis=1, inplace=True)
+    all_df = all_df.astype({'RegionID': str, 'Price': float, 'Unit': str, 'BandNo': int, \
+                            'Increase': float, 'RRNBandPrice': float, 'BandCost': float})
+    all_df = all_df[all_df['PeriodID'].between(start_dt, end_dt, inclusive="right")].sort_values(['PeriodID','RegionID'])
+    return all_df.reset_index(drop=True)
