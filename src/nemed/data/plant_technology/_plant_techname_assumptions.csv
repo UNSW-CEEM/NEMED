@@ -1,0 +1,499 @@
+EFFECTIVEFROM,DATASOURCE,DUID,STATION_NAME,FUEL_PRIMARY,FUEL_DESCRIPTOR,TECH_PRIMARY,TECH_DESCRIPTOR
+10/01/2023,NEM_Registration_Exemption_List,-,Melbourne Regional Landfill,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,-,Midlands Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,-,Pioneer Sugar Mill,Renewable/ Biomass / Waste,Bagasse,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,-,Portland,-,-,-,-
+10/01/2023,NEM_Registration_Exemption_List,-,Portland Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,-,Victoria Mill,Renewable/ Biomass / Waste,Bagasse,Combustion,Steam Super Critical
+10/01/2023,NEM_Registration_Exemption_List,ADPBA1G,Adelaide Desalination Plant,Battery storage,Grid,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,ADPBA1L,Adelaide Desalination Plant,Battery storage,Grid,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,ADPMH1,Adelaide Desalination Plant,Hydro,Water,Renewable,Run of River
+10/01/2023,NEM_Registration_Exemption_List,ADPPV1,Adelaide Desalination Plant,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,ADPPV2,Adelaide Desalination Plant,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,ADPPV3,Adelaide Desalination Plant,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,AGLHAL,Hallett Power Station,Fossil,Natural Gas / Diesel,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,AGLSITA1,Agl Kemps Creek,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,AGLSOM,Somerton Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,ANGAST1,Angaston Power Station,Fossil,Diesel,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,APPIN,Appin Power Plant,Fossil,Waste Coal Mine Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,ARWF1,Ararat Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,BAKING1,Baking Board Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,BALBG1,Ballarat Battery Energy Storage System,Battery storage,Grid,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,BALBL1,Ballarat Battery Energy Storage System,-,-,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,BALDHWF1,Bald Hills Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,BANGOWF1,Bango 973 Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,BANGOWF2,Bango 999 Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,BANN1,Bannerton Solar Park,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,BAPS,Banimboola Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,BARCALDN,Barcaldine Power Station,Fossil,Natural Gas,Combustion,Combined Cycle Gas Turbine (CCGT)
+10/01/2023,NEM_Registration_Exemption_List,BARCSF1,Barcaldine Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,BARKIPS1,Barker Inlet Power Station,Fossil,Natural Gas,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,BARRON-1,Barron Gorge Power Station,Hydro,Water,Renewable,Run of River
+10/01/2023,NEM_Registration_Exemption_List,BARRON-2,Barron Gorge Power Station,Hydro,Water,Renewable,Run of River
+10/01/2023,NEM_Registration_Exemption_List,BASTYAN,Bastyan Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,BBASEHOS,Ballarat Base Hospital Plant,Fossil,Natural Gas / Diesel,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,BBTHREE1,Bell Bay Three Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,BBTHREE2,Bell Bay Three Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,BBTHREE3,Bell Bay Three Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,BDL01,Bairnsdale Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,BDL02,Bairnsdale Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,BDONGHYD,Burrendong Hydro Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,BERYLSF1,Beryl Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,BLOWERNG,Blowering Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,BLUEGSF1,Blue Grass Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,BLUFF1,The Bluff Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,BNGSF1,Bungala One Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,BNGSF2,Bungala Two Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,BOCORWF1,Boco Rock Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,BODWF1,Bodangora Wind Farm ,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,BOLIVAR1,Bolivar Waste Water Treatment Plant,Renewable/ Biomass / Waste,Sewerage / Waste Water,Renewable,Pump Storage
+10/01/2023,NEM_Registration_Exemption_List,BOLIVPS1,Bolivar Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,BOMENSF1,Bomen Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,BOWWBA1G,Bolivar Waste Water Treatment Plant,Battery storage,Grid,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,BOWWBA1L,Bolivar Waste Water Treatment Plant,Battery storage,Grid,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,BOWWDG1,Bolivar Waste Water Treatment Plant,Fossil,Diesel,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,BOWWPV1,Bolivar Waste Water Treatment Plant,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,BPLANDF1,Browns Plains Landfill Gas PS,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,BRAEMAR1,Braemar Power Station,Fossil,Coal Seam Methane,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,BRAEMAR2,Braemar Power Station,Fossil,Coal Seam Methane,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,BRAEMAR3,Braemar Power Station,Fossil,Coal Seam Methane,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,BRAEMAR5,Braemar 2 Power Station,Fossil,Coal Seam Methane,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,BRAEMAR6,Braemar 2 Power Station,Fossil,Coal Seam Methane,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,BRAEMAR7,Braemar 2 Power Station,Fossil,Coal Seam Methane,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,BROADMDW,Broadmeadows Landfill Gas Power Station,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,BROKENH1,Broken Hill Solar Plant,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,BROOKLYN,Brooklyn LFG U1-3,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,BROWNMT,Brown Mountain Hydro Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,BRYB1WF1,Berrybank Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,BRYB2WF2,Berrybank 2 Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,BULBESG1,Bulgana Green Power Hub,Battery storage,Grid,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,BULBESL1,Bulgana Green Power Hub,Battery storage,Grid,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,BULGANA1,Bulgana Green Power Hub,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,BURRIN,Burrinjuck Hydro Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,BUTLERSG,Butlers Gorge Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,BW01,Bayswater Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,BW02,Bayswater Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,BW03,Bayswater Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,BW04,Bayswater Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,BWTR1,Broadwater Power Station,Renewable/ Biomass / Waste,Bagasse,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,CALL_A_4,Callide Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,CALL_B_1,Callide Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,CALL_B_2,Callide Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,CAPTL_WF,Capital Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,CATHROCK,Cathedral Rocks,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,CBWF1,Coonooer Bridge Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,CBWWBA1G,Christies Beach Wastewater Treatment Plant,Battery storage,Grid,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,CBWWBA1L,Christies Beach Wastewater Treatment Plant,-,-,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,CBWWBG1,Christies Beach Wastewater Treatment Plant,Renewable/ Biomass / Waste,Biogas - sludge,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,CBWWDG1,Christies Beach Wastewater Treatment Plant,Fossil,Diesel,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,CBWWDG2,Christies Beach Wastewater Treatment Plant,Fossil,Diesel,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,CBWWPV1,Christies Beach Wastewater Treatment Plant,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,CBWWPV2,Christies Beach Wastewater Treatment Plant,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,CESF1,Capital East Solar Farm,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,CETHANA,Cethana Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,CG1,Colongra Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,CG2,Colongra Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,CG3,Colongra Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,CG4,Colongra Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,CHALLHWF,Challicum Hills Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,CHILDSF1,Childers Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,CHPSTWF1,Chepstowe Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,CHYTWF1,Cherry Tree Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,CLARESF1,Clare Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,CLAYTON,Clayton Landfill Gas Power Station,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,CLEMGPWF,Clements Gap Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,CLERMSF1,Clermont Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,CLOVER,Clover Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,CLUNY,Cluny Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,CNUNDAWF,Canunda Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,CODRNGTON,Codrington Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,COHUNA,Cohuna Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,COLEASF1,Coleambally Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,COLUMSF1,Columboola Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,COLWF01,Collector Wind Farm 1,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,CONDONG1,Condong Power Station,Renewable/ Biomass / Waste,Bagasse,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,COOPGWF1,Coopers Gap Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,COPTNHYD,Copeton Hydro Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,CORIO1,Corio Landfill Gas Power Station,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,CPP_3,Callide C Nett Off,Fossil,Black Coal,Combustion,Steam Super Critical
+10/01/2023,NEM_Registration_Exemption_List,CPP_4,Callide C Nett Off,Fossil,Black Coal,Combustion,Steam Super Critical
+10/01/2023,NEM_Registration_Exemption_List,CPSA,Condamine Power Station A,Fossil,Natural Gas,Combustion,Combined Cycle Gas Turbine (CCGT)
+10/01/2023,NEM_Registration_Exemption_List,CROOKWF2,Crookwell 2 Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,CROWLWF1,Crowlands Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,CRURWF1,Crudine Ridge Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,CRWASF1,Corowa Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,CSPVPS1,Collinsville Solar PV Power Station,Solar,Solar,Renewable,Photovoltaic Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,CTHLWF1,Cattle Hill Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,CULLRGWF,Cullerin Range Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,DAANDINE,Daandine Power Station,Fossil,Coal Seam Methane,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,DALNTH01,Dalrymple North BESS,Battery storage,Grid,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,DALNTHL1,Dalrymple North BESS,-,-,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,DARLSF1,Darlington Point Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,DARTM1,Dartmouth Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,DAYDSF1,Daydream Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,DAYDSF2,Daydream Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,DDPS1,Darling Downs Power Station,Fossil,Natural Gas,Combustion,Combined Cycle Gas Turbine (CCGT)
+10/01/2023,NEM_Registration_Exemption_List,DDSF1,Darling Downs Solar Farm,Solar,Solar ,Renewable,Photovoltaic Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,DEVILS_G,Devils Gate Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,DIAPURWF1,Diapur Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,DRYCGT1,Dry Creek Gas Turbine Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,DRYCGT2,Dry Creek Gas Turbine Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,DRYCGT3,Dry Creek Gas Turbine Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,DUNDWF1,Dundonnell Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,DUNDWF2,Dundonnell Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,DUNDWF3,Dundonnell Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,EASTCRK,Eastern Creek LFG PS Units 1-4,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,EASTCRK2,Eastern Creek 2 Gas Utilisation Facility,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,EDENVSF1,Edenvale Solar Park,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,EDLRGNRD,Roghan Road LFG Power Plant,Renewable/ Biomass / Waste,Bagasse,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,EILDON1,Eildon Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,EILDON2,Eildon Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,EILDON3,Eildon Power Station,Hydro,Water,Renewable,Run of River
+10/01/2023,NEM_Registration_Exemption_List,ELAINWF1,Elaine Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,EMERASF1,Emerald Solar Park,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,ER01,Eraring Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,ER02,Eraring Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,ER03,Eraring Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,ER04,Eraring Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,ERGT01,Eraring Power Station,Fossil,Diesel,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,FINLYSF1,Finley Solar Farm,Solar,Solar ,Renewable,Photovoltaic Tracking Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,FISHER,Fisher Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,FNWF1,Ferguson North Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,FSWF1,Ferguson South Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,GANGARR1,Gangarri Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,GANNBG1,Gannawarra Energy Storage System,Battery storage,Grid,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,GANNBL1,Gannawarra Energy Storage System,-,-,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,GANNSF1,Gannawarra Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,GB01,Broken Hill Gas Turbines,Fossil,Diesel,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,GERMCRK,German Creek Power Station,Fossil,Waste Coal Mine Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,GLBWNHYD,Glenbawn Hydro Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,GLENMAG1,Glenmaggie Hydro Power Station,Hydro,Water,Renewable,Run of River
+10/01/2023,NEM_Registration_Exemption_List,GLENNCRK,Glennies Creek Power Station,Fossil,Waste Coal Mine Gas,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,GLRWNSF1,Glenrowan West Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,GNNDHSF1,Gunnedah Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,GOONSF1,Goonumbla Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,GORDON,Gordon Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,GRANGEAV,Grange Avenue Landfill Gas Power Station,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,GRANWF1,Granville Harbour Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,GRIFSF1,Griffith Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,GROSV1,Grosvenor 1 Waste Coal Mine Gas Power Station,Fossil,Waste Coal Mine Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,GROSV2,Grosvenor 2,Fossil,Waste Coal Mine Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,GSTONE1,Gladstone Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,GSTONE2,Gladstone Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,GSTONE3,Gladstone Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,GSTONE4,Gladstone Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,GSTONE5,Gladstone Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,GSTONE6,Gladstone Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,GULLRSF1,Gullen Range Solar Farm,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,GULLRWF1,Gullen Range Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,GULLRWF2,Gullen Range Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,GUNNING1,Gunning Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,GUTHEGA,Guthega Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,HALAMRD1,Hallam Road Renewable Energy Facility,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,HALLWF1,Hallett 1 Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,HALLWF2,Hallett 2 Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,HAMISF1,Hamilton Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,HAUGHT11,Haughton Solar Farm Stage 1,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,HAYMSF1,Hayman Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,HDWF1,Hornsdale Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,HDWF2,Hornsdale Wind Farm 2,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,HDWF3,Hornsdale Wind Farm 3,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,HEPWIND1,Hepburn Community Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,HEZ1,Hunter Economic Zone,Fossil,Diesel,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,HILLSTN1,Hillston Sun Farm ,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,HLMSEW01,South East Water - Halllam Hydro Plant,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,HPRG1,Hornsdale Power Reserve,Battery storage,Wind,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,HPRL1,Hornsdale Power Reserve,-,-,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,HUGSF1,Hughenden Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,HUMENSW,Hume (NSW) Hydro Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,HUMEV,Hume (Vic) Hydro Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,HVWWBA1G,Happy Valley Water Treatment Plant,Battery storage,Grid,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,HVWWBA1L,Happy Valley Water Treatment Plant,Battery storage,Grid,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,HVWWPV1,Happy Valley Water Treatment Plant,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,ICSM,ISIS Central Sugar Mill Co-generation Plant,Renewable/ Biomass / Waste,Bagasse,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,INVICTA,Invicta Sugar Mill,Renewable/ Biomass / Waste,Bagasse,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,JACKSGUL,Jacks Gully Landfill Gas Power Station,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,JBUTTERS,John Butters Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,JEMALNG1,Jemalong Solar Project,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,JLA01,"Jeeralang ""A"" Power Station",Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,JLA02,"Jeeralang ""A"" Power Station",Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,JLA03,"Jeeralang ""A"" Power Station",Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,JLA04,"Jeeralang ""A"" Power Station",Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,JLB01,"Jeeralang ""B"" Power Station",Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,JLB02,"Jeeralang ""B"" Power Station",Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,JLB03,"Jeeralang ""B"" Power Station",Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,JNDABNE1,Jindabyne Small Hydro Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,JOUNAMA1,Jounama Small Hydro Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,JUNEESF1,Junee Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,KABANWF1,Kaban Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,KAREEYA1,Kareeya Power Station,Hydro,Water,Renewable,Run of River
+10/01/2023,NEM_Registration_Exemption_List,KAREEYA2,Kareeya Power Station,Hydro,Water,Renewable,Run of River
+10/01/2023,NEM_Registration_Exemption_List,KAREEYA3,Kareeya Power Station,Hydro,Water,Renewable,Run of River
+10/01/2023,NEM_Registration_Exemption_List,KAREEYA4,Kareeya Power Station,Hydro,Water,Renewable,Run of River
+10/01/2023,NEM_Registration_Exemption_List,KAREEYA5,Kareeya Power Station,Hydro,Water,Renewable,Run of River
+10/01/2023,NEM_Registration_Exemption_List,KARSF1,Karadoc Solar Farm,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,KEEPIT,Keepit Hydro Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,KEPBG1,Kennedy Energy Park Battery,Battery storage,Grid,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,KEPBL1,Kennedy Energy Park Battery,Battery storage,Grid,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,KEPSF1,Kennedy Energy Park,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,KEPWF1,Kennedy Energy Park,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,KIAMSF1,Kiamal Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,KIATAWF1,Kiata Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,KPP_1,Kogan Creek Power Station,Fossil,Black Coal,Combustion,Steam Super Critical
+10/01/2023,NEM_Registration_Exemption_List,KSP1,Kidston Solar Project,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,LADBROK1,Ladbroke Grove Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,LADBROK2,Ladbroke Grove Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,LBBG1,Lake Bonney BESS1,Battery storage,Grid,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,LBBL1,Lake Bonney BESS1,-,-,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,LD01,Liddell Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,LD02,Liddell Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,LD04,Liddell Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,LEM_WIL,Lemonthyme / Wilmot Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,LGAPWF1,Lincoln Gap Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,LGAPWF2,Lincoln Gap Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,LI_WY_CA,Catagunya / Liapootah / Wayatinah Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,LILYSF1,Lilyvale Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,LIMOSF11,Limondale Solar Farm 1,Solar,Solar,Renewable,Photovoltaic Tracking Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,LIMOSF21,Limondale Solar Farm 2,Solar,Solar,Renewable,Photovoltaic Tracking Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,LK_ECHO,Lake Echo Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,LKBONNY1,Lake Bonney Wind Farm Stage 1,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,LKBONNY2,Lake Bonney Stage 2 Windfarm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,LKBONNY3,Lake Bonney Stage 3 Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,LNGS1,Laverton North Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,LNGS2,Laverton North Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,LONSDALE,Lonsdale Power Station,Fossil,Diesel,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,LOYYB1,Loy Yang B Power Station,Fossil,Brown Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,LOYYB2,Loy Yang B Power Station,Fossil,Brown Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,LRSF1,Longreach Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,LUCAS2S2,Lucas Heights 2 Power Station,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,LUCASHGT,Lucas Heights 2 Power Station,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,LYA1,Loy Yang A Power Station,Fossil,Brown Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,LYA2,Loy Yang A Power Station,Fossil,Brown Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,LYA3,Loy Yang A Power Station,Fossil,Brown Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,LYA4,Loy Yang A Power Station,Fossil,Brown Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,MACARTH1,Macarthur Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,MACKNTSH,Mackintosh Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,MANSLR1,Manildra solar Farm,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,MAPS2PV1,"Mannum - Adelaide Pipeline Pumping Station No 2, PV Units 1-6",Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,MAPS3PV1,"Mannum - Adelaide Pipeline Pumping Station No 3, PV Units 1-6",Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,MAROOWF1,Maroona Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,MARYRSF1,Maryrorough Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,MBAHNTH,Moranbah North Waste Coal Mine Gas Power Station,Fossil,Waste Coal Mine Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,MBPS2PV1,Murray Bridge-Onkaparinga Pipeline Pumping Station No 2,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,MCKAY1,Bogong / Mackay Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,MEADOWBK,Meadowbank Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,MERCER01,Mt Mercer Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,METZSF1,Metz Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,MEWF1,Mount Emerald Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,MIDDLSF1,Middlemount Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,MINTARO,Mintaro Gas Turbine Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,MLLFGEF1,Mugga Lane Landfill Gas To Energy Facility,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,MLSP1,Mugga Lane Solar Park,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,MLWF1,Mortons Lane Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,MOLNGSF1,Molong Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,MOORAWF1,Moorabool Wind Farm ,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,MORANBAH,Moranbah Generation Project,Fossil,Coal Seam Methane,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,MOREESF1,Moree Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,MORNW,Mornington Waste Disposal Facility,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,MORTLK11,Mortlake Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,MORTLK12,Mortlake Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,MOUSF1,Moura Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,MP1,Mt Piper Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,MP2,Mt Piper Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,MPP_1,Millmerran Power Plant,Fossil,Black Coal,Combustion,Steam Super Critical
+10/01/2023,NEM_Registration_Exemption_List,MPP_2,Millmerran Power Plant,Fossil,Black Coal,Combustion,Steam Super Critical
+10/01/2023,NEM_Registration_Exemption_List,MRTLSWF1,Mortlake South Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,MSTUART1,Mt Stuart Power Station,Fossil,Kerosene,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,MSTUART2,Mt Stuart Power Station,Fossil,Kerosene,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,MSTUART3,Mt Stuart Power Station,Fossil,Kerosene,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,MTGELWF1,Mt Gellibrand Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,MTMILLAR,Mt Millar Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,MURRAY,Murray Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,MUSSELR1,Musselroe Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,MUWAWF1,Murra Warra Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,MUWAWF2,Murra Warra Wind Farm Stage 2,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,MWPS1PV1 ,Morgan-Whyalla Pipeline Pumping Station No 1,Solar,solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,MWPS2PV1 ,Morgan-Whyalla Pipeline Pumping Station No 2,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,MWPS3PV1 ,Morgan-Whyalla Pipeline Pumping Station No 3,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,MWPS4PV1,Morgan-Whyalla Pipeline Pumping Station No 4,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,NASF1,Narromine Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,NBHWF1,North Brown Hill Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,NEVERSF1,Nevertire Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,NEWENSF1,New England Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,NEWENSF2,New England Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,NINEWIL1,Nine Network Willoughby Plant,Fossil,Diesel,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,NPS,Newport Power Station,Fossil,Natural Gas,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,NUMURSF1,Numurkah Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,NYNGAN1,Nyngan Solar Plant,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,OAKEY1,Oakey Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,OAKEY1SF,Oakey 1 Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,OAKEY2,Oakey Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,OAKEY2SF,Oakey 2 Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,OAKLAND1,Oaklands Hill Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,OAKY2,Oaky Creek 2,Fossil,Waste Coal Mine Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,OAKYCREK,Oaky Creek Power Station,Fossil,Coal Seam Methane,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,OSB-AG,Osborne Power Station,Fossil,Natural Gas,Combustion,Combined Cycle Gas Turbine (CCGT)
+10/01/2023,NEM_Registration_Exemption_List,PALOONA,Paloona Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,PAREPS1,Port Augusta Renewable Energy Park,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,PAREPW1,Port Augusta Renewable Energy Park,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,PARSF1,Parkes Solar Farm,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,PINDARI,Pindari Hydro Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,POAT110,Poatina Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,POAT220,Poatina Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,POR01,Port Lincoln Gas Turbine,Fossil,Diesel,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,POR03,Port Lincoln Gas Turbine,Fossil,Diesel,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,PPCCGT,Pelican Point Power Station,Fossil,Natural Gas,Combustion,Combined Cycle Gas Turbine (CCGT)
+10/01/2023,NEM_Registration_Exemption_List,PTSTAN1,Pt Stanvac Power Station,Fossil,Diesel,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,PUMP1,Wivenhoe Power Station,-,-,-,-
+10/01/2023,NEM_Registration_Exemption_List,PUMP2,Wivenhoe Power Station,-,-,-,-
+10/01/2023,NEM_Registration_Exemption_List,QBYNBG1,Queanbeyan BESS,Battery storage,Grid,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,QBYNBL1,Queanbeyan BESS,Battery storage,Grid,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,QPS1,Quarantine Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,QPS2,Quarantine Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,QPS3,Quarantine Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,QPS4,Quarantine Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,QPS5,Quarantine Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,RACOMIL1,Racecourse Mill Power Station,Renewable/ Biomass / Waste,Bagasse,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,REECE1,Reece Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,REECE2,Reece Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,REPULSE,Repulse Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,ROMA_7,Roma Gas Turbine Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,ROMA_8,Roma Gas Turbine Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,ROWALLAN,Rowallan Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,ROYALLA1,Royalla Solar Farm,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,RPCG,Rocky Point Cogeneration Plant,Renewable/ Biomass / Waste,Bagasse,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,RRSF1,Ross River Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,RUBICON,Rubicon Mountain Streams Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,RUGBYR1,Rugby Run Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,SALTCRK1,Salt Creek Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,SAPHWF1,Sapphire Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,SATGS1,Temporary Generation South,Fossil,Diesel,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,SEBSF1,Sebastopol Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,SHEP1,Shepparton Wastewater Treatment Facility,Renewable/ Biomass / Waste,Sewerage / Waste Water,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,SHGEN,Shoalhaven Power Station (Bendeela And Kangaroo Valley Power Station And Pumps),Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,SHPUMP,Shoalhaven Power Station (Bendeela And Kangaroo Valley Power Station And Pumps),-,-,-,-
+10/01/2023,NEM_Registration_Exemption_List,SITHE01,Smithfield Energy Facility,Fossil,Natural Gas,Combustion,Combined Cycle Gas Turbine (CCGT)
+10/01/2023,NEM_Registration_Exemption_List,SITHE04,Smithfield Energy Facility,Fossil,Natural Gas,Combustion,Combined Cycle Gas Turbine (CCGT)
+10/01/2023,NEM_Registration_Exemption_List,SKSF1,South Keswick Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,SLDCBLK1,St Leonards Data Centre,Battery storage,Grid,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,SMCSF1,Sun Metals Solar Farm,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,SNAPPER1,Snapper Point Power Station,Fossil,Diesel,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,SNOWNTH1,Snowtown Wind Farm Stage 2 North,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,SNOWSTH1,Snowtown South Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,SNOWTWN1,Snowtown Wind Farm Units 1 And 47,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,SNOWYP,Tumut 3 Pumps,,,,
+10/01/2023,NEM_Registration_Exemption_List,SNUG1,Snuggery Power Station,Fossil,Diesel,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,SRSF1,Susan River Solar Farm,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,STAN-1,Stanwell Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,STAN-2,Stanwell Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,STAN-3,Stanwell Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,STAN-4,Stanwell Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,STAPYLTON1,Stapylton Renewable Energy Facility,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,STARHLWF,Starfish Hill Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,STOCKYD1,Stockyard Hill Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,STWF1,Silverton Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,SUNRSF1,Sunraysia Solar Farm,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,SUNTPSF1,Suntop Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,SVALE1,Springvale Landfill Gas Power Station,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,SWAN_E,Swanbank E Power Station ,Fossil,Natural Gas,Combustion,Combined Cycle Gas Turbine (CCGT)
+10/01/2023,NEM_Registration_Exemption_List,TABMILL2,Tableland Mill Unit 2,Renewable/ Biomass / Waste,Bagasse,Combustion,Steam Super Critical
+10/01/2023,NEM_Registration_Exemption_List,TAHMOOR1,Tahmoor Waste Coal Mine Gas Power Station,Fossil,Waste Coal Mine Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,TALWA1,Tallawarra Power Station,Fossil,Natural Gas,Combustion,Combined Cycle Gas Turbine (CCGT)
+10/01/2023,NEM_Registration_Exemption_List,TARALGA1,Taralga Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,TARONG#1,Tarong Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,TARONG#2,Tarong Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,TARONG#3,Tarong Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,TARONG#4,Tarong Power Station,Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,TARRALEA,Tarraleah Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,TATIARA1,Tataria Bordertown Plant,Fossil,Diesel,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,TATURA01,Tatura Biomass Generator,Renewable/ Biomass / Waste,Sewerage / Waste Water,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,TBSF1,Tailem Bend Solar Project 1,Solar,Solar,Renewable,Photovoltaic Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,TGNSS1,Traralgon Network Support Station,Fossil,Natural Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,THEDROP1,The Drop Power Station,Hydro,Water,Renewable,Run of River
+10/01/2023,NEM_Registration_Exemption_List,TIMWEST,Timboon West Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,TITREE,Veolia Ti Tree Bio Reactor,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,TNPS1,Tarong North Power Station,Fossil,Black Coal,Combustion,Steam Super Critical
+10/01/2023,NEM_Registration_Exemption_List,TOORAWF,Toora Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,TORRB1,Torrens Island Power Station,Fossil,Natural Gas / Fuel Oil,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,TORRB2,Torrens Island Power Station,Fossil,Natural Gas / Fuel Oil,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,TORRB3,Torrens Island Power Station,Fossil,Natural Gas / Fuel Oil,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,TORRB4,Torrens Island Power Station,Fossil,Natural Gas / Fuel Oil,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,TOWER,Tower Power Plant,Fossil,Waste Coal Mine Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,TREVALLN,Trevallyn Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,TRIBUTE,Tribute Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,TUMUT3,Tumut 3 Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,TUNGATIN,Tungatinah Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,TVCC201,Tamar Valley Combined Cycle Power Station,Fossil,Natural Gas,Combustion,Combined Cycle Gas Turbine (CCGT)
+10/01/2023,NEM_Registration_Exemption_List,TVPP104,Bell Bay Three Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,UPPTUMUT,Tumut Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,URANQ11,Uranquinty Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,URANQ12,Uranquinty Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,URANQ13,Uranquinty Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,URANQ14,Uranquinty Power Station,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,VALDORA1,Valdora Solar Farm,Solar,Solar,Renewable,Photovoltaic Flat panel
+10/01/2023,NEM_Registration_Exemption_List,VBBG1,Victorian Big Battery,Battery storage,Grid,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,VBBL1,Victorian Big Battery, , ,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,VP5,"Vales Point ""B"" Power Station",Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,VP6,"Vales Point ""B"" Power Station",Fossil,Black Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,VPGS1,Valley Power Peaking Facility,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,VPGS2,Valley Power Peaking Facility,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,VPGS3,Valley Power Peaking Facility,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,VPGS4,Valley Power Peaking Facility,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,VPGS5,Valley Power Peaking Facility,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,VPGS6,Valley Power Peaking Facility,Fossil,Natural Gas,Combustion,Open Cycle Gas turbines (OCGT)
+10/01/2023,NEM_Registration_Exemption_List,W/HOE#1,Wivenhoe Power Station,Hydro,Water,Renewable,Pump Storage
+10/01/2023,NEM_Registration_Exemption_List,W/HOE#2,Wivenhoe Power Station,Hydro,Water,Renewable,Pump Storage
+10/01/2023,NEM_Registration_Exemption_List,WAGGNSF1,Wagga North Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,WALGRVG1,Wallgrove BESS 1,Battery storage,Grid,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,WALGRVL1,Wallgrove BESS 1,,,Storage,Battery and Inverter
+10/01/2023,NEM_Registration_Exemption_List,WANDBG1,Wandoan Battery Energy Storage System (BESS),Battery storage,Grid,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,WANDBL1,Wandoan Battery Energy Storage System (BESS),,,Storage,Battery
+10/01/2023,NEM_Registration_Exemption_List,WARWSF1,Warwick Solar Farm 1 ,Solar,Solar,Renewable,Photovoltaic Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,WARWSF2,Warwick Solar Farm 2,Solar,Solar,Renewable,Photovoltaic Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,WATERLWF,Waterloo Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,WAUBRAWF,Waubra Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,WDGPH1,Western Downs GPH,Solar,Solar,Renewable,Photovoltaic Tracking Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,WDLNGN01,Woodlawn Bioreactor Energy Generation Station,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,WELLSF1 ,Wellington Solar Farm ,Solar,Solar,Renewable,Photovoltaic Tracking Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,WEMENSF1,Wemen Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,WESTCBT1,Western Suburbs League Club (Campbelltown) Plant,Fossil,Diesel,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,WESTILL1,West Illawarra Leagues Club Plant,Fossil,Diesel,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,WGWF1,Willogoleche Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,WHILL1,Windy Hill Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,WHIT1,Whitwood Road Renewable Energy Facility,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,WHITSF1,Whitsunday Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,WILGAPK,Wilga Park Power Station,Fossil,Coal Seam Methane,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,WILGB01,Wilga Park B,Fossil,Coal Seam Methane,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,WILLHOV1,William Hovell Power Station,Hydro,Water,Renewable,Run of River
+10/01/2023,NEM_Registration_Exemption_List,WINGF1_1,Wingfield 1 Landfill Gas Power Station,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,WINGF2_1,Wingfield 2 Landfill Gas Power Station,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,WINTSF1,Winton Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,WIVENSH,Wivenhoe Small Hydro,Hydro,Water,Renewable,Run of River
+10/01/2023,NEM_Registration_Exemption_List,WKIEWA1,West Kiewa Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,WKIEWA2,West Kiewa Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,WOLLERT1,Wollert Renewable Energy Facility,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Spark Ignition Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,WONWP,Wonthaggi Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,WOODLWN1,Woodlawn Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,WOOLGSF1,Woolooga Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,WOOLNTH1,Woolnorth Studland Bay / Bluff Point Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,WPWF,Wattle Point Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,WRSF1,White Rock Solar Farm,Solar,Solar,Renewable,Photovoltaic Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,WRWF1,White Rock Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,WSTWYSF1,West Wyalong Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat Panel
+10/01/2023,NEM_Registration_Exemption_List,WYANGALA,Wyangala A Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,WYANGALB,Wyangala B Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,WYNDW,Wyndham Waste Disposal Facility,Renewable/ Biomass / Waste,Landfill Methane / Landfill Gas,Combustion,Compression Reciprocating Engine
+10/01/2023,NEM_Registration_Exemption_List,YABULU,Townsville Gas Turbine,Fossil,Natural Gas,Combustion,Combined Cycle Gas Turbine (CCGT)
+10/01/2023,NEM_Registration_Exemption_List,YABULU2,Townsville Gas Turbine,Fossil,Natural Gas,Combustion,Combined Cycle Gas Turbine (CCGT)
+10/01/2023,NEM_Registration_Exemption_List,YAMBUKWF,Yambuk Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,YARANSF1,Yarranlea Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,YARWUN_1,Yarwun Power Station,Fossil,Natural Gas,Combustion,Combined Cycle Gas Turbine (CCGT)
+10/01/2023,NEM_Registration_Exemption_List,YATSF1,Yatpool Solar Farm,Solar,Solar,Renewable,Photovoltaic Tracking Flat panel
+10/01/2023,NEM_Registration_Exemption_List,YAWWF1,Yawong Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,YENDWF1,Yendon Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,YSWF1,Yaloak South Wind Farm,Wind,Wind,Renewable,Wind - Onshore
+10/01/2023,NEM_Registration_Exemption_List,YWNGAHYD,Yarrawonga Hydro Power Station,Hydro,Water,Renewable,Hydro - Gravity
+10/01/2023,NEM_Registration_Exemption_List,YWPS1,Yallourn 'W' Power Station,Fossil,Brown Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,YWPS2,Yallourn 'W' Power Station,Fossil,Brown Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,YWPS3,Yallourn 'W' Power Station,Fossil,Brown Coal,Combustion,Steam Sub-Critical
+10/01/2023,NEM_Registration_Exemption_List,YWPS4,Yallourn 'W' Power Station,Fossil,Brown Coal,Combustion,Steam Sub-Critical
