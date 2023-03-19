@@ -225,7 +225,7 @@ def download_genset_map(cache, asof_date=None):
     return filtered.sort_values(['GENSETID','EFFECTIVEDATE']).reset_index(drop=True)
 
 
-def download_dudetailsummary(cache, asof_date=None):
+def download_dudetailsummary(cache, include_mlfs=False, asof_date=None):
     """Download the DUDETAILSUMMARY MMS table with mapping of Dispatch Type and Region to DUID
 
     Parameters
@@ -271,14 +271,21 @@ def download_dudetailsummary(cache, asof_date=None):
                                     end_time=latest,
                                     table_name="DUDETAILSUMMARY",
                                     raw_data_location=cache,
-                                    select_columns=["START_DATE", "DUID", "DISPATCHTYPE", "REGIONID", "LASTCHANGED"],
+                                    select_columns=["START_DATE", "DUID", "DISPATCHTYPE", "REGIONID", \
+                                                    "TRANSMISSIONLOSSFACTOR", "LASTCHANGED"],
                                     date_filter=None,
                                     fformat="feather",
                                     )
     df = pd.concat(df)
     df = df.drop(['file_year','file_month', 'LASTCHANGED'], axis=1)
-    filtered = df.sort_values('START_DATE').drop_duplicates(['DUID'], keep='last')
-    return filtered.sort_values(['DUID','START_DATE']).reset_index(drop=True)
+    df["TRANSMISSIONLOSSFACTOR"] =df["TRANSMISSIONLOSSFACTOR"].astype(float)
+
+    if include_mlfs:
+        filtered = df.sort_values(['DUID','START_DATE']).drop_duplicates(['DUID','TRANSMISSIONLOSSFACTOR'], keep='last')
+    else:
+        filtered = df.drop(['TRANSMISSIONLOSSFACTOR'], axis=1).sort_values(['DUID','START_DATE'])\
+                   .drop_duplicates(['DUID'], keep='last')
+    return filtered.reset_index(drop=True)
 
 
 def _download_duid_mapping():
