@@ -171,37 +171,6 @@ def _total_emissions_process(start_time, end_time, cache, filter_regions=None,
     return result
 
 
-def _adjust_ef_with_mlf(co2_factors_df, cache):
-    """ Divides emissions factors by MLF for each plant """
-    # Get MLF data for DUIDs
-    duid_mlfs = download_dudetailsummary(cache, include_mlfs=True)
-    duid_mlfs['FILE_DATE'] = pd.to_datetime(duid_mlfs['START_DATE'], format="%Y-%m-%d %H:%M:%S")
-
-    df = co2_factors_df.copy()
-    df.insert(0,'FILE_DATE', pd.to_datetime(df.file_year.astype(str) \
-                                            + '/' + df.file_month.astype(str) + '/01', \
-                                            format="%Y-%m-%d"))
-
-    df.sort_values(['FILE_DATE', 'DUID'], inplace=True)
-    duid_mlfs.sort_values(['FILE_DATE', 'DUID'], inplace=True)
-    adj_factors = pd.merge_asof(left=df,
-                                right=duid_mlfs,
-                                on=['FILE_DATE'],
-                                by=['DUID'],
-                                direction='backward')
-
-    # Save raw EF data
-    adj_factors['unadjusted_CO2E_EF'] = adj_factors['CO2E_EMISSIONS_FACTOR']
-
-    # Keep emissions factors where mlf is not given, else adjust by dividing by MLF
-    adj_factors['CO2E_EMISSIONS_FACTOR'] = np.where(adj_factors['TRANSMISSIONLOSSFACTOR'].isna(), \
-                                                    adj_factors['CO2E_EMISSIONS_FACTOR'], \
-                                                    adj_factors['CO2E_EMISSIONS_FACTOR'] / adj_factors['TRANSMISSIONLOSSFACTOR'])
-    
-    return adj_factors[['file_year', 'file_month', 'DUID', 'CO2E_EMISSIONS_FACTOR', \
-                        'CO2E_ENERGY_SOURCE', 'CO2E_DATA_SOURCE', 'unadjusted_CO2E_EF']]
-
-
 def _get_duid_emissions_intensities(start_time, end_time, cache):
     """Merges emissions factors from GENSETID to DUID and cleans data"""
     co2factors_df = download_plant_emissions_factors(start_time, end_time, cache)
@@ -292,9 +261,9 @@ def _calculate_sent_out(energy_df):
 
 def get_marginal_emitter(start_time, end_time, cache):
     """Retrieves the marginal emissions intensity for each dispatch interval and region. This factor being the weighted
-    sum of the generators contributing to price-setting. Note also the emissions factors for each plant are adjusted by 
-    their corresponding MLF given that the weighted contribution of a generator to price setting is indicative of the
-    generator's MW contribution as seen at the RRN, not generator site.
+    sum of the generators contributing to price-setting. Although not necessarily common, there may be times where
+    multiple technology types contribute to the marginal emissions - note however that the 'DUID' and 'CO2E_ENERGY_SOURCE'
+    returned will reflect only the plant which makes the greatest contribution towards price-setting.
 
     Parameters
     ----------
@@ -314,8 +283,9 @@ def get_marginal_emitter(start_time, end_time, cache):
         Columns:            Type:     Description:
         Time                datetime  Timestamp reported as end of dispatch interval.
         Region              str       The NEM region corresponding to the marginal emitter data. 
-        Intensity_Index     float     The intensity index [tCO2e/MWh] (as by weighted contributions and adjusted for MLFs) of the price-setting generators.
-        Energy source       str       Combined string of energy sources which are the marginal generators for that Time-Region.
+        Intensity_Index     float     The intensity index [tCO2e/MWh] (as by weighted contributions) of the price-setting generators.
+        DUID                str       Unit identifier of the generator with the largest contribution on the margin for that Time-Region.
+        CO2E_ENERGY_SOURCE  str       Unit energy source with the largest contribution on the margin for that Time-Region.
         ==================  ========  ==================================================================================================
 
     """
@@ -326,11 +296,6 @@ def get_marginal_emitter(start_time, end_time, cache):
     ## gen_info = download_generators_info(cache)
     logger.warning('Warning: Gen_info table only has most recent NEM registration and exemption list. Does not account for retired generators')
     co2_factors = _get_duid_emissions_intensities(start_time, end_time, cache)
-    
-    # Adjust EF by MLF for each plant
-    co2_factors = _adjust_ef_with_mlf(co2_factors, cache)
-
-    # Get Price Setter data (marginal generators)
     price_setters = download_pricesetter_files(start_time, end_time, cache)
 
     # Drop Basslink
@@ -348,38 +313,14 @@ def get_marginal_emitter(start_time, end_time, cache):
     # Weigh CO2 intensity by 'Increase' contributions
     filt_df['weighted_co2_factor'] = filt_df['Increase'] * filt_df['CO2E_EMISSIONS_FACTOR']
 
-    # Count the number of price setters per Time-Region
-    filt_df = filt_df.merge(right = filt_df.groupby(["Time", "Region"],as_index=False).size(),
-                            how='left',
-                            on=["Time", "Region"])
+    # Aggregate sum of weighted CO2 intensities
+    values = filt_df.groupby(by=['Time','Region'], axis=0).sum()
+    values = values.reset_index()[['Time','Region','weighted_co2_factor']]
+    values.rename(columns={'weighted_co2_factor': 'Intensity_Index'}, inplace=True)
 
-    # Filter out price setter increase factors less than 0.05MW, and Hydro 0 tCO2/e instances where the Hydro generator is not the main contributor to price setting
-    filt_df_adj = filt_df[filt_df['Increase']>0.05]
-    filt_df_adj = filt_df_adj[~((filt_df_adj.duplicated(['Time','Region'])) & \
-                                (filt_df_adj['weighted_co2_factor']==0) & \
-                                (filt_df_adj['CO2E_ENERGY_SOURCE'].isin(['Hydro', 'Battery Storage'])) & \
-                                (filt_df_adj['Increase'] < (1/filt_df_adj['size'])))]
-
-    # Aggregate CO2 intensities by weighted sum
-    values = filt_df_adj.groupby(by=['Time','Region'], axis=0).sum()
-    values.insert(0,'Intensity_Index', values['weighted_co2_factor'] / values['Increase'])
-    values = values.reset_index()[['Time', 'Region', 'Intensity_Index']]
-
-    # Collate all energy source technologies per Time-Region
-    source = filt_df_adj[["Time", "Region", "CO2E_ENERGY_SOURCE"]]
-    for tech in source["CO2E_ENERGY_SOURCE"].unique():
-        source.insert(3, tech, np.where(source['CO2E_ENERGY_SOURCE']==tech, 1, np.nan))
-    source_count = source.groupby(by=['Time','Region'], axis=0).sum()
-
-    # Concatenate string of all tech types contributing to marginal emissions
-    for tech in source_count.columns:
-        source_count.loc[:, tech] = np.where(source_count[tech]>0, tech + " + ", "")
-    source_count.reset_index(inplace=True)
-    source_count["Energy Source"] = source_count[source_count.columns[~source_count.columns.isin(['Time','Region'])]].agg(''.join, axis=1)
-    source_count["Energy Source"] = source_count["Energy Source"].str.rstrip(' + ')
-
-    # Merge to marginal data
-    result = values.merge(source_count[["Time", "Region", "Energy Source"]], on=["Time", "Region"], how="left")
+    # Identify Emissions tech/DUID with the largest contribution (increase) value for Time-Region
+    source = filt_df.sort_values(['Increase']).drop_duplicates(['Time','Region'], keep="last")[['Time', 'Region', 'DUID', 'CO2E_ENERGY_SOURCE']]
+    result = values.merge(source, on=['Time','Region'], how='left')
 
     return result
 
