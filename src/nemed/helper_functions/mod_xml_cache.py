@@ -27,10 +27,14 @@ def modpricesetter_get_file_name(self):
     path_name = Path(self.cache_folder) / name
     name_OCD = name.replace(".xml", "_OCD.xml")
     path_name_OCD = Path(self.cache_folder) / name_OCD
+    name_zero = name.replace(".xml", "00.xml")
+    path_name_zero = Path(self.cache_folder) / name_zero
     if os.path.exists(path_name):
         return name
-    elif path_name_OCD:
+    elif os.path.exists(path_name_OCD):
         return name_OCD
+    elif os.path.exists(path_name_zero):
+        return name_zero
     else:
         return name
 
