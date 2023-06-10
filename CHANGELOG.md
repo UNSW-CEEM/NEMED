@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.3 Minor bug fix (10/06/2023)
+- Fix an issue where some days of price setter data was not read correctly from the AEMO data archive.
+
 ## v0.3.2 Bug fixes (15/01/2023)
 - Fix function argument errors
 - v0.3.0 and v0.3.1 have known issues. Use v0.3.2

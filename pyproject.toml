@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "NEMED"
-version = "0.3.2"
+version = "0.3.3"
 description = "NEM Emissions Data tool"
 authors = ["Declan Heim","Shayan Naderi"]
 license = "Licence"
