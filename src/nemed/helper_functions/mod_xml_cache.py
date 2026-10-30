@@ -98,6 +98,14 @@ def convert_xml_to_json(start_date_str, end_date_str, cache, clean_up=False):
             os.remove(os.path.join(cache, filename))
 
 
+def _period_ids(values):
+    """NEMDE PeriodIDs as naive market-time datetimes. Older files give '2021-01-01 00:05:00'; newer ones give
+    ISO 8601 with the market's +10:00 offset ('2024-08-01T00:05:00+10:00'). Both are already market time, so any
+    offset is dropped rather than converted."""
+    parsed = pd.to_datetime(values.astype(str).str.replace(r"([+-]\d{2}:\d{2}|Z)$", "", regex=True), format="ISO8601")
+    return parsed.dt.tz_localize(None) if parsed.dt.tz is not None else parsed
+
+
 def read_json_to_df(start_dt, end_dt, cache):
     """Reads JSON files found in cache and returns price setter data as pandas dataframe.
 
@@ -133,7 +141,7 @@ def read_json_to_df(start_dt, end_dt, cache):
         with open(file, 'r') as f:
             data = json.loads(f.read())
         df_nested_list = pd.json_normalize(data)
-        df_nested_list['@PeriodID'] = pd.to_datetime(df_nested_list['@PeriodID'], format="%Y-%m-%d %H:%M:%S").dt.tz_localize(None)
+        df_nested_list['@PeriodID'] = _period_ids(df_nested_list['@PeriodID'])
         df_nested_list = df_nested_list[(df_nested_list['@Market'] == 'Energy') &
                                         (df_nested_list['@DispatchedMarket'] == 'ENOF')]
         all_df += [df_nested_list]

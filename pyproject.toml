@@ -1,16 +1,16 @@
 [tool.poetry]
 name = "NEMED"
-version = "0.4.0"
+version = "0.4.1"
 description = "NEM Emissions Data tool"
 authors = ["Declan Heim","Shayan Naderi"]
-license = "Licence"
+license = "BSD-3-Clause"
 readme = "README.md"
 
 # Main dependencies for the package via poetry. Package users will need these dependencies.
 [tool.poetry.dependencies]
-python = ">= 3.8, <3.13"
-pandas = "^1.2 || ^2.0"
-nemosis = "*"
+python = ">=3.10, <3.13"
+pandas = ">=2.2, <3"
+nemosis = ">=3.8.1"
 nempy = "*"
 datetime = "*"
 pathlib = "*"

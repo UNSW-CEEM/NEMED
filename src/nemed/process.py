@@ -1,4 +1,5 @@
 """ Process functions for calculations based on downloaded data """
+import re
 from datetime import datetime as dt, timedelta
 import pandas as pd
 import numpy as np
@@ -14,7 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 def get_total_emissions_by_DI_DUID(start_time, end_time, cache, filter_regions=None, generation_sent_out=True, \
-                                   assume_energy_ramp=True, dropna_co2factors=True, return_all=False):
+                                   assume_energy_ramp=True, dropna_co2factors=True, return_all=False,
+                                   exclude_storage=True):
     """Retrieve the total emissions for each generation unit per dispatch interval.
 
     Parameters
@@ -35,6 +37,9 @@ def get_total_emissions_by_DI_DUID(start_time, end_time, cache, filter_regions=N
         Removes data (generation) entries which do not have a CO2E_EMISSIONS_FACTOR mapped to them, by default True
     return_all : bool
         Returns the entire table will all columns as opposed to tidied up table, by default False
+    exclude_storage : bool
+        Leaves out units whose energy source is 'Battery Storage' (their discharge is energy taken from the grid
+        earlier, and AEMO's CDEII excludes them), by default True
 
     Returns
     -------
@@ -72,7 +77,7 @@ def get_total_emissions_by_DI_DUID(start_time, end_time, cache, filter_regions=N
     for sdate, edate, st, et in zip(ts['start'], ts['end'], ts['s_str'], ts['e_str']):
         logger.info(f"Processing total emissions from {st} to {et}")
         df = _total_emissions_process(sdate, edate, cache, filter_regions, generation_sent_out, assume_energy_ramp, \
-                                      dropna_co2factors)
+                                      dropna_co2factors, exclude_storage)
         name = 'processed_co2_total_{}_{}.parquet'.format(st, et)
         res_str += [name]
         df.to_parquet(os.path.join(cache, name))
@@ -115,7 +120,8 @@ def _generate_timeseries_loop(actual_start, actual_end):
 
 
 def _total_emissions_process(start_time, end_time, cache, filter_regions=None,
-                             generation_sent_out=True, assume_energy_ramp=True, dropna_co2factors=True):
+                             generation_sent_out=True, assume_energy_ramp=True, dropna_co2factors=True,
+                             exclude_storage=True):
     """Process for calculating total emissions based on the parameters defined in `get_total_emissions_by_DI_DUID`.
     """
     # Download Unit Dispatch Data and Generation Information
@@ -142,10 +148,15 @@ def _total_emissions_process(start_time, end_time, cache, filter_regions=None,
     filt_df['year'], filt_df['month'] = filt_df['Time'].dt.year, filt_df['Time'].dt.month
     co2factors_df = _get_duid_emissions_intensities(start_time, end_time, cache)
     plt_df = pd.merge(left=filt_df,
-                      right=co2factors_df[["file_year", "file_month", "DUID", "CO2E_EMISSIONS_FACTOR"]],
+                      right=co2factors_df[["file_year", "file_month", "DUID", "CO2E_EMISSIONS_FACTOR",
+                                           "CO2E_ENERGY_SOURCE"]],
                       left_on=["year", "month", "DUID"],
                       right_on=["file_year", "file_month", "DUID"],
                       how="left")
+
+    # Storage discharges energy it took from the grid earlier, so it isn't generation. AEMO's CDEII leaves it out.
+    if exclude_storage:
+        plt_df = plt_df[plt_df['CO2E_ENERGY_SOURCE'] != 'Battery Storage']
 
     # Filter out Data with Null CO2_EMISSIONS_FACTORS
     if dropna_co2factors:
@@ -171,6 +182,32 @@ def _total_emissions_process(start_time, end_time, cache, filter_regions=None,
     return result
 
 
+def _data_source_year(source):
+    """The year of an emissions factor's data source: 'ISP2024', 'NGA 2022', 'Estimate - NGA 2016' -> 2024, 2022, 2016.
+    Sources with no year ('On Exclusion List', 'Estimated', ...) give None. Known labels come from
+    CO2E_DATA_SOURCE_YEARMAP; any other label containing a year is read from it, so new ISP and NGA editions rank
+    above older ones."""
+    if source is None or (isinstance(source, float) and np.isnan(source)):
+        return None
+    if source in CO2E_DATA_SOURCE_YEARMAP:
+        year = CO2E_DATA_SOURCE_YEARMAP[source]
+        return int(year) if year else None
+    match = re.search(r"(19|20)\d{2}", str(source))
+    return int(match.group(0)) if match else None
+
+
+def _prefer_current_factors(co2factors_df):
+    """For each month, DUID and energy source keep one genset row: one that has a factor first (a combined-cycle
+    unit's steam turbine is "On Exclusion List" with no factor, while its gas turbine carries the unit's factor),
+    then the newest data source."""
+    df = co2factors_df.copy()
+    df['CO2E_DATA_YEAR'] = df['CO2E_DATA_SOURCE'].map(_data_source_year)
+    df['_HAS_FACTOR'] = df['CO2E_EMISSIONS_FACTOR'].notna()
+    df = df.sort_values(['_HAS_FACTOR', 'CO2E_DATA_YEAR'], ascending=True, na_position='first', kind='stable')
+    df = df.drop_duplicates(['file_year', 'file_month', 'CO2E_ENERGY_SOURCE', 'DUID'], keep='last')
+    return df.drop(columns=['_HAS_FACTOR'])
+
+
 def _get_duid_emissions_intensities(start_time, end_time, cache):
     """Merges emissions factors from GENSETID to DUID and cleans data"""
     co2factors_df = download_plant_emissions_factors(start_time, end_time, cache)
@@ -180,9 +217,7 @@ def _get_duid_emissions_intensities(start_time, end_time, cache):
                                         how="left")
 
     # Filter out older assumptions, where duplicate CO2 factors exist for data entry
-    co2factors_df['CO2E_DATA_YEAR'] = co2factors_df['CO2E_DATA_SOURCE'].map(CO2E_DATA_SOURCE_YEARMAP)
-    co2factors_df = co2factors_df.sort_values(['CO2E_DATA_YEAR'], ascending=True)
-    co2factors_df = co2factors_df.drop_duplicates(['file_year', 'file_month', 'CO2E_ENERGY_SOURCE', 'DUID'], keep='last')
+    co2factors_df = _prefer_current_factors(co2factors_df)
 
     # Find and correct duplicate entries for DUIDs
     co2factors_df = _condense_genset_co2_differences(co2factors_df)
@@ -254,7 +289,7 @@ def _calculate_sent_out(energy_df):
     so_df = energy_df.merge(auxload, on=["DUID"], how="left")
     so_df['pct_sent_out'] = (100 - so_df["PCT_AUXILIARY_LOAD"]) / 100
     """add error checking measure for % of no matches in auxload"""
-    so_df['pct_sent_out'].fillna(1.0, inplace=True)
+    so_df['pct_sent_out'] = so_df['pct_sent_out'].fillna(1.0)
     so_df["Energy_SO"] = so_df["Energy"] * so_df['pct_sent_out']
     return so_df
 
@@ -314,7 +349,7 @@ def get_marginal_emitter(start_time, end_time, cache):
     filt_df['weighted_co2_factor'] = filt_df['Increase'] * filt_df['CO2E_EMISSIONS_FACTOR']
 
     # Aggregate sum of weighted CO2 intensities
-    values = filt_df.groupby(by=['Time','Region'], axis=0).sum()
+    values = filt_df.groupby(by=['Time','Region'])[['weighted_co2_factor']].sum()
     values = values.reset_index()[['Time','Region','weighted_co2_factor']]
     values.rename(columns={'weighted_co2_factor': 'Intensity_Index'}, inplace=True)
 
@@ -425,7 +460,7 @@ def _time_aggregations(data, by):
     """
     result = data.copy()
     en_colname = result.columns[result.columns.str.contains('Energy')][0]
-    agg_map = {en_colname: np.sum, "Total_Emissions": np.sum}
+    agg_map = {en_colname: "sum", "Total_Emissions": "sum"}
     if 'Intensity_Index' in result.columns:
         reproduce_II = True
         result.drop(['Intensity_Index'], axis=1, inplace=True)
@@ -483,9 +518,8 @@ def _time_aggregations(data, by):
         result.insert(0,"TimeBeginning", pd.to_datetime(dict(year=result.Y,
                                                              month=result.m,
                                                              day=1)))
-        result.insert(1,"TimeEnding", pd.to_datetime(dict(year=result.Y,
-                                                          month=result.m + 1,
-                                                          day=result['TimeBeginning'].dt.day)))
+        # The next month's first day (month + 1 would be 13 for December)
+        result.insert(1,"TimeEnding", result['TimeBeginning'] + pd.offsets.MonthBegin(1))
         result.drop(['Y','m'], axis=1, inplace=True)
 
     elif by == "year":

@@ -13,13 +13,17 @@ logger = logging.getLogger(__name__)
 def overwrite_nemosis_defaults():
     """Overwrites nemosis defaults with table properties for GENUNITS from AEMO NEMWEB.
     """
-    _defaults.table_types.update({"GENUNITS": "MMS", "DUALLOC": "MMS"})
-    _defaults.names.update({"GENUNITS": "PUBLIC_DVD_GENUNITS", "DUALLOC": "PUBLIC_DVD_DUALLOC"})
-    _defaults.data_url.update({"GENUNITS": "aemo_data_url", "DUALLOC": "aemo_data_url"})
+    _defaults.table_types.update({"GENUNITS": "MMS", "DUALLOC": "MMS", "BILLING_CO2E_PUBLICATION": "MMS"})
+    _defaults.names.update({"GENUNITS": "PUBLIC_DVD_GENUNITS", "DUALLOC": "PUBLIC_DVD_DUALLOC",
+                            "BILLING_CO2E_PUBLICATION": "PUBLIC_DVD_BILLING_CO2E_PUBLICATION"})
+    _defaults.data_url.update({"GENUNITS": "aemo_data_url", "DUALLOC": "aemo_data_url",
+                               "BILLING_CO2E_PUBLICATION": "aemo_data_url"})
     _defaults.table_columns.update({"GENUNITS": ['GENSETID', 'LASTCHANGED', 'VOLTLEVEL', 'REGISTEREDCAPACITY', \
         'DISPATCHTYPE', 'STARTTYPE', 'MAXCAPACITY', 'GENSETTYPE', 'CO2E_EMISSIONS_FACTOR', 'CO2E_ENERGY_SOURCE', \
         'CO2E_DATA_SOURCE'],
-        "DUALLOC": ["EFFECTIVEDATE", "VERSIONNO", "DUID", "GENSETID", "LASTCHANGED"]})
+        "DUALLOC": ["EFFECTIVEDATE", "VERSIONNO", "DUID", "GENSETID", "LASTCHANGED"],
+        "BILLING_CO2E_PUBLICATION": ["CONTRACTYEAR", "WEEKNO", "BILLRUNNO", "SETTLEMENTDATE", "REGIONID",
+                                     "SENTOUTENERGY", "GENERATOREMISSIONS", "INTENSITYINDEX"]})
 
 
 def mod_dynamic_data_fetch_loop(
@@ -36,7 +40,11 @@ def mod_dynamic_data_fetch_loop(
     rebuild=False,
     write_kwargs={},
 ):
-    """Modified function from nemosis.data_fetch_methods
+    """Modified function from nemosis.data_fetch_methods._dynamic_data_fetch_loop, adding `file_year` and
+    `file_month` columns so emissions factors can be joined to the month they apply to.
+
+    Follows nemosis >= 3.8: from August 2024 AEMO splits each MMSDM table into numbered chunks
+    (PUBLIC_ARCHIVE#<TABLE>#FILE01#..., FILE02, ...), so every chunk of a month is read until one is missing.
     """
     data_tables = []
 
@@ -44,88 +52,64 @@ def mod_dynamic_data_fetch_loop(
     date_gen = _processing_info_maps.date_gen[table_type](start_search, end_time)
 
     for year, month, day, index in date_gen:
-        filename_stub, full_filename, path_and_name = _create_filename(
-            table_name, table_type, raw_data_location, fformat, day, month, year, index
-        )
+        check_for_next_data_chunk = True
+        chunk = 0
+        while check_for_next_data_chunk:
+            chunk += 1
 
-        if not (
-            _glob.glob(full_filename) or _glob.glob(path_and_name + ".[cC][sS][vV]")
-        ) or (not _glob.glob(path_and_name + ".[cC][sS][vV]") and rebuild):
-            _download_data(
-                table_name,
-                table_type,
-                filename_stub,
-                day,
-                month,
-                year,
-                index,
-                raw_data_location,
+            filename_stub, full_filename, path_and_name = _create_filename(
+                table_name, table_type, raw_data_location, fformat, day, month, year, chunk, index
             )
+            csv_glob = path_and_name + ".[cC][sS][vV]"
 
-        if _glob.glob(full_filename) and fformat != "csv" and not rebuild:
-            if not caching_mode:
-                data = _get_read_function(fformat, table_type, day)(full_filename)
-                data.insert(0, 'file_month', month)
-                data.insert(0, 'file_year', year)
-            else:
-                data = None
-                logger.info(
-                    f"Cache for {table_name} in date range already compiled in"
-                    + f" {raw_data_location}."
+            if not (_glob.glob(full_filename) or _glob.glob(csv_glob)) or (not _glob.glob(csv_glob) and rebuild):
+                _download_data(
+                    table_name, table_type, filename_stub, day, month, year, chunk, index, raw_data_location
                 )
 
-        elif _glob.glob(path_and_name + ".[cC][sS][vV]"):
+            if _glob.glob(full_filename) and fformat != "csv" and not rebuild:
+                if not caching_mode:
+                    data = _get_read_function(fformat, table_type, day)(full_filename)
+                else:
+                    data = None
+                    logger.info(
+                        f"Cache for {table_name} in date range already compiled in {raw_data_location}."
+                    )
 
-            if select_columns != "all":
-                read_all_columns = False
+            elif _glob.glob(csv_glob):
+                csv_path_and_name = _glob.glob(csv_glob)[0]
+                csv_read_function = _get_read_function(fformat="csv", table_type=table_type, day=day)
+                data = _determine_columns_and_read_csv(
+                    table_name,
+                    csv_path_and_name,
+                    csv_read_function,
+                    read_all_columns=(select_columns == "all"),
+                    dtypes="all" if caching_mode else "str",
+                )
+                if caching_mode:
+                    data = _perform_column_selection(data, select_columns, full_filename)
+                if data is not None and fformat != "csv":
+                    _log_file_creation_message(fformat, table_name, year, month, day, index)
+                    _write_to_format(data, fformat, full_filename, write_kwargs)
+                if not keep_csv:
+                    _os.remove(csv_path_and_name)
             else:
-                read_all_columns = True
+                data = None
 
-            if not caching_mode:
-                dtypes = "str"
-            else:
-                dtypes = "all"
-
-            csv_path_and_name = _glob.glob(path_and_name + ".[cC][sS][vV]")[0]
-
-            csv_read_function = _get_read_function(
-                fformat="csv", table_type=table_type, day=day
-            )
-            data = _determine_columns_and_read_csv(
-                table_name,
-                csv_path_and_name,
-                csv_read_function,
-                read_all_columns=read_all_columns,
-                dtypes=dtypes,
-            )
-            data.insert(0, 'file_month', month)
-            data.insert(0, 'file_year', year)
-            if caching_mode:
+            if not caching_mode and data is not None:
+                if date_filter is not None:
+                    data = date_filter(data, start_time, end_time)
                 data = _perform_column_selection(data, select_columns, full_filename)
-                data.insert(0, 'file_month', month)
-                data.insert(0, 'file_year', year)
-            if data is not None and fformat != "csv":
-                _log_file_creation_message(fformat, table_name, year, month, day, index)
-                data.drop(['file_month','file_year'], axis=1,inplace=True)
-                _write_to_format(data, fformat, full_filename, write_kwargs)
+                data.insert(0, "file_month", month)
+                data.insert(0, "file_year", year)
+                data_tables.append(data)
+            elif not caching_mode and chunk == 1:
+                logger.warning(f"Loading data from {full_filename} failed.")
 
-            if not keep_csv:
-                _os.remove(_glob.glob(path_and_name + ".[cC][sS][vV]")[0])
-        else:
-            data = None
+            # Only the chunked archives (from August 2024) have more than one file a month.
+            if data is None or "#" not in filename_stub:
+                check_for_next_data_chunk = False
 
-        if not caching_mode and data is not None:
-
-            if date_filter is not None:
-                data = date_filter(data, start_time, end_time)
-
-            data = _perform_column_selection(data, select_columns, full_filename)
-            data.insert(0, 'file_month', month)
-            data.insert(0, 'file_year', year)
-            data_tables.append(data)
-        elif not caching_mode:
-            logger.warning(f"Loading data from {full_filename} failed.") # logger.
-        
     return data_tables
 
 

@@ -4,7 +4,7 @@ from . helper_functions import helpers as hp
 from datetime import datetime as dt, timedelta
 import pandas as pd
 
-def get_total_emissions(start_time, end_time, cache, filter_regions=None, by=None, generation_sent_out=True, assume_energy_ramp=True, return_pivot=False):
+def get_total_emissions(start_time, end_time, cache, filter_regions=None, by=None, generation_sent_out=True, assume_energy_ramp=True, return_pivot=False, exclude_storage=True):
     """Retrieve (Aggregated) Regional Emissions data for total emissions (absolute and emissions intensity), as well as sent-out
     energy generation for a defined period and time-resolution (e.g. hour, day, month)
 
@@ -26,6 +26,8 @@ def get_total_emissions(start_time, end_time, cache, filter_regions=None, by=Non
         Uses a linear ramp between dispatch scada points as opposed to a stepped function, by default True
     return_pivot : bool
         Changes the structure of the returned dataframe to a pivot with column hierarchy as Data Metric then Region, by default False
+    exclude_storage : bool
+        Leaves out battery storage, as AEMO's CDEII does, by default True
 
     Returns
     -------
@@ -48,17 +50,20 @@ def get_total_emissions(start_time, end_time, cache, filter_regions=None, by=Non
     # Get emissions for all units by dispatch interval
     raw_table = nd.get_total_emissions_by_DI_DUID(
         start_time, end_time, cache, filter_regions=filter_regions,
-        generation_sent_out=generation_sent_out, assume_energy_ramp=assume_energy_ramp, return_all=True)
+        generation_sent_out=generation_sent_out, assume_energy_ramp=assume_energy_ramp, return_all=True,
+        exclude_storage=exclude_storage)
     clean_table = raw_table.drop_duplicates(subset=['Time', 'DUID'])
 
-    # Aggregate DUID data to regions
-    en_colname = clean_table.columns[clean_table.columns.str.contains('Energy')][0]
-    res = clean_table[['Time', 'Region', en_colname, 'Total_Emissions']].groupby(['Time', 'Region'])\
-        .sum().reset_index()
+    # Aggregate DUID data to regions. Emissions are computed from sent-out energy when `generation_sent_out`, so the
+    # intensity must divide by sent-out energy too (the table holds both 'Energy' and 'Energy_SO').
+    en_source = 'Energy_SO' if generation_sent_out and 'Energy_SO' in clean_table.columns else 'Energy'
+    res = clean_table[['Time', 'Region', en_source, 'Total_Emissions']].rename(columns={en_source: 'Energy'})\
+        .groupby(['Time', 'Region']).sum().reset_index()
+    en_colname = 'Energy'
 
     # Create NEM agggregation
     if filter_regions == None:
-        nem = res.groupby(['Time']).sum().reset_index()
+        nem = res.groupby(['Time'])[[en_colname, 'Total_Emissions']].sum().reset_index()
         nem.insert(1,'Region','NEM')
         res = pd.concat([res,nem],ignore_index=True)
 

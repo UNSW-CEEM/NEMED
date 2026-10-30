@@ -446,6 +446,62 @@ def download_aemo_cdeii_summary(filter_start, filter_end, cache):
     return table.sort_values('SETTLEMENTDATE').reset_index(drop=True)
 
 
+def download_cdeii_billing(start_time, end_time, cache):
+    """AEMO's published CDEII daily figures (sent-out energy, emissions and intensity index by region and for the NEM),
+    read from the MMSDM monthly archive table BILLING_CO2E_PUBLICATION. Unlike `download_aemo_cdeii_summary`, this
+    covers every month the MMSDM archive holds (the yearly summary files after 2022 are not on NEMweb).
+
+    A month's archive holds the bill runs published in that month, so the archives up to two months after
+    `end_time` are read, and only the latest bill run for each settlement date and region is kept.
+
+    Parameters
+    ----------
+    start_time : str
+        Start, in the format 'yyyy/mm/dd HH:MM'
+    end_time : str
+        End (exclusive), in the format 'yyyy/mm/dd HH:MM'
+    cache : str
+        Raw data location in local directory
+
+    Returns
+    -------
+    pandas.DataFrame
+        Columns SETTLEMENTDATE (the trading day), REGIONID ('NEM' and the five regions), SENTOUTENERGY (MWh),
+        GENERATOREMISSIONS (tCO2-e) and INTENSITYINDEX (tCO2-e/MWh).
+    """
+    cache = hp._check_cache(cache)
+    start = hp._validate_and_convert_date(start_time, "start_time")
+    end = hp._validate_and_convert_date(end_time, "end_time")
+    overwrite_nemosis_defaults()
+    search_end = datetime(end.year + (end.month + 1) // 12, (end.month + 1) % 12 + 1, 1)
+    search_end = min(search_end, datetime.now())
+    tables = mod_dynamic_data_fetch_loop(start_search=datetime(start.year, start.month, 1),
+                                         start_time=start,
+                                         end_time=search_end,
+                                         table_name="BILLING_CO2E_PUBLICATION",
+                                         raw_data_location=cache,
+                                         select_columns=["CONTRACTYEAR", "WEEKNO", "BILLRUNNO", "SETTLEMENTDATE",
+                                                         "REGIONID", "SENTOUTENERGY", "GENERATOREMISSIONS",
+                                                         "INTENSITYINDEX"],
+                                         date_filter=None,
+                                         fformat="parquet",
+                                         keep_csv=False)
+    if not tables:
+        return pd.DataFrame(columns=["SETTLEMENTDATE", "REGIONID", "SENTOUTENERGY", "GENERATOREMISSIONS",
+                                     "INTENSITYINDEX"])
+    df = pd.concat(tables, ignore_index=True)
+    df["SETTLEMENTDATE"] = pd.to_datetime(df["SETTLEMENTDATE"], format="%Y/%m/%d %H:%M:%S")
+    for col in ["CONTRACTYEAR", "WEEKNO", "BILLRUNNO"]:
+        df[col] = df[col].astype(int)
+    for col in ["SENTOUTENERGY", "GENERATOREMISSIONS", "INTENSITYINDEX"]:
+        df[col] = df[col].astype(float)
+    df = df[(df["SETTLEMENTDATE"] >= start) & (df["SETTLEMENTDATE"] < end)]
+    df = df.sort_values(["CONTRACTYEAR", "WEEKNO", "BILLRUNNO"]).drop_duplicates(["SETTLEMENTDATE", "REGIONID"],
+                                                                               keep="last")
+    return df[["SETTLEMENTDATE", "REGIONID", "SENTOUTENERGY", "GENERATOREMISSIONS", "INTENSITYINDEX"]]\
+        .sort_values(["SETTLEMENTDATE", "REGIONID"]).reset_index(drop=True)
+
+
 def download_current_aemo_cdeii_summary(filter_start, filter_end, financialyear="1920"):
     # """
     # LEGACY. TO BE DEPRECATED.
@@ -738,7 +794,7 @@ def _populate_xml_into_daily_json(cache, year, month, day, rm_xml=True):
     """Iterative function to extract all price setter xml files for a single day and combined into a single JSON file"""
     sdate = datetime(year, month, day)
     edate = sdate + timedelta(days=1)
-    date_str_list = [datetime.strftime(i,"%Y/%m/%d %H:%M:%S") for i in pd.date_range(sdate, edate, freq='5T', \
+    date_str_list = [datetime.strftime(i,"%Y/%m/%d %H:%M:%S") for i in pd.date_range(sdate, edate, freq='5min', \
         inclusive="right")]
 
     # Load individual xml files
